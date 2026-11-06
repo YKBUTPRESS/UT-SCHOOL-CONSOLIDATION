@@ -190,7 +190,8 @@ button,select,input{font:inherit}
   <div class="sb">Consolidation Reporting System · 2026</div>
   <form onsubmit="doLogin(event)">
    <div class="lf"><label>Username</label><input id="lu" autocomplete="username" placeholder="admin atau viewer" required></div>
-   <div class="lf"><label>Password</label><input id="lp" type="password" autocomplete="current-password" placeholder="••••••••" required></div>
+   <div class="lf"><label>Password</label><input id="lp" type="password" autocomplete="current-password" placeholder="••••••••" required>
+    <label style="font-weight:500;font-size:12px;margin:6px 0 0;cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px" onchange="$('lp').type=this.checked?'text':'password'">Tampilkan password</label></div>
    <button class="lbtn" id="lbtn" type="submit">MASUK KE SISTEM →</button>
   </form>
   <div class="lerr" id="lerr"></div>
@@ -265,7 +266,7 @@ button,select,input{font:inherit}
 <script>
 /* ============ CONFIG ============ */
 const CONFIG={
-  API_URL:"https://script.google.com/macros/s/AKfycbzC7SGW6NSkfx0jERQhgUmG251ghspKnsGkOQCI8pq6sVvzRdmrC-ixqsZ8QTsnOdfl/exec",                       // Tempel URL Apps Script (/exec) di sini. Kosong = mode demo.
+  API_URL:"https://script.google.com/macros/s/AKfycbwX73N-rka_Svq7lAeY_wqyx5cPpp0qeNNdJtbhwMKlQFB0pPwaYlIi5R-s6-2rP2-4eA/exec",                       // Tempel URL Apps Script (/exec) di sini. Kosong = mode demo.
   LOGO:"logo ut school.png",        // nama file logo di GitHub
   TEMPLATE_URL:"Template_Laporan_LP.xlsx",   // template Excel untuk LP (taruh di folder yang sama)
   LAST_DUE_MONTH:10,                // di mode server nilai ini diambil dari sheet Config
