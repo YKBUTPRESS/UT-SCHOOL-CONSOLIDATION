@@ -229,6 +229,7 @@ button,select,input{font:inherit}
     <button class="bt w" onclick="window.print()">🖨 Cetak</button>
    </div>
   </div>
+  <div class="demo hide" id="batchNote" style="background:#e8f0fe;border-color:#4285f4;color:#1a3c7a"></div>
   <div class="demo hide" id="demoBar"><b>Data demo.</b> Angka dibuat otomatis untuk uji tampilan. Setelah Apps Script &amp; Spreadsheet siap, isi <code>CONFIG.API_URL</code> agar dashboard menampilkan laporan asli.</div>
 
   <!-- DASHBOARD -->
@@ -303,8 +304,8 @@ function genDemo(year){year=year||CONFIG.YEAR;if(year>CONFIG.YEAR)return {};cons
  const sites=["Site A","Site B","Site C","Site D"],assetNames=["Battery Hidrometer (LVA)","Kit Rangkaian Komponen Elektrik (LVA)","Cutaway Hyd. Pump Variable Displacement (LVA)","Cutaway Battery relay (LVA)","Seragam instruktur UTS (LVA)"];
  LPS.forEach(lp=>{
   const annM=(.7+R()*2.2)*1e9,annD=(.5+R()*1.9)*1e9,rM=.55+R()*.75,rD=.5+R()*.8;
-  const seleksi=18+Math.floor(R()*26),ps=Math.round(seleksi*(.62+R()*.25)),iv=Math.round(ps*(.7+R()*.25)),mc=Math.round(iv*(.75+R()*.22));
-  const hasBin=R()<.5,nb=R()<.55?2:1,bn=["Reguler Batch 38","Reguler Batch 39"].slice(2-nb);
+  const off=(CONFIG.YEAR-year)*2,seleksi=18+Math.floor(R()*26),ps=Math.round(seleksi*(.62+R()*.25)),iv=Math.round(ps*(.7+R()*.25)),mc=Math.round(iv*(.75+R()*.22));
+  const hasBin=R()<.5,nb=R()<.55?2:1,bn=["Reguler Batch "+(38-off),"Reguler Batch "+(39-off)].slice(2-nb);
   const bat=bn.map(n=>{const plan=12,s=7+Math.floor(R()*6);return{name:n,kelas:1,siswaPlan:plan,siswa:Math.min(plan,s),ojt:2+Math.floor(R()*4)}});
   const csr=R()<.6?{program:1+Math.floor(R()*3),sekolah:1+Math.floor(R()*5),peserta:20+Math.floor(R()*120)}:{program:0,sekolah:0,peserta:0};
   const fPlan=8+Math.floor(R()*14),fRate=.5+R()*.6;
@@ -317,7 +318,7 @@ function genDemo(year){year=year||CONFIG.YEAR;if(year>CONFIG.YEAR)return {};cons
    if(st==="missing")continue;
    const nc=Math.min(5,Math.floor(m/2*R()*1.3)),cs=[];for(let i=0;i<nc;i++)cs.push({name:cust[Math.floor(R()*cust.length)],type:R()<.5?"New Customer":"New Project"});
    out[lp.id+"|"+m]={lp:lp.id,year,month:m,status:st,pic:"PIC "+lp.name,
-    kesiswaan:{batches:[{name:"Batch 39",seleksi,psikotes:ps,interview:iv,mcu:mc}],bintalsik:hasBin?{seleksi:Math.round(seleksi*.6),psikotes:Math.round(ps*.6),interview:Math.round(iv*.6),mcu:Math.round(mc*.6),lokasi:sites[Math.floor(R()*4)]}:null},
+    kesiswaan:{batches:[{name:"Batch "+(39-off),seleksi,psikotes:ps,interview:iv,mcu:mc}],bintalsik:hasBin?{seleksi:Math.round(seleksi*.6),psikotes:Math.round(ps*.6),interview:Math.round(iv*.6),mcu:Math.round(mc*.6),lokasi:sites[Math.floor(R()*4)]}:null},
     akademik:{batches:bat,csr},
     kipl:{mandiri:{plan:annM*m/12,actual:aM},mandatory:{plan:annD*m/12,actual:aD},customers:cs,fasusPlan:fPlan,fasusUsed:Math.round(fPlan*fRate*Math.min(1,m/8))},
     assets};
@@ -327,7 +328,7 @@ function genDemo(year){year=year||CONFIG.YEAR;if(year>CONFIG.YEAR)return {};cons
 }
 
 /* ============ STATE & HELPERS ============ */
-const S={view:"dashboard",year:CONFIG.YEAR,month:CONFIG.LAST_DUE_MONTH,region:"all",coord:"all",q:"",sort:"achv_desc",rank:"achv_asc",attn:"low",heat:"region"};
+const S={view:"dashboard",year:CONFIG.YEAR,batch:"all",month:CONFIG.LAST_DUE_MONTH,region:"all",coord:"all",q:"",sort:"achv_desc",rank:"achv_asc",attn:"low",heat:"region"};
 /* ---- Filter tahunan ----
    Laporan bersifat YTD per tahun kalender: tiap laporan dimiliki satu tahun (kolom year) dan kumulatifnya mulai dari nol tiap Januari.
    Maka data tahun terpilih = hanya laporan bertahun itu; batch/program yang berlanjut lintas tahun muncul di tiap tahun ia dilaporkan, tanpa dihitung ganda. */
@@ -343,6 +344,21 @@ function yearList(){
  for(let y=lo;y<=hi;y++)out.push(y);return out;
 }
 function syncMonth(){const d=dueNow();if(!S.monthTouched||S.month>d)S.month=d}
+/* ---- Filter batch ----
+   Batch tersimpan per laporan di tabel Rekrutmen ("Batch 39") dan Reguler ("Reguler Batch 39"); keduanya disatukan lewat nomor batch.
+   Hanya metrik berbasis batch (seleksi/psikotes/interview/MCU, siswa/plan/kelas/OJT) yang disaring. Income, customer, Fasus, CSR, Bintalsik
+   dan aset dilaporkan per LP (tidak punya kolom batch), jadi tidak dikarang ulang per batch.
+   Data batch memakai laporan terakhir (<= periode terpilih) yang memuat batch itu; data tingkat-LP memakai laporan terakhir LP seperti biasa. */
+const batchKey=n=>{const s=String(n||"").trim(),d=s.match(/(\d+)/);return d?"Batch "+parseInt(d[1],10):(s||"Batch")};
+const hasBatch=(r,k)=>r.kesiswaan.batches.some(b=>batchKey(b.name)===k)||r.akademik.batches.some(b=>batchKey(b.name)===k);
+function latestBatch(id,m,k){for(let j=m;j>=1;j--){const r=REP[id+"|"+j];if(r&&r.status==="submitted"&&hasBatch(r,k))return r}return null}
+function batchList(){
+ const set=new Set();
+ Object.values(REP||{}).forEach(r=>{if(r.status!=="submitted")return;r.kesiswaan.batches.forEach(b=>set.add(batchKey(b.name)));r.akademik.batches.forEach(b=>set.add(batchKey(b.name)))});
+ if(S.batch!=="all")set.add(S.batch);   // pilihan batch tetap terlihat saat pindah ke tahun yang tidak memuatnya
+ const n=s=>parseInt(s.replace(/\D/g,""),10)||0;
+ return[...set].sort((a,b)=>n(a)-n(b)||a.localeCompare(b));
+}
 async function switchYear(y){
  if(!y||y===S.year)return;
  S.year=y;S.yearTouched=true;REP=YR[y]||{};syncMonth();renderAll();await loadData(false);
@@ -363,7 +379,13 @@ function lpList(){return LPS.filter(l=>(S.region==="all"||l.region===S.region)&&
 const curStatus=(id,m)=>(REP[id+"|"+m]||{status:"missing"}).status;
 function latest(id,m){for(let k=m;k>=1;k--){const r=REP[id+"|"+k];if(r&&r.status==="submitted")return r}return null}
 function metrics(lp,m=S.month){
- const r=latest(lp.id,m),o={lp,status:curStatus(lp.id,m),rep:r,stale:!!(r&&r.month<m)};
+ let r=latest(lp.id,m),nb=0,bm=null;const stale=!!(r&&r.month<m);
+ if(r&&S.batch!=="all"){
+  const rb=latestBatch(lp.id,m,S.batch),f=b=>batchKey(b.name)===S.batch;
+  if(rb){nb=1;bm=rb.month}
+  r={...r,kesiswaan:{...r.kesiswaan,batches:rb?rb.kesiswaan.batches.filter(f):[]},akademik:{...r.akademik,batches:rb?rb.akademik.batches.filter(f):[]}};   // salinan; data asli tidak diubah
+ }
+ const o={lp,status:curStatus(lp.id,m),rep:r,stale,nb,batchMonth:bm};
  if(!r)return{...o,plan:0,actual:0,achv:null,mand:{plan:0,actual:0},mandt:{plan:0,actual:0}};
  const k=r.kipl,kb=r.kesiswaan.batches;
  o.mand=k.mandiri;o.mandt=k.mandatory;o.plan=k.mandiri.plan+k.mandatory.plan;o.actual=k.mandiri.actual+k.mandatory.actual;o.achv=pc(o.actual,o.plan);
@@ -487,7 +509,10 @@ function renderFilters(){
  $("fL").innerHTML=`<label>Tahun:</label><select class="fs" style="min-width:90px" onchange="switchYear(+this.value)">${yearList().map(y=>`<option value="${y}" ${S.year===y?"selected":""}>${y}</option>`).join("")}</select>
  <label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:dueNow()},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${S.year}</option>`).join("")}</select>
  <label>Wilayah:</label><select class="fs" onchange="S.region=this.value;renderAll()"><option value="all">-- Semua Wilayah --</option>${REGIONS.map(r=>`<option ${S.region===r?"selected":""}>${esc(r)}</option>`).join("")}</select>
- <label>Koordinator:</label><select class="fs" style="min-width:110px" onchange="S.coord=this.value;renderAll()"><option value="all">Semua</option>${["Medan","Surabaya","Makassar"].map(c=>`<option value="${c}" ${S.coord===c?"selected":""}>${c}</option>`).join("")}<option value="direct" ${S.coord==="direct"?"selected":""}>Langsung HO</option></select>`;
+ <label>Koordinator:</label><select class="fs" style="min-width:110px" onchange="S.coord=this.value;renderAll()"><option value="all">Semua</option>${["Medan","Surabaya","Makassar"].map(c=>`<option value="${c}" ${S.coord===c?"selected":""}>${c}</option>`).join("")}<option value="direct" ${S.coord==="direct"?"selected":""}>Langsung HO</option></select>
+ <label>Batch:</label><select class="fs" style="min-width:110px" onchange="S.batch=this.value;renderAll()"><option value="all">Semua Batch</option>${batchList().map(b=>`<option value="${esc(b)}" ${S.batch===b?"selected":""}>${esc(b)}</option>`).join("")}</select>`;
+ const bn=$("batchNote");bn.classList.toggle("hide",S.batch==="all"||S.view==="input");
+ bn.innerHTML=`<b>Filter batch: ${esc(S.batch)}.</b> Rekrutmen/MCU dan Siswa/OJT hanya menampilkan batch ini. Income, customer, Fasus, CSR, Bintalsik, dan aset dilaporkan per LP (bukan per batch) sehingga tidak ikut disaring.`+(S.view==="status"?" Status pelaporan juga tidak dipengaruhi batch.":"");
  $("fbar").classList.toggle("hide",S.view==="input");
 }
 function renderAll(){
@@ -553,7 +578,7 @@ function renderTrend(lps){
 function renderPillars(ms,T){
  const fn=[["Seleksi",T.sel],["Psikotes",T.psi],["Interview",T.itv],["MCU",T.mcu]],ba=batchAgg(ms);
  $("pillars").innerHTML=`
- <div class="card"><div class="ph">KESISWAAN</div><div class="sh">Rekrutmen & MCU Batch 39</div>
+ <div class="card"><div class="ph">KESISWAAN</div><div class="sh">Rekrutmen & MCU ${S.batch==="all"?"Batch 39":esc(S.batch)}</div>
   ${fn.map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,T.sel),"#ffb703")}<b>${v}</b></div>`).join("")}
   <div class="sh">Pelaksanaan Bintalsik</div>
   <div class="mini">${chip(T.binN,"LP melaksanakan","#4285f4")}${chip(T.binSel,"Seleksi","#ffb703")}${chip(T.binPsi,"Psikotes","#ffb703")}${chip(T.binItv,"Interview","#ffb703")}${chip(T.binMcu,"MCU","#34a853")}${chip(T.binLok,"Lokasi","#a855f7")}</div></div>
@@ -583,7 +608,7 @@ function renderLPTable(){
  const q=S.q.toLowerCase(),all=lpList(),ms=sortMs(all.filter(l=>!q||(l.name+" "+l.region+" "+l.coord).toLowerCase().includes(q)).map(l=>metrics(l)));
  $("lpCount").textContent=ms.length+" dari "+all.length+" learning point";
  $("lpBody").innerHTML=ms.map(x=>`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b><br><span class="tcell">${esc(x.lp.coord?"Koord. "+x.lp.coord:"Langsung HO")}</span></td><td>${esc(x.lp.region)}</td><td>${stPill(x.status)}${x.stale?`<br><span class="tcell">data ${MON[x.rep.month-1]}</span>`:""}</td>
-  <td style="min-width:160px">${x.rep?vbar(x.achv)+`<span class="tcell">${fp(x.achv)} · ${rp(x.actual)}</span>`:"—"}</td><td>${x.rep?x.siswa+"/"+x.sPlan:"—"}</td><td>${x.rep?x.mcu+"/"+x.sel:"—"}</td><td>${x.rep?x.cust:"—"}</td><td>${x.rep?fp(pc(x.fU,x.fP)):"—"}</td><td>${x.rep?(x.bad?`<span class="pill a">${x.bad} rusak</span>`:`<span class="pill g">Baik</span>`):"—"}</td></tr>`).join("")||'<tr><td colspan="9" class="empty">Tidak ada LP yang cocok.</td></tr>';
+  <td style="min-width:160px">${x.rep?vbar(x.achv)+`<span class="tcell">${fp(x.achv)} · ${rp(x.actual)}</span>`:"—"}</td><td>${x.rep&&(S.batch==="all"||x.nb)?x.siswa+"/"+x.sPlan:"—"}</td><td>${x.rep&&(S.batch==="all"||x.nb)?x.mcu+"/"+x.sel:"—"}</td><td>${x.rep?x.cust:"—"}</td><td>${x.rep?fp(pc(x.fU,x.fP)):"—"}</td><td>${x.rep?(x.bad?`<span class="pill a">${x.bad} rusak</span>`:`<span class="pill g">Baik</span>`):"—"}</td></tr>`).join("")||'<tr><td colspan="9" class="empty">Tidak ada LP yang cocok.</td></tr>';
 }
 
 /* ============ VIEW LAIN ============ */
@@ -761,6 +786,7 @@ function openLP(id){
   const tr=lineChart(MON.slice(0,S.month),[{name:"Plan (YTD)",color:"#9aa1a9",dash:1,w:2.5,vals:Array.from({length:S.month},(_,i)=>{const x=latest(id,i+1);return x?x.kipl.mandiri.plan+x.kipl.mandatory.plan:0})},{name:"Actual (YTD)",color:"#111",vals:Array.from({length:S.month},(_,i)=>{const x=latest(id,i+1);return x?x.kipl.mandiri.actual+x.kipl.mandatory.actual:0})}]);
   const inc=(t,o)=>`<div class="sbox"><h4>${t}</h4><div class="row" style="grid-template-columns:50px 1fr"><span>Plan</span><b style="text-align:left">${rp(o.plan)}</b></div><div class="row" style="grid-template-columns:50px 1fr"><span>Actual</span><b style="text-align:left">${rp(o.actual)}</b></div>${vbar(pc(o.actual,o.plan))}<div class="tcell" style="margin-top:4px">Achv <b>${fp(pc(o.actual,o.plan))}</b></div></div>`;
   body=`<div class="chips">${stPill(m.status)}${chip(r.pic,"PIC","#999")}${chip(MONTHS[r.month-1],"laporan terakhir","#4285f4")}</div>
+  ${S.batch!=="all"&&!m.nb?`<div class="sbox"><div class="empty">${esc(S.batch)} tidak ditemukan pada laporan LP ini (s.d. ${MONTHS[S.month-1]}).</div></div>`:""}
   <div class="sectt">KESISWAAN</div>
   ${kb.batches.map(b=>`<div class="sbox"><h4>Rekrutmen & MCU ${esc(b.name)}</h4>${[["Seleksi",b.seleksi],["Psikotes",b.psikotes],["Interview",b.interview],["MCU",b.mcu]].map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,b.seleksi),"#ffb703")}<b>${v}</b></div>`).join("")}</div>`).join("")}
   <div class="sbox"><h4>Pelaksanaan Bintalsik</h4>${bs?`<div class="mini">${chip(bs.seleksi,"Seleksi","#ffb703")}${chip(bs.psikotes,"Psikotes","#ffb703")}${chip(bs.interview,"Interview","#ffb703")}${chip(bs.mcu,"MCU","#34a853")}${chip(esc(bs.lokasi),"Lokasi","#a855f7")}</div>`:'<div class="empty">Tidak ada pelaksanaan Bintalsik.</div>'}</div>
@@ -779,10 +805,10 @@ function openLP(id){
 
 /* ============ CSV ============ */
 function exportCSV(){
- const rows=[["Tahun","Learning Point","Wilayah","Koordinator","Status","Bulan data","Plan income YTD","Actual income YTD","Capaian %","Siswa","Plan siswa","Seleksi","MCU","Customer","Fasus terpakai","Fasus plan","Aset rusak"]];
- sortMs(lpList().map(l=>metrics(l))).forEach(x=>rows.push([S.year,x.lp.name,x.lp.region,x.lp.coord,stLabel[x.status][0],x.rep?MONTHS[x.rep.month-1]:"",Math.round(x.plan),Math.round(x.actual),x.achv==null?"":x.achv.toFixed(1),x.siswa??"",x.sPlan??"",x.sel??"",x.mcu??"",x.cust??"",x.fU??"",x.fP??"",x.bad??""]));
+ const rows=[["Tahun","Batch","Learning Point","Wilayah","Koordinator","Status","Bulan data","Plan income YTD","Actual income YTD","Capaian %","Siswa","Plan siswa","Seleksi","MCU","Customer","Fasus terpakai","Fasus plan","Aset rusak"]];
+ sortMs(lpList().map(l=>metrics(l))).forEach(x=>rows.push([S.year,S.batch==="all"?"Semua":S.batch,x.lp.name,x.lp.region,x.lp.coord,stLabel[x.status][0],x.rep?MONTHS[x.rep.month-1]:"",Math.round(x.plan),Math.round(x.actual),x.achv==null?"":x.achv.toFixed(1),x.siswa??"",x.sPlan??"",x.sel??"",x.mcu??"",x.cust??"",x.fU??"",x.fP??"",x.bad??""]));
  const csv="﻿"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),a=document.createElement("a");
- a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`UTSchool_Konsolidasi_${S.year}_${MON[S.month-1]}.csv`;a.click();
+ a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`UTSchool_Konsolidasi_${S.year}_${S.batch==="all"?"":S.batch.replace(/\W+/g,"")+"_"}${MON[S.month-1]}.csv`;a.click();
 }
 
 /* ============ BOOT ============ */
