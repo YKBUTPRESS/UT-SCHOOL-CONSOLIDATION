@@ -296,9 +296,10 @@ let LPS=LP_MASTER.map((x,i)=>({id:"LP"+String(i+1).padStart(2,"0"),name:x[0],reg
   kipl:{mandiri:{plan,actual}, mandatory:{plan,actual}, customers:[{name,type}], fasusUsed,fasusPlan},   // income = kumulatif YTD
   assets:[{name,cond}]}                                                                                   */
 let REP={},DEMO=true,SESSION=null,lokMap=null,lokLayer=null,lastAttn=[],lastGroups=[];
+let YR={},YEARS=[];   // YR[tahun] = laporan tahun itu (cache); REP selalu menunjuk ke laporan tahun yang dipilih (S.year)
 function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function genDemo(){
- const R=rng(2026),out={},cust=["PT Pamapersada Nusantara","PT Kideco Jaya Agung","PT Berau Coal","PT Adaro Indonesia","PT Bukit Asam","PT Freeport Indonesia","PT Vale Indonesia","PT Kaltim Prima Coal","PT Bumi Resources","PT Antam"];
+function genDemo(year){year=year||CONFIG.YEAR;if(year>CONFIG.YEAR)return {};const D=year<CONFIG.YEAR?12:CONFIG.LAST_DUE_MONTH;
+ const R=rng(year),out={},cust=["PT Pamapersada Nusantara","PT Kideco Jaya Agung","PT Berau Coal","PT Adaro Indonesia","PT Bukit Asam","PT Freeport Indonesia","PT Vale Indonesia","PT Kaltim Prima Coal","PT Bumi Resources","PT Antam"];
  const sites=["Site A","Site B","Site C","Site D"],assetNames=["Battery Hidrometer (LVA)","Kit Rangkaian Komponen Elektrik (LVA)","Cutaway Hyd. Pump Variable Displacement (LVA)","Cutaway Battery relay (LVA)","Seragam instruktur UTS (LVA)"];
  LPS.forEach(lp=>{
   const annM=(.7+R()*2.2)*1e9,annD=(.5+R()*1.9)*1e9,rM=.55+R()*.75,rD=.5+R()*.8;
@@ -309,13 +310,13 @@ function genDemo(){
   const fPlan=8+Math.floor(R()*14),fRate=.5+R()*.6;
   const assets=assetNames.map(n=>({name:n,cond:R()<.14?"Rusak":"Baik"}));
   let aM=0,aD=0;
-  for(let m=1;m<=CONFIG.LAST_DUE_MONTH;m++){
+  for(let m=1;m<=D;m++){
    aM+=annM/12*rM*(.6+R()*.8);aD+=annD/12*rD*(.6+R()*.8);
    let st="submitted";const x=R();
-   if(m===CONFIG.LAST_DUE_MONTH){if(x<.18)st="missing";else if(x<.28)st="draft"}else if(x<.04)st="missing";
+   if(m===D){if(x<.18)st="missing";else if(x<.28)st="draft"}else if(x<.04)st="missing";
    if(st==="missing")continue;
    const nc=Math.min(5,Math.floor(m/2*R()*1.3)),cs=[];for(let i=0;i<nc;i++)cs.push({name:cust[Math.floor(R()*cust.length)],type:R()<.5?"New Customer":"New Project"});
-   out[lp.id+"|"+m]={lp:lp.id,month:m,status:st,pic:"PIC "+lp.name,
+   out[lp.id+"|"+m]={lp:lp.id,year,month:m,status:st,pic:"PIC "+lp.name,
     kesiswaan:{batches:[{name:"Batch 39",seleksi,psikotes:ps,interview:iv,mcu:mc}],bintalsik:hasBin?{seleksi:Math.round(seleksi*.6),psikotes:Math.round(ps*.6),interview:Math.round(iv*.6),mcu:Math.round(mc*.6),lokasi:sites[Math.floor(R()*4)]}:null},
     akademik:{batches:bat,csr},
     kipl:{mandiri:{plan:annM*m/12,actual:aM},mandatory:{plan:annD*m/12,actual:aD},customers:cs,fasusPlan:fPlan,fasusUsed:Math.round(fPlan*fRate*Math.min(1,m/8))},
@@ -326,7 +327,26 @@ function genDemo(){
 }
 
 /* ============ STATE & HELPERS ============ */
-const S={view:"dashboard",month:CONFIG.LAST_DUE_MONTH,region:"all",coord:"all",q:"",sort:"achv_desc",rank:"achv_asc",attn:"low",heat:"region"};
+const S={view:"dashboard",year:CONFIG.YEAR,month:CONFIG.LAST_DUE_MONTH,region:"all",coord:"all",q:"",sort:"achv_desc",rank:"achv_asc",attn:"low",heat:"region"};
+/* ---- Filter tahunan ----
+   Laporan bersifat YTD per tahun kalender: tiap laporan dimiliki satu tahun (kolom year) dan kumulatifnya mulai dari nol tiap Januari.
+   Maka data tahun terpilih = hanya laporan bertahun itu; batch/program yang berlanjut lintas tahun muncul di tiap tahun ia dilaporkan, tanpa dihitung ganda. */
+function dueFor(y){
+ const mx=Math.max(0,...Object.values(YR[y]||{}).map(x=>x.month));
+ const base=y<CONFIG.YEAR?12:y===CONFIG.YEAR?CONFIG.LAST_DUE_MONTH:1;
+ return Math.max(base,mx);
+}
+const dueNow=()=>dueFor(S.year);
+function yearList(){
+ const ys=[CONFIG.YEAR,new Date().getFullYear(),S.year,...YEARS,...Object.keys(YR).map(Number)].filter(y=>y>=2000&&y<=2100);
+ const lo=Math.max(2000,Math.min(...ys)-1),hi=Math.min(2100,Math.max(...ys)+1),out=[];
+ for(let y=lo;y<=hi;y++)out.push(y);return out;
+}
+function syncMonth(){const d=dueNow();if(!S.monthTouched||S.month>d)S.month=d}
+async function switchYear(y){
+ if(!y||y===S.year)return;
+ S.year=y;S.yearTouched=true;REP=YR[y]||{};syncMonth();renderAll();await loadData(false);
+}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const nf=n=>Math.round(n||0).toLocaleString("id-ID");
@@ -388,7 +408,7 @@ const chip=(v,l,c)=>`<span class="ch" style="border-left-color:${c}"><b>${v}</b>
 const tbl=(heads,rows,emptyMsg)=>`<div class="tw"><table class="t"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")||`<tr><td colspan="${heads.length}" class="empty">${emptyMsg||"Tidak ada data."}</td></tr>`}</tbody></table></div>`;
 function incRows(ms,kind){return ms.filter(x=>x.rep).map(x=>{const o=kind==="mand"?x.mand:kind==="mandt"?x.mandt:{plan:x.plan,actual:x.actual},p=pc(o.actual,o.plan);return{x,o,p}}).sort((a,b)=>(a.p??999)-(b.p??999)).map(({x,o,p})=>`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td><td>${rp(o.plan)}</td><td>${rp(o.actual)}</td><td style="background:${heatBg(p)}"><b>${fp(p)}</b></td></tr>`)}
 function showInfo(key){
- const ms=lpList().map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1]+" "+CONFIG.YEAR;
+ const ms=lpList().map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1]+" "+S.year;
  if(key==="rep"){
   openModal("Status Laporan · "+per,`<div class="desc">Laporan bulan ${MONTHS[S.month-1]} per learning point. "Draft" belum final; "Belum lapor" belum ada data masuk dari HO.</div><div class="chips">${chip(T.sub,"Sudah lapor","#34a853")}${chip(T.draft,"Draft","#fbbc04")}${chip(T.n-T.sub-T.draft,"Belum lapor","#ea4335")}</div>`+tbl(["Learning Point","Wilayah","Status"],ms.sort((a,b)=>({missing:0,draft:1,submitted:2})[a.status]-({missing:0,draft:1,submitted:2})[b.status]).map(x=>`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td><td>${esc(x.lp.region)}</td><td>${stPill(x.status)}</td></tr>`)));
  }else if(key==="tot"||key==="mand"||key==="mandt"){
@@ -435,15 +455,16 @@ async function loadData(manual){
  const btn=$("btnRefresh");btn.disabled=true;btn.textContent="⟳ Memuat…";
  try{
   if(CONFIG.API_URL){
-   const r=await api("reports",{year:CONFIG.YEAR});if(!r.ok)throw new Error(r.message||"Gagal mengambil data.");
-   REP=r.reports||{};DEMO=false;
-   if(r.config){CONFIG.YEAR=r.config.year;CONFIG.LAST_DUE_MONTH=r.config.lastDueMonth}
+   const y=S.year,firstLoad=!YEARS.length&&!Object.keys(YR).length,r=await api("reports",{year:y});if(!r.ok)throw new Error(r.message||"Gagal mengambil data.");
+   YR[y]=r.reports||{};DEMO=false;if(Array.isArray(r.years))YEARS=r.years.map(Number).filter(Boolean);
+   if(y!==S.year)return;   // pengguna sudah pindah tahun; data tahun ini tetap tersimpan di cache
+   if(r.config){const dy=r.config.defaultYear!=null?r.config.defaultYear:(firstLoad?r.config.year:null);if(dy!=null){CONFIG.YEAR=dy;CONFIG.LAST_DUE_MONTH=r.config.lastDueMonth;if(!S.yearTouched&&S.year!==dy){S.year=dy;return await loadData(false)}}}
    if(Array.isArray(r.lps)&&r.lps.length)LPS=r.lps.map(l=>({id:l.id,name:l.name,region:l.region,coord:l.coord||"",ll:[l.lat,l.lng]}));
-   const mx=Math.max(0,...Object.values(REP).map(x=>x.month));if(mx>CONFIG.LAST_DUE_MONTH)CONFIG.LAST_DUE_MONTH=mx;   // laporan yang sudah masuk selalu tampil
-   if(!S.monthTouched||S.month>CONFIG.LAST_DUE_MONTH)S.month=CONFIG.LAST_DUE_MONTH;
+   REP=YR[y];   // bulan data terjauh selalu tampil (lihat dueFor)
+   syncMonth();
    setDataSrc("ok");
   }
-  else{if(!Object.keys(REP).length)REP=genDemo();DEMO=true;setDataSrc("demo")}
+  else{if(!YR[S.year])YR[S.year]=genDemo(S.year);REP=YR[S.year];DEMO=true;syncMonth();setDataSrc("demo")}
  }catch(err){setDataSrc("err",err.message)}
  finally{btn.disabled=false;btn.textContent="⟳ Refresh Data"}
  $("demoBar").classList.toggle("hide",!DEMO);renderAll();
@@ -463,7 +484,8 @@ function toggleFullScreen(){const el=document.documentElement;if(!document.fulls
 
 /* ============ RENDER ============ */
 function renderFilters(){
- $("fL").innerHTML=`<label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:CONFIG.LAST_DUE_MONTH},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${CONFIG.YEAR}</option>`).join("")}</select>
+ $("fL").innerHTML=`<label>Tahun:</label><select class="fs" style="min-width:90px" onchange="switchYear(+this.value)">${yearList().map(y=>`<option value="${y}" ${S.year===y?"selected":""}>${y}</option>`).join("")}</select>
+ <label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:dueNow()},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${S.year}</option>`).join("")}</select>
  <label>Wilayah:</label><select class="fs" onchange="S.region=this.value;renderAll()"><option value="all">-- Semua Wilayah --</option>${REGIONS.map(r=>`<option ${S.region===r?"selected":""}>${esc(r)}</option>`).join("")}</select>
  <label>Koordinator:</label><select class="fs" style="min-width:110px" onchange="S.coord=this.value;renderAll()"><option value="all">Semua</option>${["Medan","Surabaya","Makassar"].map(c=>`<option value="${c}" ${S.coord===c?"selected":""}>${c}</option>`).join("")}<option value="direct" ${S.coord==="direct"?"selected":""}>Langsung HO</option></select>`;
  $("fbar").classList.toggle("hide",S.view==="input");
@@ -566,17 +588,17 @@ function renderLPTable(){
 
 /* ============ VIEW LAIN ============ */
 function viewStatus(){
- const lps=lpList(),due=CONFIG.LAST_DUE_MONTH;
+ const lps=lpList(),due=dueNow();
  const cell=(id,m)=>{if(m>due)return`<div class="cell n" title="Belum jatuh tempo">·</div>`;const s=curStatus(id,m);return`<div class="cell ${stLabel[s][1]}" title="${MONTHS[m-1]}: ${stLabel[s][0]}">${({submitted:"✓",draft:"…",missing:"✕"})[s]}</div>`};
  const total=lps.length*due,ok=lps.reduce((s,l)=>{for(let m=1;m<=due;m++)if(curStatus(l.id,m)==="submitted")s++;return s},0);
- return`<div class="card"><div class="hd">Kepatuhan pelaporan bulanan ${CONFIG.YEAR}<small>${ok} dari ${total} laporan sudah masuk (${fp(pc(ok,total))}) · klik nama LP untuk detail</small></div>
+ return`<div class="card"><div class="hd">Kepatuhan pelaporan bulanan ${S.year}<small>${ok} dari ${total} laporan sudah masuk (${fp(pc(ok,total))}) · klik nama LP untuk detail</small></div>
  <div class="hmap"><div class="hr"><span></span>${MON.map(m=>`<div class="hh">${m}</div>`).join("")}</div>
  ${lps.map(l=>`<div class="hr"><span style="cursor:pointer;font-weight:700;font-size:13px" onclick="openLP('${l.id}')">${esc(l.name)}</span>${MON.map((_,i)=>cell(l.id,i+1)).join("")}</div>`).join("")}</div>
  <div class="leg" style="margin-top:12px"><span><i style="background:#c6efce"></i>Sudah lapor</span><span><i style="background:#ffeb9c"></i>Draft</span><span><i style="background:#ffc7ce"></i>Belum lapor</span><span><i style="background:#eee"></i>Belum jatuh tempo</span></div></div>`;
 }
 function viewSummary(){
  const T=agg(lpList().map(l=>metrics(l))),li=(a,b)=>`<li>${a}: <b>${b}</b></li>`;
- return`<div class="stitle"><b>SUMMARY</b><span>ACHIEVEMENT ${CONFIG.YEAR} · s.d. ${MONTHS[S.month-1]}</span></div>
+ return`<div class="stitle"><b>SUMMARY</b><span>ACHIEVEMENT ${S.year} · s.d. ${MONTHS[S.month-1]}</span></div>
  <div class="slide"><div class="cols">
   <div class="card"><div class="ph">Kesiswaan</div><h4>Rekrutmen & MCU Batch 39</h4><ul>${li("Total peserta seleksi",T.sel)}${li("Lolos psikotes",T.psi)}${li("Lolos interview",T.itv)}${li("Lolos MCU",T.mcu)}</ul>
    <h4>Pelaksanaan Bintalsik</h4><ul>${li("LP melaksanakan",T.binN)}${li("Total peserta seleksi",T.binSel)}${li("Lolos psikotes",T.binPsi)}${li("Lolos interview",T.binItv)}${li("Lolos MCU",T.binMcu)}${li("Jumlah lokasi Bintalsik",T.binLok)}</ul></div>
@@ -591,7 +613,7 @@ function viewSummary(){
 }
 function viewInput(){
  if(!isAdmin())return`<div class="card"><div class="hd">Akses ditolak</div><div class="desc">Hanya HO (Admin) yang dapat mengubah data.</div></div>`;
- const okN=UP.files.filter(f=>f.report&&!f.dup).length,errN=UP.files.filter(f=>!f.report).length,m=UP.month||CONFIG.LAST_DUE_MONTH;
+ const okN=UP.files.filter(f=>f.report&&!f.dup).length,errN=UP.files.filter(f=>!f.report).length,m=UP.month||dueNow();
  const pill=f=>!f.report?'<span class="pill r">Ditolak</span>':f.dup?'<span class="pill n">Diganti file lain</span>':f.warnings.length?'<span class="pill a">Siap · '+f.warnings.length+' peringatan</span>':'<span class="pill g">Siap</span>';
  const notes=f=>(f.errors.length?`<ul class="msgs e">${f.errors.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:"")+(f.warnings.length?`<ul class="msgs w">${f.warnings.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:"")+(f.dup?'<ul class="msgs w"><li>LP + bulan yang sama muncul di file yang lebih baru; file ini dilewati.</li></ul>':"")+(f.overwrite&&f.report&&!f.dup?'<ul class="msgs w"><li>Akan menimpa laporan yang sudah ada untuk LP + bulan ini.</li></ul>':"");
  const saved=LPS.map(l=>{const r=REP[l.id+"|"+m];return`<tr><td><b>${esc(l.name)}</b></td><td>${r?stPill(r.status):'<span class="pill r">Belum ada</span>'}</td><td>${r?esc(r.pic||"—"):"—"}</td><td class="tcell">${r?esc((r.updatedAt||"").slice(0,16).replace("T"," ")||"—"):"—"}</td><td>${r?`<button class="btn-s" onclick="setSaved('${l.id}',${m},'${r.status==="draft"?"submitted":"draft"}')">Jadikan ${r.status==="draft"?"Final":"Draft"}</button><button class="btn-s d" onclick="deleteSaved('${l.id}',${m})">Hapus</button>`:"—"}</td></tr>`}).join("");
@@ -606,7 +628,7 @@ function viewInput(){
   ${UP.files.length?`<div style="margin-top:12px"><div class="chips" style="margin-bottom:8px">${chip(okN,"siap diimpor","#34a853")}${chip(errN,"ditolak","#ea4335")}${chip(UP.files.length,"file dibaca","#4285f4")}</div>
   ${tbl(["File","Laporan","Hasil","Catatan"],UP.files.map((f,i)=>`<tr><td>${esc(f.fileName)}</td><td><b>${esc(f.label)}</b></td><td>${pill(f)}</td><td>${notes(f)||"—"}<button class="btn-s" style="margin-top:4px" onclick="removeUpload(${i})">Buang</button></td></tr>`))}
   <div style="margin-top:10px;display:flex;gap:8px"><button class="bt" ${UP.busy||!okN?"disabled":""} onclick="importUploads()">${UP.busy?"Menyimpan…":"✔ Impor "+okN+" laporan"}</button><button class="bt w" onclick="UP.files=[];UP.msg='';renderAll()">Kosongkan daftar</button></div></div>`:""}</div>
- <div class="card" style="margin-bottom:10px"><div class="hd">Laporan tersimpan<select class="fs" style="min-width:150px" onchange="UP.month=+this.value;renderAll()">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${m===i+1?"selected":""}>${MONTHS[i]} ${CONFIG.YEAR}</option>`).join("")}</select></div>
+ <div class="card" style="margin-bottom:10px"><div class="hd">Laporan tersimpan<span class="fl"><select class="fs" style="min-width:90px" onchange="switchYear(+this.value)">${yearList().map(y=>`<option value="${y}" ${S.year===y?"selected":""}>${y}</option>`).join("")}</select><select class="fs" style="min-width:150px" onchange="UP.month=+this.value;renderAll()">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${m===i+1?"selected":""}>${MONTHS[i]} ${S.year}</option>`).join("")}</select></span></div>
   ${tbl(["Learning Point","Status","PIC","Terakhir diubah","Aksi (khusus HO)"],[saved])}</div>
  <div class="card"><div class="hd">Ganti password akun</div>
   <div class="fl"><select class="fs" id="pwUser" style="min-width:120px"><option value="admin">admin (HO)</option><option value="viewer">viewer</option></select><input class="fs" id="pwNew" type="password" placeholder="Password baru (min. 8 karakter)" style="min-width:260px"><button class="bt" onclick="changePw()">Simpan password</button></div>
@@ -641,7 +663,7 @@ function parseTemplateRows(rows,fileName){
  if(!lpName)R.errors.push("Learning Point belum dipilih.");else if(!lp)R.errors.push('Learning Point "'+lpName+'" tidak dikenal.');
  const yr=parseNum(V["info.tahun"]);let year=null;
  if(yr===null||isNaN(yr)||yr<2000||yr>2100||Math.floor(yr)!==yr)R.errors.push("Tahun laporan tidak valid.");
- else{year=yr;if(year!==CONFIG.YEAR)R.errors.push("Tahun laporan "+year+" berbeda dengan tahun dashboard ("+CONFIG.YEAR+").")}
+ else{year=yr;if(year!==S.year)R.warnings.push("Tahun laporan "+year+" berbeda dengan tahun yang sedang ditampilkan ("+S.year+"); laporan akan disimpan ke tahun "+year+".")}
  let month=null;const mv=V["info.bulan"],mn=typeof mv==="number"?mv:MONTH_IDX[T("info.bulan").toLowerCase()]||parseNum(mv);
  if(!mn||isNaN(mn)||mn<1||mn>12||Math.floor(mn)!==mn)R.errors.push("Bulan laporan tidak valid.");else month=mn;
  if(lp&&month&&year)R.label=lp.name+" · "+MONTHS[month-1]+" "+year;
@@ -679,7 +701,7 @@ function parseTemplateRows(rows,fileName){
   R.report={lp:lp.id,year,month,status:"submitted",pic:T("info.pic"),
    kesiswaan:{batches:rek,bintalsik:bin},akademik:{batches:reg,csr},
    kipl:{mandiri:{plan:inc["mandiri.plan"],actual:inc["mandiri.actual"]},mandatory:{plan:inc["mandatory.plan"],actual:inc["mandatory.actual"]},customers,fasusPlan,fasusUsed},assets};
-  R.overwrite=!!REP[lp.id+"|"+month];
+  R.overwrite=!!(YR[year]&&YR[year][lp.id+"|"+month]);
  }
  return R;
 }
@@ -694,7 +716,7 @@ async function handleFiles(list){
  }
  flagDuplicates();renderAll();
 }
-function flagDuplicates(){const last={};UP.files.forEach((f,i)=>{f.dup=false;if(f.report)last[f.report.lp+"|"+f.report.month]=i});UP.files.forEach((f,i)=>{if(f.report&&last[f.report.lp+"|"+f.report.month]!==i)f.dup=true})}
+function flagDuplicates(){const last={};UP.files.forEach((f,i)=>{f.dup=false;if(f.report)last[f.report.lp+"|"+f.report.year+"|"+f.report.month]=i});UP.files.forEach((f,i)=>{if(f.report&&last[f.report.lp+"|"+f.report.year+"|"+f.report.month]!==i)f.dup=true})}
 function removeUpload(i){UP.files.splice(i,1);flagDuplicates();renderAll()}
 async function importUploads(){
  const use=UP.files.filter(f=>f.report&&!f.dup);
@@ -705,10 +727,10 @@ async function importUploads(){
  try{
   if(CONFIG.API_URL){
    const r=await api("importReports",{reports});if(!r.ok)throw new Error(r.message||"Impor gagal.");
-   UP.msg="✓ "+r.saved+" laporan tersimpan ke spreadsheet."+(r.failed&&r.failed.length?" "+r.failed.length+" ditolak server: "+r.failed.map(x=>x.error).join("; "):"");UP.files=[];await loadData(false);
+   UP.msg="✓ "+r.saved+" laporan tersimpan ke spreadsheet."+(r.failed&&r.failed.length?" "+r.failed.length+" ditolak server: "+r.failed.map(x=>x.error).join("; "):"");UP.files=[];reports.forEach(r=>{if(r.year!==S.year)delete YR[r.year]});await loadData(false);
   }else{
-   reports.forEach(r=>{REP[r.lp+"|"+r.month]={...r,updatedAt:new Date().toISOString()}});
-   const mx=Math.max(0,...reports.map(r=>r.month));if(mx>CONFIG.LAST_DUE_MONTH)CONFIG.LAST_DUE_MONTH=mx;
+   reports.forEach(r=>{(YR[r.year]=YR[r.year]||{})[r.lp+"|"+r.month]={...r,updatedAt:new Date().toISOString()}});
+   REP=YR[S.year]||(YR[S.year]={});syncMonth();
    UP.msg="✓ "+reports.length+" laporan dimuat. MODE DEMO: tidak disimpan ke spreadsheet dan hilang saat halaman dimuat ulang.";UP.files=[];
   }
   toast(UP.msg,"ok");
@@ -716,12 +738,12 @@ async function importUploads(){
  UP.busy=false;renderAll();
 }
 async function deleteSaved(id,month){
- const lp=LPS.find(l=>l.id===id);if(!confirm("Hapus laporan "+lp.name+" · "+MONTHS[month-1]+" "+CONFIG.YEAR+"? Tindakan ini tidak bisa dibatalkan."))return;
- try{if(CONFIG.API_URL){const r=await api("deleteReport",{lp:id,year:CONFIG.YEAR,month});if(!r.ok)throw new Error(r.message);await loadData(false)}else delete REP[id+"|"+month];toast("Laporan dihapus.","ok")}catch(e){toast(e.message,"err")}
+ const lp=LPS.find(l=>l.id===id);if(!confirm("Hapus laporan "+lp.name+" · "+MONTHS[month-1]+" "+S.year+"? Tindakan ini tidak bisa dibatalkan."))return;
+ try{if(CONFIG.API_URL){const r=await api("deleteReport",{lp:id,year:S.year,month});if(!r.ok)throw new Error(r.message);await loadData(false)}else delete REP[id+"|"+month];toast("Laporan dihapus.","ok")}catch(e){toast(e.message,"err")}
  renderAll();
 }
 async function setSaved(id,month,status){
- try{if(CONFIG.API_URL){const r=await api("setStatus",{lp:id,year:CONFIG.YEAR,month,status});if(!r.ok)throw new Error(r.message);await loadData(false)}else REP[id+"|"+month].status=status;toast("Status diubah menjadi "+stLabel[status][0]+".","ok")}catch(e){toast(e.message,"err")}
+ try{if(CONFIG.API_URL){const r=await api("setStatus",{lp:id,year:S.year,month,status});if(!r.ok)throw new Error(r.message);await loadData(false)}else REP[id+"|"+month].status=status;toast("Status diubah menjadi "+stLabel[status][0]+".","ok")}catch(e){toast(e.message,"err")}
  renderAll();
 }
 async function changePw(){
@@ -757,10 +779,10 @@ function openLP(id){
 
 /* ============ CSV ============ */
 function exportCSV(){
- const rows=[["Learning Point","Wilayah","Koordinator","Status","Bulan data","Plan income YTD","Actual income YTD","Capaian %","Siswa","Plan siswa","Seleksi","MCU","Customer","Fasus terpakai","Fasus plan","Aset rusak"]];
- sortMs(lpList().map(l=>metrics(l))).forEach(x=>rows.push([x.lp.name,x.lp.region,x.lp.coord,stLabel[x.status][0],x.rep?MONTHS[x.rep.month-1]:"",Math.round(x.plan),Math.round(x.actual),x.achv==null?"":x.achv.toFixed(1),x.siswa??"",x.sPlan??"",x.sel??"",x.mcu??"",x.cust??"",x.fU??"",x.fP??"",x.bad??""]));
+ const rows=[["Tahun","Learning Point","Wilayah","Koordinator","Status","Bulan data","Plan income YTD","Actual income YTD","Capaian %","Siswa","Plan siswa","Seleksi","MCU","Customer","Fasus terpakai","Fasus plan","Aset rusak"]];
+ sortMs(lpList().map(l=>metrics(l))).forEach(x=>rows.push([S.year,x.lp.name,x.lp.region,x.lp.coord,stLabel[x.status][0],x.rep?MONTHS[x.rep.month-1]:"",Math.round(x.plan),Math.round(x.actual),x.achv==null?"":x.achv.toFixed(1),x.siswa??"",x.sPlan??"",x.sel??"",x.mcu??"",x.cust??"",x.fU??"",x.fP??"",x.bad??""]));
  const csv="﻿"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),a=document.createElement("a");
- a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`UTSchool_Konsolidasi_${CONFIG.YEAR}_${MON[S.month-1]}.csv`;a.click();
+ a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`UTSchool_Konsolidasi_${S.year}_${MON[S.month-1]}.csv`;a.click();
 }
 
 /* ============ BOOT ============ */
