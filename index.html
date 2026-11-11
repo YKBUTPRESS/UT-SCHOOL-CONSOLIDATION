@@ -87,7 +87,7 @@ button,select,input{font:inherit}
 .hd{font-size:14px;font-weight:800;color:#000;margin-bottom:8px;padding-left:8px;border-left:4px solid var(--y);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .hd small{font-size:11px;font-weight:600;color:#777;text-transform:none}
 .i{color:#9ca3af;font-size:12px;margin-left:4px}
-.kpis{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpis{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .kpi{background:#fff;border:2px solid #000;border-left:6px solid var(--y);border-radius:6px;padding:10px 12px;cursor:pointer;transition:box-shadow .15s,transform .1s;min-width:0}
 .kpi:hover,.click:hover{box-shadow:0 3px 10px #0004;transform:translateY(-1px)}
 .kpi span{font-size:12px;font-weight:700;color:#555;text-transform:uppercase}
@@ -106,7 +106,7 @@ button,select,input{font:inherit}
 .tog button{border:2px solid #000;background:#fff;padding:2px 11px;font-size:12px;font-weight:700;border-radius:4px;cursor:pointer}
 .tog button.on{background:var(--y)}
 #attn{max-height:318px;overflow-y:auto;padding-right:4px}
-.at{display:grid;grid-template-columns:86px 1fr 50px;gap:8px;align-items:center;font-size:13px;margin-bottom:8px;font-weight:700;cursor:pointer;padding:3px 4px;border-radius:4px}
+.at{display:grid;grid-template-columns:86px 1fr 74px;gap:8px;align-items:center;font-size:13px;margin-bottom:8px;font-weight:700;cursor:pointer;padding:3px 4px;border-radius:4px}
 .at:hover{background:#fff7e0}
 .at span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .at b{text-align:right}
@@ -117,7 +117,7 @@ button,select,input{font:inherit}
 .rank{grid-column:4;grid-row:3/span 2;position:relative;min-height:540px}
 .rank .rs{position:absolute;left:12px;right:12px;bottom:10px;top:86px;overflow-y:auto}
 .rank select{font-size:12px;padding:3px 6px;border:1px solid #aaa;border-radius:4px}
-.rrow{display:grid;grid-template-columns:92px 1fr 50px;gap:8px;align-items:center;font-size:12.5px;font-weight:700;margin-bottom:7px;cursor:pointer;padding:2px 3px;border-radius:4px}
+.rrow{display:grid;grid-template-columns:92px 1fr 78px;gap:8px;align-items:center;font-size:12.5px;font-weight:700;margin-bottom:7px;cursor:pointer;padding:2px 3px;border-radius:4px}
 .rrow:hover{background:#fff7e0}
 .rrow span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rrow b{text-align:right}
 .leg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#333;margin-top:6px}
@@ -153,6 +153,7 @@ button,select,input{font:inherit}
 .stitle{background:#111;color:#fff;text-align:center;padding:14px;border-radius:6px;margin-bottom:10px}
 .stitle b{display:block;font-size:21px;letter-spacing:1px}.stitle span{color:var(--y);font-weight:800}
 .tcell{font-size:12px;color:#555}
+.lph td{background:#fff7e0!important;font-weight:800;border-top:2px solid #000}
 
 .toast{position:fixed;right:18px;bottom:18px;z-index:20000;background:#111;color:#fff;border-left:6px solid var(--y);padding:11px 16px;border-radius:6px;font-weight:600;max-width:420px;box-shadow:0 6px 24px #0006}
 .toast.err{border-left-color:var(--r)}.toast.ok{border-left-color:var(--g)}
@@ -238,28 +239,28 @@ button,select,input{font:inherit}
     <div class="kpis" id="kpis"></div>
     <div class="card c3 mapcard"><div class="hd">Peta Sebaran Learning Point <small id="mapNote"></small></div><div id="lokMap"></div></div>
     <div class="card c1"><div class="hd">Perlu Perhatian</div>
-     <div class="tog"><button id="tgLow" class="on" onclick="setAttn('low')">Capaian rendah</button><button id="tgLate" onclick="setAttn('late')">Belum lapor</button><button id="tgAsset" onclick="setAttn('asset')">Aset rusak</button></div>
+     <div class="tog"><button id="tgLow" class="on" onclick="setAttn('low')">Capaian rendah</button><button id="tgAsset" onclick="setAttn('asset')">Aset rusak</button></div>
      <div id="attn"></div></div>
     <div class="card click" onclick="showInfo('tot')"><div class="hd">Income Total (YTD)<span class="i">ⓘ</span></div><div id="g1"></div></div>
     <div class="card click" onclick="showInfo('mand')"><div class="hd">Mandiri<span class="i">ⓘ</span></div><div id="g2"></div></div>
     <div class="card click" onclick="showInfo('mandt')"><div class="hd">Mandatory<span class="i">ⓘ</span></div><div id="g3"></div></div>
-    <div class="card rank"><div class="hd">Capaian Income per LP<select id="rankSel" onchange="S.rank=this.value;renderRank()"><option value="achv_asc">Urut: Terendah</option><option value="achv_desc">Urut: Tertinggi</option><option value="plan">Urut: Plan terbesar</option><option value="name">Urut: Nama A–Z</option></select></div>
-     <div class="leg"><span><i style="background:#34a853"></i>≥ 85%</span><span><i style="background:#fbbc04"></i>70–84%</span><span><i style="background:#ea4335"></i>&lt; 70%</span><span style="color:#777;font-weight:600">Klik baris untuk detail LP</span></div>
+    <div class="card rank"><div class="hd"><span id="rankTitle">Capaian Income per LP</span><select id="rankSel" onchange="S.rank=this.value;renderRank()"><option value="achv_asc">Urut: Terendah</option><option value="achv_desc">Urut: Tertinggi</option><option value="plan">Urut: Plan terbesar</option><option value="name">Urut: Nama A–Z</option></select></div>
+     <div class="leg" id="rankLeg"></div>
      <div class="rs" id="rankList"></div></div>
-    <div class="card c3"><div class="hd">Tren Income Kumulatif (YTD) <small>Plan vs actual · Mandiri + Mandatory</small></div><div id="trend"></div></div>
+    <div class="card c3"><div class="hd">Tren Income Kumulatif (YTD) <small id="trendNote"></small></div><div id="trend"></div></div>
     <div class="pillars" id="pillars"></div>
     <div class="card c4"><div class="hd">Peta Kinerja <small>klik baris untuk memfilter</small></div>
      <div class="tog"><button id="tgReg" class="on" onclick="setHeat('region')">Per Wilayah</button><button id="tgCoo" onclick="setHeat('coord')">Per Koordinator</button></div>
      <div class="tw" style="max-height:none"><table class="t hm" id="heat"></table></div></div>
     <div class="card c4"><div class="hd">Detail per Learning Point <small id="lpCount"></small></div>
      <div class="fl" style="margin-bottom:8px"><input class="fs" id="q" placeholder="Cari learning point / wilayah…" oninput="S.q=this.value;renderLPTable()" style="min-width:230px">
-      <select class="fs" onchange="S.sort=this.value;renderLPTable()"><option value="achv_desc">Capaian tertinggi</option><option value="achv_asc">Capaian terendah</option><option value="name">Nama A–Z</option><option value="status">Status laporan</option></select></div>
-     <div class="tw"><table class="t"><thead><tr><th>Learning Point</th><th>Wilayah</th><th>Status</th><th>Income vs plan (YTD)</th><th>Siswa</th><th>MCU/Seleksi</th><th>Customer</th><th>Fasus</th><th>Aset</th></tr></thead><tbody id="lpBody"></tbody></table></div></div>
+      <select class="fs" onchange="S.sort=this.value;renderLPTable()"><option value="achv_desc">Capaian tertinggi</option><option value="achv_asc">Capaian terendah</option><option value="name">Nama A–Z</option></select></div>
+     <div class="tw"><table class="t"><thead><tr><th>Learning Point</th><th>Wilayah</th><th>Income (YTD)</th><th>Siswa</th><th>MCU/Seleksi</th><th>Customer</th><th>Fasus</th><th>Aset</th></tr></thead><tbody id="lpBody"></tbody></table></div></div>
    </div>
   </div>
 
-  <div id="view-status" class="view"></div>
   <div id="view-summary" class="view"></div>
+  <div id="view-asset" class="view"></div>
   <div id="view-input" class="view"></div>
  </div>
 </div>
@@ -267,12 +268,13 @@ button,select,input{font:inherit}
 <script>
 /* ============ CONFIG ============ */
 const CONFIG={
-  API_URL:"https://script.google.com/macros/s/AKfycbzpTudLWdjmS2rZ4R9aLrmb4OeVq_gvPrPYAY21zGauIL5lapav-81sWb7M2JkcZLHRDw/exec",                       // Tempel URL Apps Script (/exec) di sini. Kosong = mode demo.
+  API_URL:"https://script.google.com/macros/s/AKfycbzYVsA9x1oKyeupqynGo6EphB-VvCJvRP5XdTMK9apVkjtmy5PY3NNwboqP93cQVvFhuQ/exec",                       // Tempel URL Apps Script (/exec) di sini. Kosong = mode demo.
   LOGO:"logo ut school.png",        // nama file logo di GitHub
   TEMPLATE_URL:"Template_Laporan_LP.xlsx",   // template Excel untuk LP (taruh di folder yang sama)
   LAST_DUE_MONTH:10,                // di mode server nilai ini diambil dari sheet Config
   YEAR:2026                         // di mode server nilai ini diambil dari sheet Config
 };
+const PA_LABEL={both:"Plan vs Actual",plan:"Plan",actual:"Actual"};
 const MONTHS=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 const MON=MONTHS.map(m=>m.slice(0,3));
 const REGIONS=["Sumatera","Jawa","NTB","Kalimantan","Sulawesi","Papua & Maluku"];
@@ -297,6 +299,7 @@ let LPS=LP_MASTER.map((x,i)=>({id:"LP"+String(i+1).padStart(2,"0"),name:x[0],reg
   kipl:{mandiri:{plan,actual}, mandatory:{plan,actual}, customers:[{name,type}], fasusUsed,fasusPlan},   // income = kumulatif YTD
   assets:[{name,cond}]}                                                                                   */
 let REP={},DEMO=true,SESSION=null,lokMap=null,lokLayer=null,lastAttn=[],lastGroups=[];
+let BM=[],BR=[],BX={by:{},spans:{}},AE=null,BMF={key:"",start:"",end:""};   // BM/BR = periode & catatan batch semua tahun dari server
 let YR={},YEARS=[];   // YR[tahun] = laporan tahun itu (cache); REP selalu menunjuk ke laporan tahun yang dipilih (S.year)
 function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function genDemo(year){year=year||CONFIG.YEAR;if(year>CONFIG.YEAR)return {};const D=year<CONFIG.YEAR?12:CONFIG.LAST_DUE_MONTH;
@@ -304,7 +307,7 @@ function genDemo(year){year=year||CONFIG.YEAR;if(year>CONFIG.YEAR)return {};cons
  const sites=["Site A","Site B","Site C","Site D"],assetNames=["Battery Hidrometer (LVA)","Kit Rangkaian Komponen Elektrik (LVA)","Cutaway Hyd. Pump Variable Displacement (LVA)","Cutaway Battery relay (LVA)","Seragam instruktur UTS (LVA)"];
  LPS.forEach(lp=>{
   const annM=(.7+R()*2.2)*1e9,annD=(.5+R()*1.9)*1e9,rM=.55+R()*.75,rD=.5+R()*.8;
-  const off=(CONFIG.YEAR-year)*2,seleksi=18+Math.floor(R()*26),ps=Math.round(seleksi*(.62+R()*.25)),iv=Math.round(ps*(.7+R()*.25)),mc=Math.round(iv*(.75+R()*.22));
+  const off=(CONFIG.YEAR-year),seleksi=18+Math.floor(R()*26),ps=Math.round(seleksi*(.62+R()*.25)),iv=Math.round(ps*(.7+R()*.25)),mc=Math.round(iv*(.75+R()*.22));
   const hasBin=R()<.5,nb=R()<.55?2:1,bn=["Reguler Batch "+(38-off),"Reguler Batch "+(39-off)].slice(2-nb);
   const bat=bn.map(n=>{const plan=12,s=7+Math.floor(R()*6);return{name:n,kelas:1,siswaPlan:plan,siswa:Math.min(plan,s),ojt:2+Math.floor(R()*4)}});
   const csr=R()<.6?{program:1+Math.floor(R()*3),sekolah:1+Math.floor(R()*5),peserta:20+Math.floor(R()*120)}:{program:0,sekolah:0,peserta:0};
@@ -328,7 +331,7 @@ function genDemo(year){year=year||CONFIG.YEAR;if(year>CONFIG.YEAR)return {};cons
 }
 
 /* ============ STATE & HELPERS ============ */
-const S={view:"dashboard",year:CONFIG.YEAR,batch:"all",month:CONFIG.LAST_DUE_MONTH,region:"all",coord:"all",q:"",sort:"achv_desc",rank:"achv_asc",attn:"low",heat:"region"};
+const S={view:"dashboard",year:CONFIG.YEAR,batch:"all",month:CONFIG.LAST_DUE_MONTH,region:"all",coord:"all",q:"",sort:"achv_desc",rank:"achv_asc",attn:"low",heat:"region",aq:"",ac:"all",pa:"both"};
 /* ---- Filter tahunan ----
    Laporan bersifat YTD per tahun kalender: tiap laporan dimiliki satu tahun (kolom year) dan kumulatifnya mulai dari nol tiap Januari.
    Maka data tahun terpilih = hanya laporan bertahun itu; batch/program yang berlanjut lintas tahun muncul di tiap tahun ia dilaporkan, tanpa dihitung ganda. */
@@ -344,20 +347,58 @@ function yearList(){
  for(let y=lo;y<=hi;y++)out.push(y);return out;
 }
 function syncMonth(){const d=dueNow();if(!S.monthTouched||S.month>d)S.month=d}
-/* ---- Filter batch ----
+/* ---- Filter batch: kontinuitas lintas tahun ----
    Batch tersimpan per laporan di tabel Rekrutmen ("Batch 39") dan Reguler ("Reguler Batch 39"); keduanya disatukan lewat nomor batch.
-   Hanya metrik berbasis batch (seleksi/psikotes/interview/MCU, siswa/plan/kelas/OJT) yang disaring. Income, customer, Fasus, CSR, Bintalsik
-   dan aset dilaporkan per LP (tidak punya kolom batch), jadi tidak dikarang ulang per batch.
-   Data batch memakai laporan terakhir (<= periode terpilih) yang memuat batch itu; data tingkat-LP memakai laporan terakhir LP seperti biasa. */
+   Satu batch bisa dimulai di satu tahun dan selesai di tahun berikutnya. Karena itu daftar batch & datanya TIDAK dibatasi pada tahun terpilih:
+   - Periode batch = sheet Batch_Master bila ada (resmi), kalau tidak diperkirakan dari laporan pertama s.d. terakhir yang memuat batch itu.
+   - Batch muncul di filter tahun mana pun yang beririsan dengan periodenya (mis. Mei 2026 – Jun 2027 muncul di 2026 dan 2027).
+   - Data batch memakai laporan terakhir (<= periode terpilih, tahun mana pun) yang memuat batch itu; riwayat lengkap semua tahun tersedia di "Riwayat batch".
+   Income, customer, Fasus, CSR, Bintalsik, dan aset dilaporkan per LP (tanpa kolom batch), jadi tidak dikarang ulang per batch. */
 const batchKey=n=>{const s=String(n||"").trim(),d=s.match(/(\d+)/);return d?"Batch "+parseInt(d[1],10):(s||"Batch")};
-const hasBatch=(r,k)=>r.kesiswaan.batches.some(b=>batchKey(b.name)===k)||r.akademik.batches.some(b=>batchKey(b.name)===k);
-function latestBatch(id,m,k){for(let j=m;j>=1;j--){const r=REP[id+"|"+j];if(r&&r.status==="submitted"&&hasBatch(r,k))return r}return null}
+const ymOf=(y,m)=>y*100+m;
+const ymStr=v=>MONTHS[v%100-1]+" "+Math.floor(v/100);
+const ymInput=v=>Math.floor(v/100)+"-"+String(v%100).padStart(2,"0");
+const parseYM=s=>{const m=String(s||"").match(/(\d{4})-(\d{1,2})/);return m?ymOf(+m[1],+m[2]):null};
+function rebuildBX(){
+ let recs=[];
+ if(!DEMO&&BR.length)recs=BR;
+ else Object.values(YR).forEach(rp=>Object.values(rp).forEach(r=>recs.push({lp:r.lp,year:r.year,month:r.month,status:r.status,rek:r.kesiswaan.batches,reg:r.akademik.batches})));
+ const by={},est={};
+ recs.forEach(r=>{
+  if(r.status!=="submitted")return;
+  const keys=new Set([...(r.rek||[]),...(r.reg||[])].map(b=>batchKey(b.name)));
+  if(!keys.size)return;
+  const v=ymOf(r.year,r.month);(by[r.lp]=by[r.lp]||[]).push({...r,keys,v});
+  keys.forEach(k=>{const e=est[k]||(est[k]={s:v,e:v});e.s=Math.min(e.s,v);e.e=Math.max(e.e,v)});
+ });
+ Object.values(by).forEach(a=>a.sort((x,y)=>x.v-y.v));
+ const spans={};
+ Object.entries(est).forEach(([k,e])=>spans[k]={s:e.s,e:e.e,src:"est"});
+ (BM||[]).forEach(x=>{const k=batchKey(x.key),s0=parseYM(x.start),e0=parseYM(x.end);if(!s0)return;
+  const o=spans[k];spans[k]={s:o?Math.min(s0,o.s):s0,e:e0==null?null:o?Math.max(e0,o.e):e0,src:"master"}});   // periode resmi diperlebar bila ada laporan di luarnya, agar tidak ada data tersembunyi
+ BX={by,spans};
+}
+function latestBatch(id,m,k){const lim=ymOf(S.year,m),a=BX.by[id]||[];for(let i=a.length-1;i>=0;i--)if(a[i].v<=lim&&a[i].keys.has(k))return a[i];return null}
+function spanText(k){const s=BX.spans[k];if(!s)return"periode belum diketahui";return ymStr(s.s)+" – "+(s.e==null?"berjalan":ymStr(s.e))+(s.src==="master"?" (periode resmi)":" (estimasi dari laporan)")}
 function batchList(){
- const set=new Set();
- Object.values(REP||{}).forEach(r=>{if(r.status!=="submitted")return;r.kesiswaan.batches.forEach(b=>set.add(batchKey(b.name)));r.akademik.batches.forEach(b=>set.add(batchKey(b.name)))});
- if(S.batch!=="all")set.add(S.batch);   // pilihan batch tetap terlihat saat pindah ke tahun yang tidak memuatnya
+ const lo=ymOf(S.year,1),hi=ymOf(S.year,12),set=new Set();
+ Object.entries(BX.spans).forEach(([k,s])=>{if(s.s<=hi&&(s.e==null||s.e>=lo))set.add(k)});
+ if(S.batch!=="all")set.add(S.batch);   // pilihan batch tetap terlihat
  const n=s=>parseInt(s.replace(/\D/g,""),10)||0;
  return[...set].sort((a,b)=>n(a)-n(b)||a.localeCompare(b));
+}
+const histHeads=()=>["Learning Point","Periode laporan",...(showA()?["Seleksi","Psikotes","Interview","MCU","Siswa"]:[]),...(showP()?["Plan"]:[]),...(showA()?["OJT"]:[])];
+function histRows(k,lpId){
+ const ids=new Set(lpList().map(l=>l.id)),out=[];
+ Object.entries(BX.by).forEach(([id,a])=>{if(lpId?id!==lpId:!ids.has(id))return;a.forEach(r=>{if(r.keys.has(k))out.push({id,r})})});
+ out.sort((x,y)=>x.r.v-y.r.v||x.id.localeCompare(y.id));
+ return out.map(({id,r})=>{const lp=LPS.find(l=>l.id===id);if(!lp)return"";
+  const rk=(r.rek||[]).filter(b=>batchKey(b.name)===k),rg=(r.reg||[]).filter(b=>batchKey(b.name)===k),f=(a,g)=>a.length?sum(a,g):"—",A=showA();
+  return`<tr class="cl" onclick="openLP('${id}')"><td><b>${esc(lp.name)}</b></td><td>${ymStr(r.v)}</td>${A?`<td>${f(rk,b=>b.seleksi)}</td><td>${f(rk,b=>b.psikotes)}</td><td>${f(rk,b=>b.interview)}</td><td>${f(rk,b=>b.mcu)}</td><td>${f(rg,b=>b.siswa)}</td>`:""}${showP()?`<td>${f(rg,b=>b.siswaPlan)}</td>`:""}${A?`<td>${f(rg,b=>b.ojt)}</td>`:""}</tr>`});
+}
+function showBatchHistory(){
+ const k=S.batch;if(k==="all")return;
+ openModal("Riwayat lengkap "+k,`<div class="desc">Periode: <b>${spanText(k)}</b>. Menampilkan seluruh laporan yang memuat batch ini dari awal sampai akhir periode, lintas tahun kalender, sesuai filter wilayah/koordinator.</div>`+tbl(histHeads(),histRows(k),"Belum ada laporan yang memuat batch ini."),true);
 }
 async function switchYear(y){
  if(!y||y===S.year)return;
@@ -373,6 +414,15 @@ const band=p=>p==null?"#cbd0d6":p>=85?"#34a853":p>=70?"#fbbc04":"#ea4335";
 const heatBg=p=>p==null?"#f3f4f6":p>=85?"#c6efce":p>=70?"#ffeb9c":"#ffc7ce";
 const sum=(a,f)=>a.reduce((s,x)=>s+(f(x)||0),0);
 const vbar=(p,c)=>`<div class="vb"><i style="width:${Math.max(0,Math.min(100,p||0))}%;background:${c||band(p)}"></i></div>`;
+const showP=()=>S.pa!=="actual",showA=()=>S.pa!=="plan",cmp=()=>S.pa==="both";   // filter Data: Plan saja / Actual saja / bandingkan
+const rs=n=>Math.abs(n)>=1e9?(n/1e9).toFixed(1).replace(".",",")+" M":Math.abs(n)>=1e6?nf(n/1e6)+" Jt":nf(n);
+const onlyA='<div class="empty">Hanya tersedia pada data Actual (bagian ini tidak punya plan).</div>';
+const pv=x=>S.pa==="plan"?x.plan:x.actual;
+const pk=x=>!x.rep?null:cmp()?x.achv:pv(x);
+const pkTxt=x=>!x.rep?"—":cmp()?fp(x.achv):rs(pv(x));
+const pkMax=ms=>Math.max(1,...ms.map(x=>x.rep?pv(x):0));
+const pkPct=(x,mx)=>cmp()?x.achv:pv(x)/mx*100;
+const pkCol=x=>cmp()?band(x.achv):S.pa==="plan"?"#4285f4":"#ffb703";
 const stLabel={submitted:["Sudah lapor","g"],draft:["Draft","a"],missing:["Belum lapor","r"]};
 const stPill=s=>`<span class="pill ${stLabel[s][1]}">${stLabel[s][0]}</span>`;
 function lpList(){return LPS.filter(l=>(S.region==="all"||l.region===S.region)&&(S.coord==="all"||(S.coord==="direct"?!l.coord:l.coord===S.coord)))}
@@ -380,10 +430,11 @@ const curStatus=(id,m)=>(REP[id+"|"+m]||{status:"missing"}).status;
 function latest(id,m){for(let k=m;k>=1;k--){const r=REP[id+"|"+k];if(r&&r.status==="submitted")return r}return null}
 function metrics(lp,m=S.month){
  let r=latest(lp.id,m),nb=0,bm=null;const stale=!!(r&&r.month<m);
- if(r&&S.batch!=="all"){
-  const rb=latestBatch(lp.id,m,S.batch),f=b=>batchKey(b.name)===S.batch;
+ if(S.batch!=="all"){
+  const rb=latestBatch(lp.id,m,S.batch),f=b=>batchKey(b.name)===S.batch;   // rb boleh berasal dari tahun sebelumnya
   if(rb){nb=1;bm=rb.month}
-  r={...r,kesiswaan:{...r.kesiswaan,batches:rb?rb.kesiswaan.batches.filter(f):[]},akademik:{...r.akademik,batches:rb?rb.akademik.batches.filter(f):[]}};   // salinan; data asli tidak diubah
+  if(r||rb){const base=r||{month:rb.month,pic:"",kesiswaan:{batches:[],bintalsik:null},akademik:{batches:[],csr:{program:0,sekolah:0,peserta:0}},kipl:{mandiri:{plan:0,actual:0},mandatory:{plan:0,actual:0},customers:[],fasusPlan:0,fasusUsed:0},assets:[]};
+   r={...base,kesiswaan:{...base.kesiswaan,batches:rb?(rb.rek||[]).filter(f):[]},akademik:{...base.akademik,batches:rb?(rb.reg||[]).filter(f):[]}}}   // salinan; data asli tidak diubah
  }
  const o={lp,status:curStatus(lp.id,m),rep:r,stale,nb,batchMonth:bm};
  if(!r)return{...o,plan:0,actual:0,achv:null,mand:{plan:0,actual:0},mandt:{plan:0,actual:0}};
@@ -413,7 +464,11 @@ function gauge(parts,big,sub){
  const segs=parts.filter(p=>p.v>0).map(p=>{const len=p.v/tot*C,s=`<circle r="${r}" cx="80" cy="80" fill="none" stroke="${p.c}" stroke-width="18" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 80 80)"><title>${esc(p.l)}</title></circle>`;off+=len;return s}).join("");
  return`<div class="gauge"><svg viewBox="0 0 160 160"><circle r="${r}" cx="80" cy="80" fill="none" stroke="#e5e7eb" stroke-width="18"/>${segs}</svg><div class="gc"><b>${big}</b><span>${sub}</span></div></div>`;
 }
-function incGauge(plan,actual,label){const p=pc(actual,plan);return gauge([{v:Math.min(actual,plan),c:band(p),l:"Actual "+rp(actual)},{v:Math.max(plan-actual,0),c:"#e5e7eb",l:"Gap "+rp(plan-actual)}],fp(p),rp(actual)+"<br>dari "+rp(plan))}
+function incGauge(plan,actual){
+ if(S.pa==="plan")return gauge([{v:plan,c:"#4285f4",l:"Plan "+rp(plan)}],rs(plan),rp(plan)+"<br>plan YTD");
+ if(S.pa==="actual")return gauge([{v:actual,c:"#ffb703",l:"Actual "+rp(actual)}],rs(actual),rp(actual)+"<br>actual YTD");
+ const p=pc(actual,plan);return gauge([{v:Math.min(actual,plan),c:band(p),l:"Actual "+rp(actual)},{v:Math.max(plan-actual,0),c:"#e5e7eb",l:"Gap "+rp(plan-actual)}],fp(p),rp(actual)+"<br>dari "+rp(plan));
+}
 function lineChart(labels,series){
  const W=640,H=250,L=52,B=28,T=14,Rm=12,max=Math.max(1,...series.flatMap(s=>s.vals))*1.1,x=i=>L+(labels.length<2?0:i*(W-L-Rm)/(labels.length-1)),y=v=>T+(H-T-B)*(1-v/max);
  let g="";for(let i=0;i<=4;i++){const v=max*i/4,yy=y(v);g+=`<line x1="${L}" x2="${W-Rm}" y1="${yy}" y2="${yy}" stroke="#e6e8eb"/><text x="${L-8}" y="${yy+4}" font-size="10" fill="#6b7280" text-anchor="end">${(v/1e9).toFixed(1)}M</text>`}
@@ -428,18 +483,23 @@ function closeModal(){$("modal").classList.remove("open")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 const chip=(v,l,c)=>`<span class="ch" style="border-left-color:${c}"><b>${v}</b>${l}</span>`;
 const tbl=(heads,rows,emptyMsg)=>`<div class="tw"><table class="t"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")||`<tr><td colspan="${heads.length}" class="empty">${emptyMsg||"Tidak ada data."}</td></tr>`}</tbody></table></div>`;
-function incRows(ms,kind){return ms.filter(x=>x.rep).map(x=>{const o=kind==="mand"?x.mand:kind==="mandt"?x.mandt:{plan:x.plan,actual:x.actual},p=pc(o.actual,o.plan);return{x,o,p}}).sort((a,b)=>(a.p??999)-(b.p??999)).map(({x,o,p})=>`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td><td>${rp(o.plan)}</td><td>${rp(o.actual)}</td><td style="background:${heatBg(p)}"><b>${fp(p)}</b></td></tr>`)}
+function incHeads(){return["Learning Point",...(showP()?["Plan YTD"]:[]),...(showA()?["Actual YTD"]:[]),...(cmp()?["Capaian"]:[])]}
+function incRows(ms,kind){
+ return ms.filter(x=>x.rep).map(x=>{const o=kind==="mand"?x.mand:kind==="mandt"?x.mandt:{plan:x.plan,actual:x.actual},p=pc(o.actual,o.plan);return{x,o,p}})
+ .sort((a,b)=>cmp()?(a.p??999)-(b.p??999):S.pa==="plan"?b.o.plan-a.o.plan:b.o.actual-a.o.actual)
+ .map(({x,o,p})=>`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td>${showP()?`<td>${rp(o.plan)}</td>`:""}${showA()?`<td>${rp(o.actual)}</td>`:""}${cmp()?`<td style="background:${heatBg(p)}"><b>${fp(p)}</b></td>`:""}</tr>`);
+}
 function showInfo(key){
- const ms=lpList().map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1]+" "+S.year;
- if(key==="rep"){
-  openModal("Status Laporan · "+per,`<div class="desc">Laporan bulan ${MONTHS[S.month-1]} per learning point. "Draft" belum final; "Belum lapor" belum ada data masuk dari HO.</div><div class="chips">${chip(T.sub,"Sudah lapor","#34a853")}${chip(T.draft,"Draft","#fbbc04")}${chip(T.n-T.sub-T.draft,"Belum lapor","#ea4335")}</div>`+tbl(["Learning Point","Wilayah","Status"],ms.sort((a,b)=>({missing:0,draft:1,submitted:2})[a.status]-({missing:0,draft:1,submitted:2})[b.status]).map(x=>`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td><td>${esc(x.lp.region)}</td><td>${stPill(x.status)}</td></tr>`)));
- }else if(key==="tot"||key==="mand"||key==="mandt"){
+ const ms=lpList().map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1]+" "+S.year,md=PA_LABEL[S.pa];
+ if(key==="tot"||key==="mand"||key==="mandt"){
   const t=key==="tot"?[T.plan,T.actual]:key==="mand"?[T.mPlan,T.mAct]:[T.dPlan,T.dAct],nm=key==="tot"?"Income Total":key==="mand"?"Income Mandiri":"Income Mandatory";
-  openModal(nm+" · s.d. "+per,`<div class="desc">Income kumulatif tahun berjalan (YTD) dibanding plan YTD, dari laporan terakhir tiap LP. Diurutkan dari capaian terendah.</div><div class="chips">${chip(rp(t[0]),"Plan","#4285f4")}${chip(rp(t[1]),"Actual","#34a853")}${chip(fp(pc(t[1],t[0])),"Capaian","#ffb703")}${chip(rp(t[0]-t[1]),"Gap","#ea4335")}</div>`+tbl(["Learning Point","Plan YTD","Actual YTD","Capaian"],incRows(ms,key)),true);
+  openModal(nm+" · "+md+" · s.d. "+per,`<div class="desc">Income kumulatif tahun berjalan (YTD), dari laporan terakhir tiap LP. ${cmp()?"Diurutkan dari capaian terendah.":"Hanya menampilkan data "+md+"; diurutkan dari nilai terbesar."}</div><div class="chips">${showP()?chip(rp(t[0]),"Plan","#4285f4"):""}${showA()?chip(rp(t[1]),"Actual","#34a853"):""}${cmp()?chip(fp(pc(t[1],t[0])),"Capaian","#ffb703")+chip(rp(t[0]-t[1]),"Gap","#ea4335"):""}</div>`+tbl(incHeads(),incRows(ms,key)),true);
  }else if(key==="sis"){
-  openModal("Siswa Reguler · s.d. "+per,`<div class="desc">Jumlah siswa aktif dibanding plan seluruh batch reguler.</div><div class="chips">${chip(nf(T.siswa),"Siswa","#34a853")}${chip(nf(T.sPlan),"Plan","#4285f4")}${chip(fp(pc(T.siswa,T.sPlan)),"Terisi","#ffb703")}${chip(T.ojt,"Lokasi OJT","#a855f7")}</div>`+tbl(["Learning Point","Siswa","Plan","%","OJT"],ms.filter(x=>x.rep).sort((a,b)=>pc(a.siswa,a.sPlan)-pc(b.siswa,b.sPlan)).map(x=>{const p=pc(x.siswa,x.sPlan);return`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td><td>${x.siswa}</td><td>${x.sPlan}</td><td style="background:${heatBg(p)}"><b>${fp(p)}</b></td><td>${x.ojt}</td></tr>`})));
+  const rows=ms.filter(x=>x.rep).sort((a,b)=>cmp()?pc(a.siswa,a.sPlan)-pc(b.siswa,b.sPlan):S.pa==="plan"?b.sPlan-a.sPlan:b.siswa-a.siswa).map(x=>{const p=pc(x.siswa,x.sPlan);return`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td>${showA()?`<td>${x.siswa}</td>`:""}${showP()?`<td>${x.sPlan}</td>`:""}${cmp()?`<td style="background:${heatBg(p)}"><b>${fp(p)}</b></td>`:""}${showA()?`<td>${x.ojt}</td>`:""}</tr>`});
+  openModal("Siswa Reguler · "+md+" · s.d. "+per,`<div class="desc">Siswa reguler seluruh batch. Hanya menampilkan data ${md}.</div><div class="chips">${showA()?chip(nf(T.siswa),"Siswa","#34a853"):""}${showP()?chip(nf(T.sPlan),"Plan","#4285f4"):""}${cmp()?chip(fp(pc(T.siswa,T.sPlan)),"Terisi","#ffb703"):""}${showA()?chip(T.ojt,"Lokasi OJT","#a855f7"):""}</div>`+tbl(["Learning Point",...(showA()?["Siswa"]:[]),...(showP()?["Plan"]:[]),...(cmp()?["%"]:[]),...(showA()?["OJT"]:[])],rows));
  }else if(key==="cust"){
-  openModal("New Customer / Project & Fasus · s.d. "+per,`<div class="desc">New customer/project (Big 5) dan optimalisasi pemakaian fasus NT UTS.</div><div class="chips">${chip(T.cust,"New customer/project","#34a853")}${chip(T.fU+" / "+T.fP,"Fasus terpakai","#4285f4")}${chip(fp(pc(T.fU,T.fP)),"Fasus %","#ffb703")}</div>`+tbl(["Learning Point","Customer / Project","Fasus terpakai","Fasus plan","%"],ms.filter(x=>x.rep).sort((a,b)=>b.cust-a.cust).map(x=>{const p=pc(x.fU,x.fP);return`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td><td>${x.cust}</td><td>${x.fU}</td><td>${x.fP}</td><td style="background:${heatBg(p)}"><b>${fp(p)}</b></td></tr>`})));
+  const rows=ms.filter(x=>x.rep).sort((a,b)=>S.pa==="plan"?b.fP-a.fP:b.cust-a.cust).map(x=>{const p=pc(x.fU,x.fP);return`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td>${showA()?`<td>${x.cust}</td><td>${x.fU}</td>`:""}${showP()?`<td>${x.fP}</td>`:""}${cmp()?`<td style="background:${heatBg(p)}"><b>${fp(p)}</b></td>`:""}</tr>`});
+  openModal("New Customer / Project & Fasus · "+md+" · s.d. "+per,`<div class="desc">New customer/project (Big 5) dan pemakaian fasus NT UTS. Hanya menampilkan data ${md}.</div><div class="chips">${showA()?chip(T.cust,"New customer/project","#34a853")+chip(T.fU,"Fasus terpakai","#4285f4"):""}${showP()?chip(T.fP,"Fasus direncanakan","#4285f4"):""}${cmp()?chip(fp(pc(T.fU,T.fP)),"Fasus %","#ffb703"):""}</div>`+tbl(["Learning Point",...(showA()?["Customer / Project","Fasus terpakai"]:[]),...(showP()?["Fasus plan"]:[]),...(cmp()?["%"]:[])],rows));
  }
 }
 
@@ -478,7 +538,7 @@ async function loadData(manual){
  try{
   if(CONFIG.API_URL){
    const y=S.year,firstLoad=!YEARS.length&&!Object.keys(YR).length,r=await api("reports",{year:y});if(!r.ok)throw new Error(r.message||"Gagal mengambil data.");
-   YR[y]=r.reports||{};DEMO=false;if(Array.isArray(r.years))YEARS=r.years.map(Number).filter(Boolean);
+   YR[y]=r.reports||{};DEMO=false;BM=r.batchMaster||[];BR=r.batchRecords||[];if(Array.isArray(r.years))YEARS=r.years.map(Number).filter(Boolean);
    if(y!==S.year)return;   // pengguna sudah pindah tahun; data tahun ini tetap tersimpan di cache
    if(r.config){const dy=r.config.defaultYear!=null?r.config.defaultYear:(firstLoad?r.config.year:null);if(dy!=null){CONFIG.YEAR=dy;CONFIG.LAST_DUE_MONTH=r.config.lastDueMonth;if(!S.yearTouched&&S.year!==dy){S.year=dy;return await loadData(false)}}}
    if(Array.isArray(r.lps)&&r.lps.length)LPS=r.lps.map(l=>({id:l.id,name:l.name,region:l.region,coord:l.coord||"",ll:[l.lat,l.lng]}));
@@ -486,15 +546,15 @@ async function loadData(manual){
    syncMonth();
    setDataSrc("ok");
   }
-  else{if(!YR[S.year])YR[S.year]=genDemo(S.year);REP=YR[S.year];DEMO=true;syncMonth();setDataSrc("demo")}
+  else{[CONFIG.YEAR-1,CONFIG.YEAR].forEach(yy=>{if(!YR[yy])YR[yy]=genDemo(yy)});if(!YR[S.year])YR[S.year]=genDemo(S.year);REP=YR[S.year];DEMO=true;syncMonth();setDataSrc("demo")}
  }catch(err){setDataSrc("err",err.message)}
  finally{btn.disabled=false;btn.textContent="⟳ Refresh Data"}
  $("demoBar").classList.toggle("hide",!DEMO);renderAll();
 }
 
 /* ============ NAVIGASI ============ */
-const ICON={dashboard:'<path d="M3 13h8V3H3zm0 8h8v-6H3zm10 0h8V11h-8zm0-18v6h8V3z"/>',status:'<path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/>',summary:'<path d="M4 4h16v4H4zm0 6h10v10H4zm12 0h4v10h-4z"/>',input:'<path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75zM20.7 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/>',out:'<path d="M10 17l1.4-1.4L8.8 13H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4z"/>'};
-const VIEWS={dashboard:"Dashboard Overview",status:"Status Pelaporan",summary:"Ringkasan Konsolidasi",input:"Input Data"};
+const ICON={dashboard:'<path d="M3 13h8V3H3zm0 8h8v-6H3zm10 0h8V11h-8zm0-18v6h8V3z"/>',status:'<path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/>',summary:'<path d="M4 4h16v4H4zm0 6h10v10H4zm12 0h4v10h-4z"/>',input:'<path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75zM20.7 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/>',asset:'<path d="M20 6h-3V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zM9 4h6v2H9z"/>',out:'<path d="M10 17l1.4-1.4L8.8 13H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4z"/>'};
+const VIEWS={dashboard:"Dashboard Overview",summary:"Ringkasan Konsolidasi",asset:"Daftar Aset per LP",input:"Input Data"};
 function renderNav(){
  const items=Object.entries(VIEWS).filter(([k])=>k!=="input"||isAdmin()).map(([k,v])=>`<div class="nl ${S.view===k?"on":""}" onclick="switchView('${k}')"><svg viewBox="0 0 24 24">${ICON[k]}</svg><span class="nt">${v}</span>${k==="input"?'<span class="nt soon">ADMIN</span>':""}</div>`).join("");
  $("nav").innerHTML=items+`<div style="margin-top:auto;margin-bottom:12px"><div class="nl" style="color:#ef4444" onclick="logout()"><svg viewBox="0 0 24 24">${ICON.out}</svg><span class="nt">Keluar</span></div></div>`;
@@ -510,27 +570,37 @@ function renderFilters(){
  <label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:dueNow()},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${S.year}</option>`).join("")}</select>
  <label>Wilayah:</label><select class="fs" onchange="S.region=this.value;renderAll()"><option value="all">-- Semua Wilayah --</option>${REGIONS.map(r=>`<option ${S.region===r?"selected":""}>${esc(r)}</option>`).join("")}</select>
  <label>Koordinator:</label><select class="fs" style="min-width:110px" onchange="S.coord=this.value;renderAll()"><option value="all">Semua</option>${["Medan","Surabaya","Makassar"].map(c=>`<option value="${c}" ${S.coord===c?"selected":""}>${c}</option>`).join("")}<option value="direct" ${S.coord==="direct"?"selected":""}>Langsung HO</option></select>
- <label>Batch:</label><select class="fs" style="min-width:110px" onchange="S.batch=this.value;renderAll()"><option value="all">Semua Batch</option>${batchList().map(b=>`<option value="${esc(b)}" ${S.batch===b?"selected":""}>${esc(b)}</option>`).join("")}</select>`;
+ <label>Batch:</label><select class="fs" style="min-width:110px" onchange="S.batch=this.value;renderAll()"><option value="all">Semua Batch</option>${batchList().map(b=>`<option value="${esc(b)}" ${S.batch===b?"selected":""}>${esc(b)}</option>`).join("")}</select>
+ <label>Data:</label><select class="fs" style="min-width:130px" onchange="S.pa=this.value;renderAll()"><option value="both" ${S.pa==="both"?"selected":""}>Plan vs Actual</option><option value="plan" ${S.pa==="plan"?"selected":""}>Plan saja</option><option value="actual" ${S.pa==="actual"?"selected":""}>Actual saja</option></select>`;
  const bn=$("batchNote");bn.classList.toggle("hide",S.batch==="all"||S.view==="input");
- bn.innerHTML=`<b>Filter batch: ${esc(S.batch)}.</b> Rekrutmen/MCU dan Siswa/OJT hanya menampilkan batch ini. Income, customer, Fasus, CSR, Bintalsik, dan aset dilaporkan per LP (bukan per batch) sehingga tidak ikut disaring.`+(S.view==="status"?" Status pelaporan juga tidak dipengaruhi batch.":"");
+ bn.innerHTML=`<b>Filter batch: ${esc(S.batch)}</b> · periode ${spanText(S.batch)}. Rekrutmen/MCU dan Siswa/OJT menampilkan batch ini secara utuh, termasuk laporan dari tahun kalender lain selama batch berlangsung. Income, customer, Fasus, CSR, Bintalsik, dan aset dilaporkan per LP (bukan per batch) sehingga tidak ikut disaring.`+(S.view==="asset"?" Daftar aset tidak dipengaruhi batch.":"")+` <button class="btn-s" onclick="showBatchHistory()">Riwayat batch</button>`;
  $("fbar").classList.toggle("hide",S.view==="input");
 }
 function renderAll(){
- if(!SESSION)return;renderFilters();
+ if(!SESSION)return;rebuildBX();renderFilters();
  if(S.view==="dashboard")renderDashboard();
- else if(S.view==="status")$("view-status").innerHTML=viewStatus();
  else if(S.view==="summary")$("view-summary").innerHTML=viewSummary();
+ else if(S.view==="asset"){$("view-asset").innerHTML=viewAsset();renderAssetBody()}
  else if(S.view==="input")$("view-input").innerHTML=viewInput();
 }
 function renderDashboard(){
- const lps=lpList(),ms=lps.map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1];
- $("kpis").innerHTML=`
-  <div class="kpi" onclick="showInfo('rep')"><span>Laporan masuk · ${per} <i class="i">ⓘ</i></span><b>${T.sub}<small> / ${T.n}</small></b>${vbar(pc(T.sub,T.n),"#34a853")}<em>${T.draft} draft · ${T.n-T.sub-T.draft} belum lapor</em></div>
-  <div class="kpi" onclick="showInfo('tot')"><span>Capaian income (YTD) <i class="i">ⓘ</i></span><b>${fp(T.achv)}</b>${vbar(T.achv)}<em>${rp(T.actual)} dari plan ${rp(T.plan)}</em></div>
-  <div class="kpi" onclick="showInfo('sis')"><span>Siswa reguler <i class="i">ⓘ</i></span><b>${nf(T.siswa)}<small> / ${nf(T.sPlan)}</small></b>${vbar(pc(T.siswa,T.sPlan),"#4285f4")}<em>${fp(pc(T.siswa,T.sPlan))} dari plan · ${T.ojt} lokasi OJT</em></div>
-  <div class="kpi" onclick="showInfo('cust')"><span>New customer / project <i class="i">ⓘ</i></span><b>${T.cust}</b>${vbar(pc(T.fU,T.fP),"#a855f7")}<em>Fasus NT UTS terpakai ${T.fU} / ${T.fP} (${fp(pc(T.fU,T.fP))})</em></div>`;
+ const lps=lpList(),ms=lps.map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1],P=S.pa;
+ const kInc=cmp()?`<div class="kpi" onclick="showInfo('tot')"><span>Capaian income (YTD) <i class="i">ⓘ</i></span><b>${fp(T.achv)}</b>${vbar(T.achv)}<em>${rp(T.actual)} dari plan ${rp(T.plan)}</em></div>`
+  :`<div class="kpi" onclick="showInfo('tot')"><span>Income ${P==="plan"?"Plan":"Actual"} (YTD) <i class="i">ⓘ</i></span><b>${rp(P==="plan"?T.plan:T.actual)}</b><em>Mandiri ${rp(P==="plan"?T.mPlan:T.mAct)} · Mandatory ${rp(P==="plan"?T.dPlan:T.dAct)}</em></div>`;
+ const kSis=cmp()?`<div class="kpi" onclick="showInfo('sis')"><span>Siswa reguler <i class="i">ⓘ</i></span><b>${nf(T.siswa)}<small> / ${nf(T.sPlan)}</small></b>${vbar(pc(T.siswa,T.sPlan),"#4285f4")}<em>${fp(pc(T.siswa,T.sPlan))} dari plan · ${T.ojt} lokasi OJT</em></div>`
+  :`<div class="kpi" onclick="showInfo('sis')"><span>Siswa reguler ${P==="plan"?"(Plan)":"(Actual)"} <i class="i">ⓘ</i></span><b>${nf(P==="plan"?T.sPlan:T.siswa)}</b><em>${P==="plan"?"Plan siswa seluruh batch reguler":T.ojt+" lokasi OJT"}</em></div>`;
+ const kCus=cmp()?`<div class="kpi" onclick="showInfo('cust')"><span>New customer / project <i class="i">ⓘ</i></span><b>${T.cust}</b>${vbar(pc(T.fU,T.fP),"#a855f7")}<em>Fasus NT UTS terpakai ${T.fU} / ${T.fP} (${fp(pc(T.fU,T.fP))})</em></div>`
+  :P==="plan"?`<div class="kpi" onclick="showInfo('cust')"><span>Fasus NT UTS (Plan) <i class="i">ⓘ</i></span><b>${T.fP}</b><em>Fasus direncanakan</em></div>`
+  :`<div class="kpi" onclick="showInfo('cust')"><span>New customer / project <i class="i">ⓘ</i></span><b>${T.cust}</b><em>Fasus NT UTS terpakai ${T.fU}</em></div>`;
+ $("kpis").innerHTML=kInc+kSis+kCus;
  $("g1").innerHTML=incGauge(T.plan,T.actual);$("g2").innerHTML=incGauge(T.mPlan,T.mAct);$("g3").innerHTML=incGauge(T.dPlan,T.dAct);
  renderMap(ms);renderAttn(ms);renderRank(ms);renderTrend(lps);renderPillars(ms,T);renderHeat();renderLPTable();
+}
+var lokLg=null;
+function mapLegend(){
+ if(cmp())return'<i style="background:#34a853"></i>Capaian ≥ 85%<br><i style="background:#fbbc04"></i>70–84%<br><i style="background:#ea4335"></i>&lt; 70%<br><i style="background:#cbd0d6"></i>Belum ada laporan<br><span style="font-weight:600;color:#555">Ukuran = actual income</span>';
+ const n=S.pa==="plan"?"Plan":"Actual";
+ return`<i style="background:${pkCol(null)}"></i>${n} income (YTD)<br><i style="background:#cbd0d6"></i>Belum ada laporan<br><span style="font-weight:600;color:#555">Ukuran = ${n.toLowerCase()} income</span>`;
 }
 function renderMap(ms){
  const box=$("lokMap");
@@ -540,100 +610,115 @@ function renderMap(ms){
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(lokMap);
   lokLayer=L.layerGroup().addTo(lokMap);
   const lg=L.control({position:"bottomleft"});
-  lg.onAdd=()=>{const d=L.DomUtil.create("div","legend");d.innerHTML='<i style="background:#34a853"></i>Capaian ≥ 85%<br><i style="background:#fbbc04"></i>70–84%<br><i style="background:#ea4335"></i>&lt; 70%<br><i style="background:#cbd0d6"></i>Belum ada laporan<br><span style="font-weight:600;color:#555">Ukuran = actual income</span>';return d};
+  lg.onAdd=()=>{lokLg=L.DomUtil.create("div","legend");return lokLg};
   lg.addTo(lokMap);
   if(window.ResizeObserver)new ResizeObserver(()=>lokMap.invalidateSize()).observe(box);
  }
+ if(lokLg)lokLg.innerHTML=mapLegend();
  lokLayer.clearLayers();const pts=[];
  ms.forEach(x=>{
-  const r=x.rep?Math.min(28,9+Math.sqrt(x.actual/1e8)*1.9):9,m=L.circleMarker(x.lp.ll,{radius:r,color:"#000",weight:2,fillColor:band(x.achv),fillOpacity:.82}).addTo(lokLayer);
-  m.bindTooltip(`<b>${esc(x.lp.name)}</b> · ${x.rep?fp(x.achv):"belum ada laporan"}`,{direction:"top",sticky:true});
+  const v=S.pa==="plan"?x.plan:x.actual,r=x.rep?Math.min(28,9+Math.sqrt(v/1e8)*1.9):9,col=x.rep?pkCol(x):"#cbd0d6",m=L.circleMarker(x.lp.ll,{radius:r,color:"#000",weight:2,fillColor:col,fillOpacity:.82}).addTo(lokLayer);
+  m.bindTooltip(`<b>${esc(x.lp.name)}</b> · ${x.rep?pkTxt(x):"belum ada laporan"}`,{direction:"top",sticky:true});
   m.on("click",()=>openLP(x.lp.id));m.on("mouseover",()=>m.setStyle({weight:4}));m.on("mouseout",()=>m.setStyle({weight:2}));
-  L.marker(x.lp.ll,{icon:L.divIcon({className:"",html:`<div class="ml">${x.rep?Math.round(x.achv)+"%":"–"}</div>`,iconSize:[40,16],iconAnchor:[20,8]}),interactive:false}).addTo(lokLayer);
+  L.marker(x.lp.ll,{icon:L.divIcon({className:"",html:`<div class="ml">${x.rep?(cmp()?Math.round(x.achv)+"%":rs(v)):"–"}</div>`,iconSize:[40,16],iconAnchor:[20,8]}),interactive:false}).addTo(lokLayer);
   pts.push(x.lp.ll);
  });
- $("mapNote").textContent=`${ms.length} LP · lokasi perkiraan · klik lingkaran untuk detail`;
+ $("mapNote").textContent=`${ms.length} LP · ${PA_LABEL[S.pa]} · lokasi perkiraan · klik lingkaran untuk detail`;
  if(pts.length)lokMap.fitBounds(L.latLngBounds(pts),{padding:[40,40],maxZoom:7});
  setTimeout(()=>lokMap.invalidateSize(),60);
 }
-function setAttn(m){S.attn=m;[["low","tgLow"],["late","tgLate"],["asset","tgAsset"]].forEach(([k,id])=>$(id).classList.toggle("on",k===m));renderAttn()}
+function setAttn(m){S.attn=m;[["low","tgLow"],["asset","tgAsset"]].forEach(([k,id])=>$(id).classList.toggle("on",k===m));renderAttn()}
 function renderAttn(ms){
  ms=ms||lpList().map(l=>metrics(l));let list=[];
- if(S.attn==="low")list=ms.filter(x=>x.achv!=null).sort((a,b)=>a.achv-b.achv).slice(0,8).map(x=>({x,txt:x.lp.name,p:x.achv,b:fp(x.achv)}));
- else if(S.attn==="late")list=ms.filter(x=>x.status!=="submitted").map(x=>({x,txt:x.lp.name,p:x.status==="draft"?60:0,b:x.status==="draft"?"Draft":"Belum"}));
- else list=ms.filter(x=>x.bad>0).sort((a,b)=>b.bad-a.bad).map(x=>({x,txt:x.lp.name,p:100-x.bad*20,b:x.bad+" rusak"}));
- lastAttn=list;
- $("attn").innerHTML=list.map((o,i)=>`<div class="at" onclick="openLP('${o.x.lp.id}')" title="Klik untuk detail"><span>${esc(o.txt)}</span>${vbar(o.p,S.attn==="asset"?"#ea4335":band(o.p))}<b>${o.b}</b></div>`).join("")||'<div class="empty">Tidak ada item 👍</div>';
+ $("tgLow").textContent=cmp()?"Capaian rendah":S.pa==="plan"?"Plan terkecil":"Actual terkecil";
+ if(S.attn==="low"){
+  if(cmp())list=ms.filter(x=>x.achv!=null).sort((a,b)=>a.achv-b.achv).slice(0,8).map(x=>({x,p:x.achv,b:fp(x.achv),c:band(x.achv)}));
+  else{const mx=pkMax(ms);list=ms.filter(x=>x.rep).sort((a,b)=>pv(a)-pv(b)).slice(0,8).map(x=>({x,p:pv(x)/mx*100,b:rs(pv(x)),c:pkCol(x)}))}
+ }else{
+  if(S.pa==="plan"){$("attn").innerHTML=onlyA;return}
+  list=ms.filter(x=>x.bad>0).sort((a,b)=>b.bad-a.bad).map(x=>({x,p:100-x.bad*20,b:x.bad+" rusak",c:"#ea4335"}));
+ }
+ $("attn").innerHTML=list.map(o=>`<div class="at" onclick="openLP('${o.x.lp.id}')" title="Klik untuk detail"><span>${esc(o.x.lp.name)}</span>${vbar(o.p,o.c)}<b>${o.b}</b></div>`).join("")||'<div class="empty">Tidak ada item 👍</div>';
 }
 function renderRank(ms){
  ms=ms||lpList().map(l=>metrics(l));
- const f={achv_asc:(a,b)=>(a.achv??999)-(b.achv??999),achv_desc:(a,b)=>(b.achv??-1)-(a.achv??-1),plan:(a,b)=>b.plan-a.plan,name:(a,b)=>a.lp.name.localeCompare(b.lp.name)}[S.rank];
- $("rankList").innerHTML=[...ms].sort(f).map(x=>`<div class="rrow" onclick="openLP('${x.lp.id}')" title="${esc(x.lp.name)}"><span>${esc(x.lp.name)}</span>${vbar(x.achv)}<b>${x.rep?fp(x.achv):"—"}</b></div>`).join("");
+ $("rankTitle").textContent=cmp()?"Capaian Income per LP":"Income "+PA_LABEL[S.pa]+" per LP";
+ $("rankLeg").innerHTML=cmp()?'<span><i style="background:#34a853"></i>≥ 85%</span><span><i style="background:#fbbc04"></i>70–84%</span><span><i style="background:#ea4335"></i>&lt; 70%</span><span style="color:#777;font-weight:600">Klik baris untuk detail LP</span>':`<span><i style="background:${pkCol(null)}"></i>${PA_LABEL[S.pa]} income (YTD)</span><span style="color:#777;font-weight:600">Klik baris untuk detail LP</span>`;
+ const mx=pkMax(ms),f={achv_asc:(a,b)=>(pk(a)??1e18)-(pk(b)??1e18),achv_desc:(a,b)=>(pk(b)??-1)-(pk(a)??-1),plan:(a,b)=>b.plan-a.plan,name:(a,b)=>a.lp.name.localeCompare(b.lp.name)}[S.rank];
+ $("rankList").innerHTML=[...ms].sort(f).map(x=>`<div class="rrow" onclick="openLP('${x.lp.id}')" title="${esc(x.lp.name)}"><span>${esc(x.lp.name)}</span>${x.rep?vbar(pkPct(x,mx),pkCol(x)):vbar(null)}<b>${pkTxt(x)}</b></div>`).join("");
 }
 function renderTrend(lps){
  const labels=[],plan=[],act=[];
  for(let m=1;m<=S.month;m++){labels.push(MON[m-1]);const ms=lps.map(l=>metrics(l,m)).filter(x=>x.rep);plan.push(sum(ms,x=>x.plan));act.push(sum(ms,x=>x.actual))}
- $("trend").innerHTML=lineChart(labels,[{name:"Plan (YTD)",color:"#9aa1a9",vals:plan,dash:1,w:2.5},{name:"Actual (YTD)",color:"#111",vals:act}]);
+ const series=[];if(showP())series.push({name:"Plan (YTD)",color:"#9aa1a9",vals:plan,dash:1,w:2.5});if(showA())series.push({name:"Actual (YTD)",color:"#111",vals:act});
+ $("trendNote").textContent=(cmp()?"Plan vs actual":PA_LABEL[S.pa])+" · Mandiri + Mandatory";
+ $("trend").innerHTML=lineChart(labels,series);
 }
 function renderPillars(ms,T){
- const fn=[["Seleksi",T.sel],["Psikotes",T.psi],["Interview",T.itv],["MCU",T.mcu]],ba=batchAgg(ms);
- $("pillars").innerHTML=`
- <div class="card"><div class="ph">KESISWAAN</div><div class="sh">Rekrutmen & MCU ${S.batch==="all"?"Batch 39":esc(S.batch)}</div>
+ const fn=[["Seleksi",T.sel],["Psikotes",T.psi],["Interview",T.itv],["MCU",T.mcu]],ba=batchAgg(ms),P=S.pa;
+ const kes=P==="plan"?onlyA:`<div class="sh">Rekrutmen & MCU ${S.batch==="all"?"Batch 39":esc(S.batch)}</div>
   ${fn.map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,T.sel),"#ffb703")}<b>${v}</b></div>`).join("")}
   <div class="sh">Pelaksanaan Bintalsik</div>
-  <div class="mini">${chip(T.binN,"LP melaksanakan","#4285f4")}${chip(T.binSel,"Seleksi","#ffb703")}${chip(T.binPsi,"Psikotes","#ffb703")}${chip(T.binItv,"Interview","#ffb703")}${chip(T.binMcu,"MCU","#34a853")}${chip(T.binLok,"Lokasi","#a855f7")}</div></div>
- <div class="card"><div class="ph">AKADEMIK</div>
-  ${Object.entries(ba).sort().map(([n,g])=>`<div class="sh">${esc(n)}</div><div class="row" style="grid-template-columns:70px 1fr 90px"><span>Siswa</span>${vbar(pc(g.siswa,g.plan),"#4285f4")}<b>${g.siswa} dari ${g.plan}</b></div><div class="mini">${chip(g.kelas,"Kelas","#ffb703")}${chip(g.ojt,"Lokasi OJT","#a855f7")}${chip(g.lp,"LP","#999")}</div>`).join("")||'<div class="empty">Belum ada data.</div>'}
-  <div class="sh">Program CSR</div><div class="mini">${chip(T.csrP,"Program","#34a853")}${chip(T.csrS,"Sekolah / PT","#4285f4")}${chip(nf(T.csrQ),"Peserta","#ffb703")}</div></div>
- <div class="card"><div class="ph">KIPL</div><div class="sh">Achievement as of ${MONTHS[S.month-1]}</div>
-  <div style="font-size:24px;font-weight:800">${rp(T.actual)} <small style="font-size:15px;color:#555">(${fp(T.achv)})</small></div>
-  <div class="row" style="grid-template-columns:70px 1fr 52px"><span>Mandiri</span>${vbar(pc(T.mAct,T.mPlan))}<b>${fp(pc(T.mAct,T.mPlan))}</b></div>
-  <div class="tcell">Plan ${rp(T.mPlan)} · Actual ${rp(T.mAct)}</div>
-  <div class="row" style="grid-template-columns:70px 1fr 52px"><span>Mandatory</span>${vbar(pc(T.dAct,T.dPlan))}<b>${fp(pc(T.dAct,T.dPlan))}</b></div>
-  <div class="tcell">Plan ${rp(T.dPlan)} · Actual ${rp(T.dAct)}</div>
-  <div class="sh">New Project / New Customer</div><div class="mini">${chip(T.cust,"Total (Big 5)","#34a853")}</div>
-  <div class="sh">Optimalisasi Fasus NT UTS</div><div class="mini">${chip(T.fU,"Terpakai","#34a853")}${chip(T.fP,"Direncanakan","#4285f4")}${chip(fp(pc(T.fU,T.fP)),"Optimalisasi","#ffb703")}</div></div>`;
+  <div class="mini">${chip(T.binN,"LP melaksanakan","#4285f4")}${chip(T.binSel,"Seleksi","#ffb703")}${chip(T.binPsi,"Psikotes","#ffb703")}${chip(T.binItv,"Interview","#ffb703")}${chip(T.binMcu,"MCU","#34a853")}${chip(T.binLok,"Lokasi","#a855f7")}</div>`;
+ const aka=Object.entries(ba).sort().map(([n,g])=>{
+  const sis=cmp()?`<div class="row" style="grid-template-columns:70px 1fr 90px"><span>Siswa</span>${vbar(pc(g.siswa,g.plan),"#4285f4")}<b>${g.siswa} dari ${g.plan}</b></div>`:P==="plan"?`<div class="mini">${chip(g.plan,"Plan siswa","#4285f4")}</div>`:`<div class="mini">${chip(g.siswa,"Siswa","#34a853")}</div>`;
+  return`<div class="sh">${esc(n)}</div>${sis}<div class="mini">${showA()?chip(g.kelas,"Kelas","#ffb703")+chip(g.ojt,"Lokasi OJT","#a855f7"):""}${chip(g.lp,"LP","#999")}</div>`}).join("")||'<div class="empty">Belum ada data.</div>';
+ const csr=P==="plan"?onlyA:`<div class="mini">${chip(T.csrP,"Program","#34a853")}${chip(T.csrS,"Sekolah / PT","#4285f4")}${chip(nf(T.csrQ),"Peserta","#ffb703")}</div>`;
+ const incRow=(l,pl,ac)=>cmp()?`<div class="row" style="grid-template-columns:70px 1fr 52px"><span>${l}</span>${vbar(pc(ac,pl))}<b>${fp(pc(ac,pl))}</b></div><div class="tcell">Plan ${rp(pl)} · Actual ${rp(ac)}</div>`:`<div class="row" style="grid-template-columns:70px 1fr"><span>${l}</span><b style="text-align:left">${rp(P==="plan"?pl:ac)}</b></div>`;
+ const kHead=cmp()?"Achievement":P==="plan"?"Plan":"Actual";
+ const bigv=cmp()?`${rp(T.actual)} <small style="font-size:15px;color:#555">(${fp(T.achv)})</small>`:rp(P==="plan"?T.plan:T.actual);
+ const fasus=cmp()?`${chip(T.fU,"Terpakai","#34a853")}${chip(T.fP,"Direncanakan","#4285f4")}${chip(fp(pc(T.fU,T.fP)),"Optimalisasi","#ffb703")}`:P==="plan"?chip(T.fP,"Direncanakan","#4285f4"):chip(T.fU,"Terpakai","#34a853");
+ $("pillars").innerHTML=`
+ <div class="card"><div class="ph">KESISWAAN</div>${kes}</div>
+ <div class="card"><div class="ph">AKADEMIK</div>${aka}<div class="sh">Program CSR</div>${csr}</div>
+ <div class="card"><div class="ph">KIPL</div><div class="sh">${kHead} as of ${MONTHS[S.month-1]}</div>
+  <div style="font-size:24px;font-weight:800">${bigv}</div>
+  ${incRow("Mandiri",T.mPlan,T.mAct)}${incRow("Mandatory",T.dPlan,T.dAct)}
+  ${showA()?`<div class="sh">New Project / New Customer</div><div class="mini">${chip(T.cust,"Total (Big 5)","#34a853")}</div>`:""}
+  <div class="sh">Optimalisasi Fasus NT UTS</div><div class="mini">${fasus}</div></div>`;
 }
 function setHeat(k){S.heat=k;$("tgReg").classList.toggle("on",k==="region");$("tgCoo").classList.toggle("on",k==="coord");renderHeat()}
 function renderHeat(){
- const lps=lpList(),by=S.heat;
+ const lps=lpList(),by=S.heat,P=S.pa;
  lastGroups=(by==="region"?REGIONS.map(r=>[r,lps.filter(l=>l.region===r),REG_COL[r]]):COORDS_LIST.map(c=>[c,lps.filter(l=>(l.coord||"Langsung HO")===c),"#6366f1"])).filter(g=>g[1].length);
- const mx=Math.max(1,...lastGroups.map(g=>g[1].length)),hcell=v=>`<td style="background:${heatBg(v)}"><b>${fp(v)}</b></td>`;
- $("heat").innerHTML=`<thead><tr><th>${by==="region"?"Wilayah":"Koordinator"}</th><th>Jumlah LP</th><th>Lapor %</th><th>Income vs plan</th><th>Siswa vs plan</th><th>MCU / Seleksi</th><th>Fasus</th><th>Customer</th></tr></thead><tbody>`+
- lastGroups.map(([k,g,col],i)=>{const t=agg(g.map(l=>metrics(l)));return`<tr class="cl" onclick="pickGroup(${i})"><td style="border-left:5px solid ${col};text-align:left"><b>${esc(k)}</b></td><td><div class="hc"><i style="width:${g.length*70/mx}%;background:${col}"></i><b>${g.length}</b></div></td>${hcell(pc(t.sub,t.n))}${hcell(t.achv)}${hcell(pc(t.siswa,t.sPlan))}${hcell(pc(t.mcu,t.sel))}${hcell(pc(t.fU,t.fP))}<td><b>${t.cust}</b></td></tr>`}).join("")+"</tbody>";
+ const mx=Math.max(1,...lastGroups.map(g=>g[1].length)),hcell=v=>`<td style="background:${heatBg(v)}"><b>${fp(v)}</b></td>`,num=v=>`<td><b>${v}</b></td>`,dash="<td>—</td>";
+ const H=P==="both"?["Income vs plan","Siswa vs plan","MCU / Seleksi","Fasus","Customer"]:P==="plan"?["Income (plan)","Siswa (plan)","MCU / Seleksi","Fasus (plan)","Customer"]:["Income (actual)","Siswa (actual)","MCU / Seleksi","Fasus (terpakai)","Customer"];
+ const cells=t=>P==="both"?hcell(t.achv)+hcell(pc(t.siswa,t.sPlan))+hcell(pc(t.mcu,t.sel))+hcell(pc(t.fU,t.fP))+num(t.cust):P==="plan"?num(rp(t.plan))+num(nf(t.sPlan))+dash+num(t.fP)+dash:num(rp(t.actual))+num(nf(t.siswa))+num(t.mcu+" / "+t.sel)+num(t.fU)+num(t.cust);
+ $("heat").innerHTML=`<thead><tr><th>${by==="region"?"Wilayah":"Koordinator"}</th><th>Jumlah LP</th>${H.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>`+
+ lastGroups.map(([k,g,col],i)=>{const t=agg(g.map(l=>metrics(l)));return`<tr class="cl" onclick="pickGroup(${i})"><td style="border-left:5px solid ${col};text-align:left"><b>${esc(k)}</b></td><td><div class="hc"><i style="width:${g.length*70/mx}%;background:${col}"></i><b>${g.length}</b></div></td>${cells(t)}</tr>`}).join("")+"</tbody>";
 }
 function pickGroup(i){const g=lastGroups[i];if(!g)return;if(S.heat==="region")S.region=S.region===g[0]?"all":g[0];else{const v=g[0]==="Langsung HO"?"direct":g[0];S.coord=S.coord===v?"all":v}renderAll()}
-function sortMs(ms){const o={missing:0,draft:1,submitted:2},f={achv_desc:(a,b)=>(b.achv??-1)-(a.achv??-1),achv_asc:(a,b)=>(a.achv??999)-(b.achv??999),name:(a,b)=>a.lp.name.localeCompare(b.lp.name),status:(a,b)=>o[a.status]-o[b.status]}[S.sort];return ms.sort(f)}
+function sortMs(ms){const f={achv_desc:(a,b)=>(pk(b)??-1)-(pk(a)??-1),achv_asc:(a,b)=>(pk(a)??1e18)-(pk(b)??1e18),name:(a,b)=>a.lp.name.localeCompare(b.lp.name)};return ms.sort(f[S.sort]||f.achv_desc)}
 function renderLPTable(){
- const q=S.q.toLowerCase(),all=lpList(),ms=sortMs(all.filter(l=>!q||(l.name+" "+l.region+" "+l.coord).toLowerCase().includes(q)).map(l=>metrics(l)));
- $("lpCount").textContent=ms.length+" dari "+all.length+" learning point";
- $("lpBody").innerHTML=ms.map(x=>`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b><br><span class="tcell">${esc(x.lp.coord?"Koord. "+x.lp.coord:"Langsung HO")}</span></td><td>${esc(x.lp.region)}</td><td>${stPill(x.status)}${x.stale?`<br><span class="tcell">data ${MON[x.rep.month-1]}</span>`:""}</td>
-  <td style="min-width:160px">${x.rep?vbar(x.achv)+`<span class="tcell">${fp(x.achv)} · ${rp(x.actual)}</span>`:"—"}</td><td>${x.rep&&(S.batch==="all"||x.nb)?x.siswa+"/"+x.sPlan:"—"}</td><td>${x.rep&&(S.batch==="all"||x.nb)?x.mcu+"/"+x.sel:"—"}</td><td>${x.rep?x.cust:"—"}</td><td>${x.rep?fp(pc(x.fU,x.fP)):"—"}</td><td>${x.rep?(x.bad?`<span class="pill a">${x.bad} rusak</span>`:`<span class="pill g">Baik</span>`):"—"}</td></tr>`).join("")||'<tr><td colspan="9" class="empty">Tidak ada LP yang cocok.</td></tr>';
+ const q=S.q.toLowerCase(),all=lpList(),ms=sortMs(all.filter(l=>!q||(l.name+" "+l.region+" "+l.coord).toLowerCase().includes(q)).map(l=>metrics(l))),P=S.pa;
+ $("lpCount").textContent=ms.length+" dari "+all.length+" learning point · "+PA_LABEL[P];
+ $("lpBody").innerHTML=ms.map(x=>{
+  const ok=x.rep&&(S.batch==="all"||x.nb);
+  const inc=!x.rep?"—":cmp()?vbar(x.achv)+`<span class="tcell">${fp(x.achv)} · ${rp(x.actual)}</span>`:rp(pv(x));
+  const sis=!ok?"—":cmp()?x.siswa+"/"+x.sPlan:P==="plan"?x.sPlan:x.siswa;
+  const mcu=!ok||P==="plan"?"—":x.mcu+"/"+x.sel;
+  const fas=!x.rep?"—":cmp()?fp(pc(x.fU,x.fP)):P==="plan"?x.fP:x.fU;
+  const ast=!x.rep||P==="plan"?"—":(x.bad?`<span class="pill a">${x.bad} rusak</span>`:`<span class="pill g">Baik</span>`);
+  return`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b><br><span class="tcell">${esc(x.lp.coord?"Koord. "+x.lp.coord:"Langsung HO")}${x.stale?" · data "+MON[x.rep.month-1]:""}</span></td><td>${esc(x.lp.region)}</td><td style="min-width:160px">${inc}</td><td>${sis}</td><td>${mcu}</td><td>${x.rep&&P!=="plan"?x.cust:"—"}</td><td>${fas}</td><td>${ast}</td></tr>`}).join("")||'<tr><td colspan="8" class="empty">Tidak ada LP yang cocok.</td></tr>';
 }
 
 /* ============ VIEW LAIN ============ */
-function viewStatus(){
- const lps=lpList(),due=dueNow();
- const cell=(id,m)=>{if(m>due)return`<div class="cell n" title="Belum jatuh tempo">·</div>`;const s=curStatus(id,m);return`<div class="cell ${stLabel[s][1]}" title="${MONTHS[m-1]}: ${stLabel[s][0]}">${({submitted:"✓",draft:"…",missing:"✕"})[s]}</div>`};
- const total=lps.length*due,ok=lps.reduce((s,l)=>{for(let m=1;m<=due;m++)if(curStatus(l.id,m)==="submitted")s++;return s},0);
- return`<div class="card"><div class="hd">Kepatuhan pelaporan bulanan ${S.year}<small>${ok} dari ${total} laporan sudah masuk (${fp(pc(ok,total))}) · klik nama LP untuk detail</small></div>
- <div class="hmap"><div class="hr"><span></span>${MON.map(m=>`<div class="hh">${m}</div>`).join("")}</div>
- ${lps.map(l=>`<div class="hr"><span style="cursor:pointer;font-weight:700;font-size:13px" onclick="openLP('${l.id}')">${esc(l.name)}</span>${MON.map((_,i)=>cell(l.id,i+1)).join("")}</div>`).join("")}</div>
- <div class="leg" style="margin-top:12px"><span><i style="background:#c6efce"></i>Sudah lapor</span><span><i style="background:#ffeb9c"></i>Draft</span><span><i style="background:#ffc7ce"></i>Belum lapor</span><span><i style="background:#eee"></i>Belum jatuh tempo</span></div></div>`;
-}
 function viewSummary(){
- const T=agg(lpList().map(l=>metrics(l))),li=(a,b)=>`<li>${a}: <b>${b}</b></li>`;
- return`<div class="stitle"><b>SUMMARY</b><span>ACHIEVEMENT ${S.year} · s.d. ${MONTHS[S.month-1]}</span></div>
+ const T=agg(lpList().map(l=>metrics(l))),li=(a,b)=>`<li>${a}: <b>${b}</b></li>`,P=S.pa;
+ const kes=P==="plan"?onlyA:`<h4>Rekrutmen & MCU Batch 39</h4><ul>${li("Total peserta seleksi",T.sel)}${li("Lolos psikotes",T.psi)}${li("Lolos interview",T.itv)}${li("Lolos MCU",T.mcu)}</ul>
+   <h4>Pelaksanaan Bintalsik</h4><ul>${li("LP melaksanakan",T.binN)}${li("Total peserta seleksi",T.binSel)}${li("Lolos psikotes",T.binPsi)}${li("Lolos interview",T.binItv)}${li("Lolos MCU",T.binMcu)}${li("Jumlah lokasi Bintalsik",T.binLok)}</ul>`;
+ const sis=cmp()?li("Jumlah siswa",T.siswa+" dari "+T.sPlan+" ("+fp(pc(T.siswa,T.sPlan))+")"):P==="plan"?li("Plan siswa",T.sPlan):li("Jumlah siswa",T.siswa);
+ const kipl=cmp()?`<li><b>${rp(T.actual)}</b> (${fp(T.achv)})</li><li>Mandiri — plan ${rp(T.mPlan)} · actual ${rp(T.mAct)} · <b>${fp(pc(T.mAct,T.mPlan))}</b></li><li>Mandatory — plan ${rp(T.dPlan)} · actual ${rp(T.dAct)} · <b>${fp(pc(T.dAct,T.dPlan))}</b></li>`
+  :P==="plan"?`<li><b>${rp(T.plan)}</b></li><li>Mandiri — plan ${rp(T.mPlan)}</li><li>Mandatory — plan ${rp(T.dPlan)}</li>`:`<li><b>${rp(T.actual)}</b></li><li>Mandiri — actual ${rp(T.mAct)}</li><li>Mandatory — actual ${rp(T.dAct)}</li>`;
+ return`<div class="stitle"><b>SUMMARY</b><span>${P==="both"?"ACHIEVEMENT":P==="plan"?"PLAN":"ACTUAL"} ${S.year} · s.d. ${MONTHS[S.month-1]}</span></div>
  <div class="slide"><div class="cols">
-  <div class="card"><div class="ph">Kesiswaan</div><h4>Rekrutmen & MCU Batch 39</h4><ul>${li("Total peserta seleksi",T.sel)}${li("Lolos psikotes",T.psi)}${li("Lolos interview",T.itv)}${li("Lolos MCU",T.mcu)}</ul>
-   <h4>Pelaksanaan Bintalsik</h4><ul>${li("LP melaksanakan",T.binN)}${li("Total peserta seleksi",T.binSel)}${li("Lolos psikotes",T.binPsi)}${li("Lolos interview",T.binItv)}${li("Lolos MCU",T.binMcu)}${li("Jumlah lokasi Bintalsik",T.binLok)}</ul></div>
-  <div class="card"><div class="ph">Akademik</div><h4>Reguler (Batch 38 &amp; 39)</h4><ul>${li("Jumlah siswa",T.siswa+" dari "+T.sPlan+" ("+fp(pc(T.siswa,T.sPlan))+")")}${li("Lokasi OJT",T.ojt+" site")}</ul>
-   <h4>Program CSR</h4><ul>${li("Jumlah program",T.csrP)}${li("Jumlah sekolah / PT",T.csrS)}${li("Jumlah peserta",nf(T.csrQ))}</ul></div>
-  <div class="card"><div class="ph">KIPL</div><h4>Achievement as of ${MONTHS[S.month-1]}</h4><ul><li><b>${rp(T.actual)}</b> (${fp(T.achv)})</li>
-   <li>Mandiri — plan ${rp(T.mPlan)} · actual ${rp(T.mAct)} · <b>${fp(pc(T.mAct,T.mPlan))}</b></li><li>Mandatory — plan ${rp(T.dPlan)} · actual ${rp(T.dAct)} · <b>${fp(pc(T.dAct,T.dPlan))}</b></li></ul>
-   <h4>New Project / New Customer (Big 5)</h4><ul>${li("Total",T.cust)}</ul><h4>Optimalisasi Fasus NT UTS</h4><ul>${li("Fasus terpakai",T.fU)}${li("Fasus direncanakan",T.fP)}</ul></div>
+  <div class="card"><div class="ph">Kesiswaan</div>${kes}</div>
+  <div class="card"><div class="ph">Akademik</div><h4>Reguler (Batch 38 &amp; 39)</h4><ul>${sis}${showA()?li("Lokasi OJT",T.ojt+" site"):""}</ul>
+   <h4>Program CSR</h4>${P==="plan"?onlyA:`<ul>${li("Jumlah program",T.csrP)}${li("Jumlah sekolah / PT",T.csrS)}${li("Jumlah peserta",nf(T.csrQ))}</ul>`}</div>
+  <div class="card"><div class="ph">KIPL</div><h4>${P==="both"?"Achievement":P==="plan"?"Plan":"Actual"} as of ${MONTHS[S.month-1]}</h4><ul>${kipl}</ul>
+   ${showA()?`<h4>New Project / New Customer (Big 5)</h4><ul>${li("Total",T.cust)}</ul>`:""}<h4>Optimalisasi Fasus NT UTS</h4><ul>${showA()?li("Fasus terpakai",T.fU):""}${showP()?li("Fasus direncanakan",T.fP):""}</ul></div>
  </div></div>
- <div class="card" style="margin-top:10px"><div class="hd">Daftar Laporan Aset</div><div class="desc">${T.bad} aset berstatus Rusak dari ${T.assets} aset yang dilaporkan. Rincian per LP tersedia di detail Learning Point.</div></div>
+ <div class="card" style="margin-top:10px"><div class="hd">Daftar Laporan Aset</div>${P==="plan"?onlyA:`<div class="desc">${T.bad} aset berstatus Rusak dari ${T.assets} aset yang dilaporkan. Rincian per LP tersedia di detail Learning Point.</div><div style="margin-top:8px"><button class="bt" onclick="switchView('asset')">Buka Daftar Aset per LP</button></div>`}</div>
  <div class="noprint" style="margin-top:10px"><button class="bt" onclick="window.print()">🖨 Cetak / Simpan PDF</button></div>`;
 }
 function viewInput(){
@@ -655,6 +740,7 @@ function viewInput(){
   <div style="margin-top:10px;display:flex;gap:8px"><button class="bt" ${UP.busy||!okN?"disabled":""} onclick="importUploads()">${UP.busy?"Menyimpan…":"✔ Impor "+okN+" laporan"}</button><button class="bt w" onclick="UP.files=[];UP.msg='';renderAll()">Kosongkan daftar</button></div></div>`:""}</div>
  <div class="card" style="margin-bottom:10px"><div class="hd">Laporan tersimpan<span class="fl"><select class="fs" style="min-width:90px" onchange="switchYear(+this.value)">${yearList().map(y=>`<option value="${y}" ${S.year===y?"selected":""}>${y}</option>`).join("")}</select><select class="fs" style="min-width:150px" onchange="UP.month=+this.value;renderAll()">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${m===i+1?"selected":""}>${MONTHS[i]} ${S.year}</option>`).join("")}</select></span></div>
   ${tbl(["Learning Point","Status","PIC","Terakhir diubah","Aksi (khusus HO)"],[saved])}</div>
+ ${batchMasterCard()}
  <div class="card"><div class="hd">Ganti password akun</div>
   <div class="fl"><select class="fs" id="pwUser" style="min-width:120px"><option value="admin">admin (HO)</option><option value="viewer">viewer</option></select><input class="fs" id="pwNew" type="password" placeholder="Password baru (min. 8 karakter)" style="min-width:260px"><button class="bt" onclick="changePw()">Simpan password</button></div>
   ${DEMO?'<div class="desc" style="margin-top:8px">Tersedia setelah terhubung ke Apps Script.</div>':""}</div>`;
@@ -779,36 +865,132 @@ async function changePw(){
 
 /* ============ DETAIL LP (popup bentuk slide) ============ */
 function openLP(id){
- const lp=LPS.find(l=>l.id===id),m=metrics(lp),r=m.rep;let body;
+ const lp=LPS.find(l=>l.id===id),m=metrics(lp),r=m.rep,P=S.pa;let body;
  if(!r)body='<div class="empty">Belum ada laporan yang masuk untuk learning point ini.</div>';
  else{
-  const k=r.kipl,kb=r.kesiswaan,bs=kb.bintalsik;
-  const tr=lineChart(MON.slice(0,S.month),[{name:"Plan (YTD)",color:"#9aa1a9",dash:1,w:2.5,vals:Array.from({length:S.month},(_,i)=>{const x=latest(id,i+1);return x?x.kipl.mandiri.plan+x.kipl.mandatory.plan:0})},{name:"Actual (YTD)",color:"#111",vals:Array.from({length:S.month},(_,i)=>{const x=latest(id,i+1);return x?x.kipl.mandiri.actual+x.kipl.mandatory.actual:0})}]);
-  const inc=(t,o)=>`<div class="sbox"><h4>${t}</h4><div class="row" style="grid-template-columns:50px 1fr"><span>Plan</span><b style="text-align:left">${rp(o.plan)}</b></div><div class="row" style="grid-template-columns:50px 1fr"><span>Actual</span><b style="text-align:left">${rp(o.actual)}</b></div>${vbar(pc(o.actual,o.plan))}<div class="tcell" style="margin-top:4px">Achv <b>${fp(pc(o.actual,o.plan))}</b></div></div>`;
-  body=`<div class="chips">${stPill(m.status)}${chip(r.pic,"PIC","#999")}${chip(MONTHS[r.month-1],"laporan terakhir","#4285f4")}</div>
+  const k=r.kipl,kb=r.kesiswaan,bs=kb.bintalsik,ser=[];
+  const vals=f=>Array.from({length:S.month},(_,i)=>{const x=latest(id,i+1);return x?f(x):0});
+  if(showP())ser.push({name:"Plan (YTD)",color:"#9aa1a9",dash:1,w:2.5,vals:vals(x=>x.kipl.mandiri.plan+x.kipl.mandatory.plan)});
+  if(showA())ser.push({name:"Actual (YTD)",color:"#111",vals:vals(x=>x.kipl.mandiri.actual+x.kipl.mandatory.actual)});
+  const tr=lineChart(MON.slice(0,S.month),ser);
+  const inc=(t,o)=>`<div class="sbox"><h4>${t}</h4>${showP()?`<div class="row" style="grid-template-columns:50px 1fr"><span>Plan</span><b style="text-align:left">${rp(o.plan)}</b></div>`:""}${showA()?`<div class="row" style="grid-template-columns:50px 1fr"><span>Actual</span><b style="text-align:left">${rp(o.actual)}</b></div>`:""}${cmp()?`${vbar(pc(o.actual,o.plan))}<div class="tcell" style="margin-top:4px">Achv <b>${fp(pc(o.actual,o.plan))}</b></div>`:""}</div>`;
+  const incHead=cmp()?`Achievement as of ${MONTHS[r.month-1]} · ${rp(m.actual)} (${fp(m.achv)})`:`${PA_LABEL[P]} as of ${MONTHS[r.month-1]} · ${rp(pv(m))}`;
+  const sisChip=b=>cmp()?chip(b.siswa+" dari "+b.siswaPlan+" ("+fp(pc(b.siswa,b.siswaPlan))+")","Siswa",band(pc(b.siswa,b.siswaPlan))):P==="plan"?chip(b.siswaPlan,"Plan siswa","#4285f4"):chip(b.siswa,"Siswa","#34a853");
+  const fas=cmp()?`${vbar(pc(k.fasusUsed,k.fasusPlan),"#34a853")}<div class="tcell" style="margin-top:4px">${k.fasusUsed} fasus terpakai dari ${k.fasusPlan} direncanakan (${fp(pc(k.fasusUsed,k.fasusPlan))})</div>`:P==="plan"?`<div class="tcell">${k.fasusPlan} fasus direncanakan</div>`:`<div class="tcell">${k.fasusUsed} fasus terpakai</div>`;
+  body=`<div class="chips">${chip(PA_LABEL[P],"mode data","#ffb703")}${chip(r.pic,"PIC","#999")}${chip(MONTHS[r.month-1],"laporan terakhir","#4285f4")}</div>
   ${S.batch!=="all"&&!m.nb?`<div class="sbox"><div class="empty">${esc(S.batch)} tidak ditemukan pada laporan LP ini (s.d. ${MONTHS[S.month-1]}).</div></div>`:""}
+  ${S.batch!=="all"?`<div class="sbox"><h4>Riwayat ${esc(S.batch)} · ${spanText(S.batch)}</h4>${tbl(histHeads(),histRows(S.batch,id),"Tidak ada laporan batch ini untuk LP ini.")}</div>`:""}
   <div class="sectt">KESISWAAN</div>
-  ${kb.batches.map(b=>`<div class="sbox"><h4>Rekrutmen & MCU ${esc(b.name)}</h4>${[["Seleksi",b.seleksi],["Psikotes",b.psikotes],["Interview",b.interview],["MCU",b.mcu]].map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,b.seleksi),"#ffb703")}<b>${v}</b></div>`).join("")}</div>`).join("")}
-  <div class="sbox"><h4>Pelaksanaan Bintalsik</h4>${bs?`<div class="mini">${chip(bs.seleksi,"Seleksi","#ffb703")}${chip(bs.psikotes,"Psikotes","#ffb703")}${chip(bs.interview,"Interview","#ffb703")}${chip(bs.mcu,"MCU","#34a853")}${chip(esc(bs.lokasi),"Lokasi","#a855f7")}</div>`:'<div class="empty">Tidak ada pelaksanaan Bintalsik.</div>'}</div>
+  ${P==="plan"?`<div class="sbox">${onlyA}</div>`:`${kb.batches.map(b=>`<div class="sbox"><h4>Rekrutmen & MCU ${esc(b.name)}</h4>${[["Seleksi",b.seleksi],["Psikotes",b.psikotes],["Interview",b.interview],["MCU",b.mcu]].map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,b.seleksi),"#ffb703")}<b>${v}</b></div>`).join("")}</div>`).join("")}
+  <div class="sbox"><h4>Pelaksanaan Bintalsik</h4>${bs?`<div class="mini">${chip(bs.seleksi,"Seleksi","#ffb703")}${chip(bs.psikotes,"Psikotes","#ffb703")}${chip(bs.interview,"Interview","#ffb703")}${chip(bs.mcu,"MCU","#34a853")}${chip(esc(bs.lokasi),"Lokasi","#a855f7")}</div>`:'<div class="empty">Tidak ada pelaksanaan Bintalsik.</div>'}</div>`}
   <div class="sectt">AKADEMIK</div>
-  ${r.akademik.batches.map(b=>`<div class="sbox"><h4>${esc(b.name)}</h4><div class="mini">${chip(b.kelas,"Kelas","#ffb703")}${chip(b.siswa+" dari "+b.siswaPlan+" ("+fp(pc(b.siswa,b.siswaPlan))+")","Siswa",band(pc(b.siswa,b.siswaPlan)))}${chip(b.ojt,"Lokasi OJT","#a855f7")}</div></div>`).join("")}
-  <div class="sbox"><h4>Program CSR</h4><div class="mini">${chip(r.akademik.csr.program,"Program","#34a853")}${chip(r.akademik.csr.sekolah,"Sekolah / PT","#4285f4")}${chip(r.akademik.csr.peserta,"Peserta","#ffb703")}</div></div>
+  ${r.akademik.batches.map(b=>`<div class="sbox"><h4>${esc(b.name)}</h4><div class="mini">${showA()?chip(b.kelas,"Kelas","#ffb703"):""}${sisChip(b)}${showA()?chip(b.ojt,"Lokasi OJT","#a855f7"):""}</div></div>`).join("")}
+  <div class="sbox"><h4>Program CSR</h4>${P==="plan"?onlyA:`<div class="mini">${chip(r.akademik.csr.program,"Program","#34a853")}${chip(r.akademik.csr.sekolah,"Sekolah / PT","#4285f4")}${chip(r.akademik.csr.peserta,"Peserta","#ffb703")}</div>`}</div>
   <div class="sectt">KIPL</div>
-  <div class="sbox"><h4>Achievement as of ${MONTHS[r.month-1]} · ${rp(m.actual)} (${fp(m.achv)})</h4><div class="split">${inc("Mandiri",k.mandiri)}${inc("Mandatory",k.mandatory)}</div><div style="margin-top:10px">${tr}</div></div>
-  <div class="sbox"><h4>New Project / New Customer (Big 5)</h4>${k.customers.length?`<table class="t"><tbody>${k.customers.map((c,i)=>`<tr><td>${i+1}</td><td>${esc(c.name)}</td><td><span class="pill ${c.type==="New Customer"?"g":"a"}">${c.type}</span></td></tr>`).join("")}</tbody></table>`:'<div class="empty">Belum ada.</div>'}</div>
-  <div class="sbox"><h4>Optimalisasi Fasus NT UTS</h4>${vbar(pc(k.fasusUsed,k.fasusPlan),"#34a853")}<div class="tcell" style="margin-top:4px">${k.fasusUsed} fasus terpakai dari ${k.fasusPlan} direncanakan (${fp(pc(k.fasusUsed,k.fasusPlan))})</div></div>
+  <div class="sbox"><h4>${incHead}</h4><div class="split">${inc("Mandiri",k.mandiri)}${inc("Mandatory",k.mandatory)}</div><div style="margin-top:10px">${tr}</div></div>
+  ${showA()?`<div class="sbox"><h4>New Project / New Customer (Big 5)</h4>${k.customers.length?`<table class="t"><tbody>${k.customers.map((c,i)=>`<tr><td>${i+1}</td><td>${esc(c.name)}</td><td><span class="pill ${c.type==="New Customer"?"g":"a"}">${c.type}</span></td></tr>`).join("")}</tbody></table>`:'<div class="empty">Belum ada.</div>'}</div>`:""}
+  <div class="sbox"><h4>Optimalisasi Fasus NT UTS</h4>${fas}</div>
   <div class="sectt">DAFTAR LAPORAN ASET</div>
-  <div class="sbox"><table class="t"><tbody>${r.assets.map((a,i)=>`<tr><td>${i+1}</td><td>${esc(a.name)}</td><td><span class="pill ${a.cond==="Baik"?"g":"r"}">${a.cond}</span></td></tr>`).join("")}</tbody></table></div>`;
+  <div class="sbox">${P==="plan"?onlyA:`<table class="t"><tbody>${r.assets.map((a,i)=>`<tr><td>${i+1}</td><td>${esc(a.name)}</td><td><span class="pill ${a.cond==="Baik"?"g":"r"}">${a.cond}</span></td></tr>`).join("")}</tbody></table>`}</div>`;
  }
  openModal(lp.name+" · "+lp.region+" · "+(lp.coord?"Koordinator "+lp.coord:"Langsung ke HO"),body,true);
 }
 
+/* ============ PERIODE BATCH (admin) ============ */
+function batchMasterCard(){
+ const rows=Object.entries(BX.spans).sort((a,b)=>a[1].s-b[1].s||a[0].localeCompare(b[0],undefined,{numeric:true})).map(([k,x])=>`<tr><td><b>${esc(k)}</b></td><td>${ymStr(x.s)}</td><td>${x.e==null?"Berjalan":ymStr(x.e)}</td><td>${x.src==="master"?'<span class="pill g">Resmi</span>':'<span class="pill n">Estimasi</span>'}</td><td><button class="btn-s" onclick="fillBM('${esc(k)}')">Atur periode</button>${x.src==="master"?`<button class="btn-s d" onclick="deleteBM('${esc(k)}')">Hapus periode</button>`:""}</td></tr>`).join("");
+ return`<div class="card" style="margin-bottom:10px"><div class="hd">Periode Batch Kesiswaan<small>batch yang melintasi tahun tetap tampil utuh di tahun mana pun yang dilewatinya</small></div>
+  <div class="fl" style="margin-bottom:8px"><input class="fs" placeholder="Batch (mis. Batch 1)" value="${esc(BMF.key)}" oninput="BMF.key=this.value" style="min-width:150px"><label>Mulai</label><input class="fs" type="month" value="${esc(BMF.start)}" oninput="BMF.start=this.value"><label>Selesai (kosong = berjalan)</label><input class="fs" type="month" value="${esc(BMF.end)}" oninput="BMF.end=this.value"><button class="bt" onclick="saveBM()">Simpan periode</button></div>
+  ${tbl(["Batch","Mulai","Selesai","Sumber","Aksi"],[rows],"Belum ada batch yang dilaporkan.")}</div>`;
+}
+function fillBM(k){const x=BX.spans[k];BMF={key:k,start:x?ymInput(x.s):"",end:x&&x.e!=null?ymInput(x.e):""};renderAll()}
+async function saveBM(){
+ const key=BMF.key.trim();if(!key||!BMF.start){toast("Nama batch dan bulan mulai wajib diisi.","err");return}
+ if(BMF.end&&BMF.end<BMF.start){toast("Bulan selesai tidak boleh sebelum bulan mulai.","err");return}
+ try{
+  if(CONFIG.API_URL){const r=await api("saveBatch",{key,start:BMF.start,end:BMF.end||""});if(!r.ok)throw new Error(r.message||"Gagal menyimpan.");BMF={key:"",start:"",end:""};await loadData(false)}
+  else{BM=BM.filter(x=>batchKey(x.key)!==batchKey(key));BM.push({key:batchKey(key),start:BMF.start+"-01",end:BMF.end?BMF.end+"-28":""});BMF={key:"",start:"",end:""};renderAll()}
+  toast("Periode batch disimpan.","ok");
+ }catch(e){toast(e.message,"err")}
+}
+async function deleteBM(k){
+ if(!confirm("Hapus periode resmi "+k+"? Data laporan tidak ikut terhapus; periode kembali diperkirakan dari laporan."))return;
+ try{
+  if(CONFIG.API_URL){const r=await api("deleteBatch",{key:k});if(!r.ok)throw new Error(r.message);await loadData(false)}
+  else{BM=BM.filter(x=>batchKey(x.key)!==batchKey(k));renderAll()}
+  toast("Periode batch dihapus.","ok");
+ }catch(e){toast(e.message,"err")}
+}
+
+/* ============ DAFTAR ASET PER LP ============ */
+function viewAsset(){
+ return`<div class="card"><div class="hd">Daftar Aset per Learning Point<small id="astNote"></small></div>
+  <div class="fl" style="margin-bottom:8px"><input class="fs" placeholder="Cari LP / nama aset…" value="${esc(S.aq)}" oninput="S.aq=this.value;renderAssetBody()" style="min-width:230px">
+   <select class="fs" onchange="S.ac=this.value;renderAssetBody()"><option value="all">Semua kondisi</option><option value="Rusak" ${S.ac==="Rusak"?"selected":""}>Rusak</option><option value="Baik" ${S.ac==="Baik"?"selected":""}>Baik</option></select>
+   <button class="bt w" onclick="exportAssetCSV()">⬇ CSV Aset</button></div>
+  <div id="assetBody"></div></div>`;
+}
+function assetGroups(){
+ const q=S.aq.trim().toLowerCase(),filtered=!!q||S.ac!=="all";
+ return lpList().map(l=>{
+  const r=latest(l.id,S.month),all=r?r.assets:[],lpHit=!q||(l.name+" "+l.region).toLowerCase().includes(q);
+  const as=all.filter(a=>(S.ac==="all"||a.cond===S.ac)&&(lpHit||a.name.toLowerCase().includes(q)));
+  return{lp:l,r,all,as};
+ }).filter(g=>!filtered||g.as.length);
+}
+function renderAssetBody(){
+ const el=$("assetBody");if(!el)return;
+ const lr=lpList().map(l=>latest(l.id,S.month)),have=lr.filter(Boolean),tot=sum(have,r=>r.assets.length),bad=sum(have,r=>r.assets.filter(a=>a.cond==="Rusak").length);
+ $("astNote").textContent="laporan final terakhir tiap LP s.d. "+MONTHS[S.month-1]+" "+S.year;
+ const rows=assetGroups().map(g=>{
+  const r=g.r,nb=g.all.filter(a=>a.cond==="Rusak").length;
+  const head=`<tr class="lph"><td colspan="4"><span style="cursor:pointer" onclick="openLP('${g.lp.id}')">${esc(g.lp.name)}</span> <span class="tcell">· ${esc(g.lp.region)}</span> · ${r?`${g.all.length} aset · ${nb} rusak · data ${MON[r.month-1]} ${S.year}`:"belum ada laporan"} ${isAdmin()&&r?`<button class="btn-s" style="float:right" onclick="openAssetEditor('${g.lp.id}')">Kelola aset</button>`:""}</td></tr>`;
+  const body=g.as.map((a,i)=>`<tr><td>${i+1}</td><td>${esc(a.name)}</td><td><span class="pill ${a.cond==="Baik"?"g":"r"}">${esc(a.cond)}</span></td><td>${MON[r.month-1]} ${S.year}</td></tr>`).join("")||`<tr><td colspan="4" class="empty">${r?"Belum ada aset dilaporkan.":"—"}</td></tr>`;
+  return head+body;
+ }).join("");
+ el.innerHTML=`<div class="chips" style="margin-bottom:8px">${chip(tot,"Total aset","#4285f4")}${chip(tot-bad,"Baik","#34a853")}${chip(bad,"Rusak","#ea4335")}${chip(have.length,"LP punya data","#ffb703")}${chip(lr.length-have.length,"LP belum lapor","#999")}</div>
+  <div class="tw" style="max-height:none"><table class="t"><thead><tr><th style="width:50px">No</th><th>Nama aset</th><th>Kondisi</th><th>Dilaporkan</th></tr></thead><tbody>${rows||'<tr><td colspan="4" class="empty">Tidak ada aset yang cocok.</td></tr>'}</tbody></table></div>`;
+}
+function openAssetEditor(id){
+ if(!isAdmin())return;
+ const r=latest(id,S.month);
+ if(!r){toast("Belum ada laporan final untuk LP ini s.d. periode terpilih. Impor laporan dulu.","err");return}
+ AE={lp:id,month:r.month,list:r.assets.map(a=>({...a}))};renderAE();
+}
+function syncAE(){AE.list.forEach((a,i)=>{const n=$("aeN"+i),c=$("aeC"+i);if(n)a.name=n.value;if(c)a.cond=c.value})}
+function renderAE(){
+ const lp=LPS.find(l=>l.id===AE.lp);
+ openModal("Kelola aset · "+lp.name,`<div class="desc">Aset di bawah ini milik <b>${esc(lp.name)}</b> dan disimpan pada laporan ${MONTHS[AE.month-1]} ${S.year} LP tersebut. Status laporan tidak berubah.</div>
+  ${AE.list.map((a,i)=>`<div class="fl"><input class="fs" id="aeN${i}" value="${esc(a.name)}" placeholder="Nama aset" style="flex:1;min-width:240px"><select class="fs" id="aeC${i}" style="min-width:90px"><option ${a.cond==="Baik"?"selected":""}>Baik</option><option ${a.cond==="Rusak"?"selected":""}>Rusak</option></select><button class="btn-s d" onclick="aeDel(${i})">Hapus</button></div>`).join("")||'<div class="empty">Belum ada aset.</div>'}
+  <div class="fl"><button class="bt w" onclick="aeAdd()">+ Tambah aset</button><button class="bt" onclick="aeSave()">✔ Simpan</button></div>`);
+}
+function aeAdd(){syncAE();AE.list.push({name:"",cond:"Baik"});renderAE()}
+function aeDel(i){syncAE();AE.list.splice(i,1);renderAE()}
+async function aeSave(){
+ syncAE();const list=AE.list.map(a=>({name:a.name.trim(),cond:a.cond})).filter(a=>a.name);
+ try{
+  if(CONFIG.API_URL){const r=await api("saveAssets",{lp:AE.lp,year:S.year,month:AE.month,assets:list});if(!r.ok)throw new Error(r.message||"Gagal menyimpan.");await loadData(false)}
+  else{const rp=REP[AE.lp+"|"+AE.month];if(rp)rp.assets=list}
+  closeModal();toast("Aset "+LPS.find(l=>l.id===AE.lp).name+" disimpan.","ok");
+ }catch(e){toast(e.message,"err")}
+ renderAll();
+}
+function exportAssetCSV(){
+ const rows=[["Tahun","ID LP","Learning Point","Wilayah","Koordinator","Nama aset","Kondisi","Bulan laporan"]];
+ assetGroups().forEach(g=>g.as.forEach(a=>rows.push([S.year,g.lp.id,g.lp.name,g.lp.region,g.lp.coord||"Langsung HO",a.name,a.cond,MONTHS[g.r.month-1]])));
+ const csv="﻿"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`UTSchool_DaftarAset_${S.year}_${MON[S.month-1]}.csv`;a.click();
+}
+
 /* ============ CSV ============ */
 function exportCSV(){
- const rows=[["Tahun","Batch","Learning Point","Wilayah","Koordinator","Status","Bulan data","Plan income YTD","Actual income YTD","Capaian %","Siswa","Plan siswa","Seleksi","MCU","Customer","Fasus terpakai","Fasus plan","Aset rusak"]];
- sortMs(lpList().map(l=>metrics(l))).forEach(x=>rows.push([S.year,S.batch==="all"?"Semua":S.batch,x.lp.name,x.lp.region,x.lp.coord,stLabel[x.status][0],x.rep?MONTHS[x.rep.month-1]:"",Math.round(x.plan),Math.round(x.actual),x.achv==null?"":x.achv.toFixed(1),x.siswa??"",x.sPlan??"",x.sel??"",x.mcu??"",x.cust??"",x.fU??"",x.fP??"",x.bad??""]));
- const csv="﻿"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),a=document.createElement("a");
- a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`UTSchool_Konsolidasi_${S.year}_${S.batch==="all"?"":S.batch.replace(/\W+/g,"")+"_"}${MON[S.month-1]}.csv`;a.click();
+ const A=showA(),Pl=showP(),c=cmp();
+ const rows=[["Tahun","Batch","Mode data","Learning Point","Wilayah","Koordinator","Bulan data",...(Pl?["Plan income YTD"]:[]),...(A?["Actual income YTD"]:[]),...(c?["Capaian %"]:[]),...(A?["Siswa"]:[]),...(Pl?["Plan siswa"]:[]),...(A?["Seleksi","MCU","Customer","Fasus terpakai"]:[]),...(Pl?["Fasus plan"]:[]),...(A?["Aset rusak"]:[])]];
+ sortMs(lpList().map(l=>metrics(l))).forEach(x=>rows.push([S.year,S.batch==="all"?"Semua":S.batch,PA_LABEL[S.pa],x.lp.name,x.lp.region,x.lp.coord,x.rep?MONTHS[x.rep.month-1]:"",
+  ...(Pl?[Math.round(x.plan)]:[]),...(A?[Math.round(x.actual)]:[]),...(c?[x.achv==null?"":x.achv.toFixed(1)]:[]),
+  ...(A?[x.siswa??""]:[]),...(Pl?[x.sPlan??""]:[]),...(A?[x.sel??"",x.mcu??"",x.cust??"",x.fU??""]:[]),...(Pl?[x.fP??""]:[]),...(A?[x.bad??""]:[])]));
+ const csv="\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`UTSchool_Konsolidasi_${S.year}_${S.pa}_${S.batch==="all"?"":S.batch.replace(/\W+/g,"")+"_"}${MON[S.month-1]}.csv`;a.click();
 }
 
 /* ============ BOOT ============ */
