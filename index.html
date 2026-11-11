@@ -164,6 +164,58 @@ button,select,input{font:inherit}
 .steps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .btn-s{border:2px solid #000;background:#fff;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px}
 .btn-s.d{background:#ffc7ce}.btn-s:hover{background:var(--y)}
+
+/* ---------- DAFTAR ASET (redesain: kartu per LP) ---------- */
+.ast-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.ast-bar .fs{min-width:260px;padding:8px 10px;font-size:13px;border:2px solid #000;border-radius:6px}
+.seg{display:inline-flex;border:2px solid #000;border-radius:6px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;border-right:2px solid #000}
+.seg button:last-child{border-right:0}.seg button:hover{background:#fff3cc}
+.seg button.on{background:#111;color:var(--y)}
+.ast-sum{display:grid;grid-template-columns:minmax(260px,2fr) 1fr 1fr;gap:12px;margin-bottom:18px}
+.ast-box{border:2px solid #000;border-radius:8px;padding:12px 14px;background:#fff;min-width:0}
+.ast-box.hl{background:#111;color:#fff}
+.ast-box small{display:block;font-size:11.5px;color:#666;font-weight:600}
+.ast-box.hl small{color:#bbb}
+.ast-num{font-size:30px;font-weight:900;line-height:1.1;margin-top:2px}
+.ast-meter{display:flex;height:10px;border-radius:5px;overflow:hidden;background:#ddd;margin:10px 0 8px}
+.ast-meter i{display:block;height:100%}.ast-meter i.g{background:var(--g)}.ast-meter i.r{background:var(--r)}
+.ast-leg{display:flex;gap:14px;font-size:12px;font-weight:700}
+.ast-leg u{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;text-decoration:none}
+.ast-leg u.g{background:var(--g)}.ast-leg u.r{background:var(--r)}
+.ast-reg{display:flex;align-items:baseline;gap:10px;margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid #111}
+.ast-reg h3{font-size:15px;font-weight:900;margin:0}
+.ast-reg span{font-size:12px;color:#666;font-weight:600}
+.ast-reg .warn{color:#b91c1c;font-weight:800;margin-left:auto}
+.ast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.ac{background:#fff;border:2px solid #000;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:3px 3px 0 #0002}
+.ac.bad{border-left:7px solid var(--r)}
+.ac.ok{border-left:7px solid var(--g)}
+.ac-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ac-h h4{margin:0;font-size:15px;font-weight:900;cursor:pointer}.ac-h h4:hover{text-decoration:underline}
+.ac-h small{font-size:11.5px;color:#666;font-weight:600}
+.ac-ticks{display:flex;gap:3px}
+.ac-ticks i{flex:1;height:6px;border-radius:3px;background:var(--g);max-width:28px}.ac-ticks i.r{background:var(--r)}
+.ac ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.ac li{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.35}
+.ac li:before{content:"";flex:none;width:8px;height:8px;border-radius:50%;margin-top:5px;background:var(--g)}
+.ac li.r{font-weight:700}.ac li.r:before{background:var(--r)}
+.ac details{border-top:1px dashed #bbb;padding-top:8px}
+.ac summary{cursor:pointer;font-size:12px;font-weight:700;color:#444;margin-bottom:8px;list-style:none}
+.ac summary::-webkit-details-marker{display:none}
+.ac summary:before{content:"+ "}.ac details[open] summary:before{content:"− "}
+.ac-f{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;font-size:11px;color:#777;font-weight:600}
+.ac-f .btn-s{margin:0}
+.ac-none{font-size:12px;color:#777}
+.ast-miss{margin-top:22px;border:2px dashed #999;border-radius:8px;padding:12px 14px;background:#fafafa}
+.ast-miss b{font-size:13px}.ast-miss p{margin:2px 0 10px;font-size:12px;color:#666}
+.ast-miss .tags{display:flex;flex-wrap:wrap;gap:6px}
+.ast-miss .tags button{border:1.5px solid #999;background:#fff;border-radius:14px;padding:3px 11px;font-size:12px;font-weight:600;cursor:pointer}
+.ast-miss .tags button:hover{border-color:#000;background:var(--y)}
+.ast-empty{text-align:center;padding:40px 10px;color:#666;font-size:13px;border:2px dashed #bbb;border-radius:8px}
+.ast-empty b{display:block;color:#111;font-size:15px;margin-bottom:4px}
+@media(max-width:900px){.ast-sum{grid-template-columns:1fr 1fr}.ast-sum .ast-box:first-child{grid-column:1/-1}}
+@media(max-width:560px){.ast-bar .fs{min-width:0;width:100%}.ast-sum{grid-template-columns:1fr}}
 @media(max-width:1100px){
  .kpis{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr 1fr}.c3,.c2,.c4{grid-column:1/-1}.c1{grid-column:1/-1}
  .rank{grid-column:1/-1;grid-row:auto;min-height:480px}.pillars{grid-template-columns:1fr}.slide .cols{grid-template-columns:1fr}
@@ -925,9 +977,9 @@ async function deleteBM(k){
 /* ============ DAFTAR ASET PER LP ============ */
 function viewAsset(){
  return`<div class="card"><div class="hd">Daftar Aset per Learning Point<small id="astNote"></small></div>
-  <div class="fl" style="margin-bottom:8px"><input class="fs" placeholder="Cari LP / nama aset…" value="${esc(S.aq)}" oninput="S.aq=this.value;renderAssetBody()" style="min-width:230px">
-   <select class="fs" onchange="S.ac=this.value;renderAssetBody()"><option value="all">Semua kondisi</option><option value="Rusak" ${S.ac==="Rusak"?"selected":""}>Rusak</option><option value="Baik" ${S.ac==="Baik"?"selected":""}>Baik</option></select>
-   <button class="bt w" onclick="exportAssetCSV()">⬇ CSV Aset</button></div>
+  <div class="ast-bar"><input class="fs" placeholder="Cari LP atau nama aset…" value="${esc(S.aq)}" oninput="S.aq=this.value;renderAssetBody()">
+   <div class="seg" id="astSeg">${[["all","Semua"],["Rusak","Rusak"],["Baik","Baik"]].map(([v,l])=>`<button data-v="${v}" onclick="S.ac='${v}';renderAssetBody()">${l}</button>`).join("")}</div>
+   <button class="bt w" style="margin-left:auto" onclick="exportAssetCSV()">⬇ CSV Aset</button></div>
   <div id="assetBody"></div></div>`;
 }
 function assetGroups(){
@@ -940,16 +992,37 @@ function assetGroups(){
 }
 function renderAssetBody(){
  const el=$("assetBody");if(!el)return;
+ document.querySelectorAll("#astSeg button").forEach(x=>x.classList.toggle("on",x.dataset.v===S.ac));
  const lr=lpList().map(l=>latest(l.id,S.month)),have=lr.filter(Boolean),tot=sum(have,r=>r.assets.length),bad=sum(have,r=>r.assets.filter(a=>a.cond==="Rusak").length);
  $("astNote").textContent="laporan final terakhir tiap LP s.d. "+MONTHS[S.month-1]+" "+S.year;
- const rows=assetGroups().map(g=>{
-  const r=g.r,nb=g.all.filter(a=>a.cond==="Rusak").length;
-  const head=`<tr class="lph"><td colspan="4"><span style="cursor:pointer" onclick="openLP('${g.lp.id}')">${esc(g.lp.name)}</span> <span class="tcell">· ${esc(g.lp.region)}</span> · ${r?`${g.all.length} aset · ${nb} rusak · data ${MON[r.month-1]} ${S.year}`:"belum ada laporan"} ${isAdmin()&&r?`<button class="btn-s" style="float:right" onclick="openAssetEditor('${g.lp.id}')">Kelola aset</button>`:""}</td></tr>`;
-  const body=g.as.map((a,i)=>`<tr><td>${i+1}</td><td>${esc(a.name)}</td><td><span class="pill ${a.cond==="Baik"?"g":"r"}">${esc(a.cond)}</span></td><td>${MON[r.month-1]} ${S.year}</td></tr>`).join("")||`<tr><td colspan="4" class="empty">${r?"Belum ada aset dilaporkan.":"—"}</td></tr>`;
-  return head+body;
- }).join("");
- el.innerHTML=`<div class="chips" style="margin-bottom:8px">${chip(tot,"Total aset","#4285f4")}${chip(tot-bad,"Baik","#34a853")}${chip(bad,"Rusak","#ea4335")}${chip(have.length,"LP punya data","#ffb703")}${chip(lr.length-have.length,"LP belum lapor","#999")}</div>
-  <div class="tw" style="max-height:none"><table class="t"><thead><tr><th style="width:50px">No</th><th>Nama aset</th><th>Kondisi</th><th>Dilaporkan</th></tr></thead><tbody>${rows||'<tr><td colspan="4" class="empty">Tidak ada aset yang cocok.</td></tr>'}</tbody></table></div>`;
+ const all=assetGroups(),shown=all.filter(g=>g.r),missing=all.filter(g=>!g.r);
+ const lpBad=lpList().filter(l=>{const r=latest(l.id,S.month);return r&&r.assets.some(a=>a.cond==="Rusak")}).length;
+ const pR=tot?bad/tot*100:0,open=!!S.aq.trim()||S.ac==="Baik";
+ const sumHtml=`<div class="ast-sum">
+  <div class="ast-box"><small>Kondisi seluruh aset</small><div class="ast-num">${tot} <span style="font-size:13px;font-weight:700;color:#666">aset dari ${have.length} LP</span></div>
+   <div class="ast-meter"><i class="g" style="width:${100-pR}%"></i><i class="r" style="width:${pR}%"></i></div>
+   <div class="ast-leg"><span><u class="g"></u>${tot-bad} baik</span><span><u class="r"></u>${bad} rusak</span></div></div>
+  <div class="ast-box${lpBad?" hl":""}"><small>LP dengan aset rusak</small><div class="ast-num" style="${lpBad?"color:var(--y)":""}">${lpBad}</div></div>
+  <div class="ast-box"><small>LP belum melapor</small><div class="ast-num">${lr.length-have.length}</div></div></div>`;
+ const byReg={};shown.forEach(g=>(byReg[g.lp.region]=byReg[g.lp.region]||[]).push(g));
+ const card=g=>{
+  const r=g.r,nb=g.all.filter(a=>a.cond==="Rusak").length,rus=g.as.filter(a=>a.cond==="Rusak"),bk=g.as.filter(a=>a.cond!=="Rusak");
+  const li=a=>`<li class="${a.cond==="Rusak"?"r":""}">${esc(a.name)}</li>`;
+  const ticks=g.all.map(a=>`<i class="${a.cond==="Rusak"?"r":""}" title="${esc(a.name)}"></i>`).join("");
+  return`<article class="ac ${g.all.length?(nb?"bad":"ok"):""}">
+   <div class="ac-h"><div><h4 onclick="openLP('${g.lp.id}')">${esc(g.lp.name)}</h4><small>${g.all.length} aset</small></div>
+    ${g.all.length?(nb?`<span class="pill r">${nb} rusak</span>`:`<span class="pill g">Semua baik</span>`):`<span class="pill n">Kosong</span>`}</div>
+   ${g.all.length?`<div class="ac-ticks">${ticks}</div>`:""}
+   ${rus.length?`<ul>${rus.map(li).join("")}</ul>`:""}
+   ${bk.length?`<details ${open||!rus.length?"open":""}><summary>${bk.length} aset kondisi baik</summary><ul>${bk.map(li).join("")}</ul></details>`:""}
+   ${!g.all.length?`<div class="ac-none">Belum ada aset dilaporkan.</div>`:""}
+   <div class="ac-f"><span>Data ${MON[r.month-1]} ${S.year}</span>${isAdmin()?`<button class="btn-s" onclick="openAssetEditor('${g.lp.id}')">Kelola aset</button>`:""}</div></article>`};
+ const regHtml=Object.keys(byReg).map(rg=>{
+  const gs=byReg[rg].slice().sort((x,y)=>y.all.filter(a=>a.cond==="Rusak").length-x.all.filter(a=>a.cond==="Rusak").length),nb=sum(gs,g=>g.all.filter(a=>a.cond==="Rusak").length);
+  return`<div class="ast-reg"><h3>${esc(rg)}</h3><span>${gs.length} LP</span>${nb?`<span class="warn">${nb} aset rusak</span>`:""}</div><div class="ast-grid">${gs.map(card).join("")}</div>`}).join("");
+ const missHtml=missing.length?`<div class="ast-miss"><b>${missing.length} LP belum ada laporan final</b><p>Aset mereka akan muncul di sini setelah laporan dikirim.</p><div class="tags">${missing.map(g=>`<button onclick="openLP('${g.lp.id}')">${esc(g.lp.name)}</button>`).join("")}</div></div>`:"";
+ const empty=!shown.length&&!missing.length?`<div class="ast-empty"><b>Tidak ada aset yang cocok</b>Ubah kata kunci atau filter kondisi.</div>`:"";
+ el.innerHTML=sumHtml+regHtml+missHtml+empty;
 }
 function openAssetEditor(id){
  if(!isAdmin())return;
