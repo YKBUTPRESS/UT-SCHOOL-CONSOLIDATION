@@ -507,6 +507,48 @@ body{background:radial-gradient(900px 480px at 0 -10%,#ffe9b0aa,transparent 70%)
  .kpi b{font-size:38px}.kpi:nth-child(1) b{font-size:48px}
 }
 @media print{.sidebar{display:none}.card,.kpi{box-shadow:none;border:1px solid #bbb}.kpi:nth-child(1){background:#fff}}
+
+/* ================= REDESIGN v4 · perbaikan grafik, daftar peringkat & kotak info ================= */
+/* peringkat: tidak lagi saling tumpuk */
+.rank{display:flex;flex-direction:column}
+.rank .rs{position:static;flex:1;min-height:260px;overflow-y:auto;margin-top:12px;padding-right:6px}
+.rank .hd{flex-wrap:wrap;gap:8px}
+.rank select{border:0;background:var(--soft);border-radius:999px;padding:6px 12px;font-weight:700;font-family:inherit}
+.rrow{grid-template-columns:96px 1fr 66px;gap:12px;padding:7px 8px;margin-bottom:2px;border-radius:12px}
+.rrow:hover{background:var(--soft)}
+.rrow b{font-family:var(--fh);font-size:14px}
+.row .vb,.rrow .vb{height:9px}
+.leg{gap:6px;margin:0}
+.leg span{display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;background:var(--soft);font-weight:700;color:var(--ink2)}
+.leg span[style*="color"]{background:transparent;padding:4px 2px;color:var(--mu)!important}
+.leg i{width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:0}
+
+/* donat: angka muat di dalam cincin */
+.gauge{height:176px}
+.gc b{font-size:25px;letter-spacing:-.5px;line-height:1;font-weight:800}
+.gc span{font-size:11px;max-width:92px;line-height:1.35;margin-top:4px;color:var(--mu);font-weight:600}
+
+/* tren: interaktif */
+svg.lc{display:block;overflow:visible}
+.tp .gd,.tp .tt,.tp .dot{opacity:0;transition:opacity .12s;pointer-events:none}
+.tp.last .dot{opacity:1}
+.tp:hover .gd,.tp:hover .tt,.tp:hover .dot{opacity:1}
+.tp rect[fill="transparent"]{cursor:crosshair}
+.tp .tt{filter:drop-shadow(0 6px 14px #15191e40)}
+
+/* kotak info: ubin lembut berwarna */
+.ch{display:inline-flex;align-items:baseline;gap:7px;background:var(--soft);background:color-mix(in srgb,var(--c,#f5a800) 13%,#fff);border:0;border-radius:14px;padding:9px 14px;color:var(--mu);font-weight:600;font-size:12.5px}
+.ch b{font-family:var(--fh);font-size:22px;font-weight:800;line-height:1;color:var(--ink);color:color-mix(in srgb,var(--c,#f5a800) 58%,#10151a)}
+.mini{gap:8px;margin-top:8px}
+.sh{font-size:15px;margin:18px 0 6px}
+.pillars>*{position:relative;overflow:hidden}
+.pillars>*:nth-child(1){background:linear-gradient(180deg,#fff4d6,#fff 170px)}
+.pillars>*:nth-child(2){background:linear-gradient(180deg,#e6eefb,#fff 170px)}
+.pillars>*:nth-child(3){background:linear-gradient(180deg,#e0f2e8,#fff 170px)}
+.pillars>*:nth-child(1) .ph{background:var(--y);color:var(--ink)}
+.pillars>*:nth-child(2) .ph{background:var(--b);color:#fff}
+.pillars>*:nth-child(3) .ph{background:var(--g);color:#fff}
+.sbox{background:var(--soft)}
 </style>
 </head>
 <body>
@@ -789,9 +831,9 @@ function batchAgg(ms){const o={};ms.filter(x=>x.rep).forEach(x=>x.rep.akademik.b
 
 /* ============ KOMPONEN GRAFIK (SVG, tanpa library) ============ */
 function gauge(parts,big,sub){
- const r=62,C=2*Math.PI*r,tot=parts.reduce((s,p)=>s+p.v,0);let off=0;
- const segs=parts.filter(p=>p.v>0).map(p=>{const len=p.v/tot*C,s=`<circle r="${r}" cx="80" cy="80" fill="none" stroke="${p.c}" stroke-width="18" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 80 80)"><title>${esc(p.l)}</title></circle>`;off+=len;return s}).join("");
- return`<div class="gauge"><svg viewBox="0 0 160 160"><circle r="${r}" cx="80" cy="80" fill="none" stroke="#e5e7eb" stroke-width="18"/>${segs}</svg><div class="gc"><b>${big}</b><span>${sub}</span></div></div>`;
+ const r=66,C=2*Math.PI*r,tot=parts.reduce((s,p)=>s+p.v,0)||1;let off=0;
+ const segs=parts.filter(p=>p.v>0).map(p=>{const len=p.v/tot*C,tr=p.c==="#e5e7eb",s=`<circle r="${r}" cx="80" cy="80" fill="none" stroke="${p.c}" stroke-width="12" ${tr?"":'stroke-linecap="round"'} stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 80 80)"><title>${esc(p.l)}</title></circle>`;off+=len;return s}).join("");
+ return`<div class="gauge"><svg viewBox="0 0 160 160"><circle r="${r}" cx="80" cy="80" fill="none" stroke="#e5e7eb" stroke-width="12"/>${segs}</svg><div class="gc"><b>${big}</b><span>${sub}</span></div></div>`;
 }
 function incGauge(plan,actual){
  if(S.pa==="plan")return gauge([{v:plan,c:"#3f6fb5",l:"Plan "+rp(plan)}],rs(plan),rp(plan)+"<br>plan YTD");
@@ -799,18 +841,36 @@ function incGauge(plan,actual){
  const p=pc(actual,plan);return gauge([{v:Math.min(actual,plan),c:band(p),l:"Actual "+rp(actual)},{v:Math.max(plan-actual,0),c:"#e5e7eb",l:"Gap "+rp(plan-actual)}],fp(p),rp(actual)+"<br>dari "+rp(plan));
 }
 function lineChart(labels,series){
- const W=640,H=250,L=52,B=28,T=14,Rm=12,max=Math.max(1,...series.flatMap(s=>s.vals))*1.1,x=i=>L+(labels.length<2?0:i*(W-L-Rm)/(labels.length-1)),y=v=>T+(H-T-B)*(1-v/max);
- let g="";for(let i=0;i<=4;i++){const v=max*i/4,yy=y(v);g+=`<line x1="${L}" x2="${W-Rm}" y1="${yy}" y2="${yy}" stroke="#e6e8eb"/><text x="${L-8}" y="${yy+4}" font-size="10" fill="#6b7280" text-anchor="end">${(v/1e9).toFixed(1)}M</text>`}
- labels.forEach((l,i)=>g+=`<text x="${x(i)}" y="${H-8}" font-size="10" fill="#6b7280" text-anchor="middle">${l}</text>`);
- series.forEach(s=>{const pts=s.vals.map((v,i)=>x(i)+","+y(v)).join(" ");g+=`<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="${s.w||3}" ${s.dash?'stroke-dasharray="6 5"':""} stroke-linejoin="round" stroke-linecap="round"/>`;s.vals.forEach((v,i)=>g+=`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="${s.color}"><title>${esc(s.name)} ${labels[i]}: ${rp(v)}</title></circle>`)});
- return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Tren income">${g}</svg><div class="leg">${series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join("")}</div>`;
+ const W=640,H=260,L=58,B=30,T=16,Rm=18,uid="lg"+(lineChart.n=(lineChart.n||0)+1),col=c=>c==="#111"?"#f5a800":c,
+  ok=labels.map((_,i)=>series.some(s=>s.vals[i]>0)),idx=labels.map((_,i)=>i).filter(i=>ok[i]),
+  max=Math.max(1,...series.flatMap(s=>s.vals))*1.15,
+  x=i=>L+(labels.length<2?(W-L-Rm)/2:i*(W-L-Rm)/(labels.length-1)),y=v=>T+(H-T-B)*(1-v/max),
+  step=labels.length<2?60:(W-L-Rm)/(labels.length-1),
+  fmt=v=>v>=1e9?(v/1e9).toFixed(1).replace(".",",")+" M":Math.round(v/1e6)+" Jt";
+ const smooth=p=>{const n=p.length;if(n<2)return"";const dx=[],sl=[],m=[];
+  for(let i=0;i<n-1;i++){dx[i]=p[i+1][0]-p[i][0];sl[i]=(p[i+1][1]-p[i][1])/dx[i]}
+  m[0]=sl[0];m[n-1]=sl[n-2];for(let i=1;i<n-1;i++)m[i]=sl[i-1]*sl[i]<=0?0:(sl[i-1]+sl[i])/2;
+  for(let i=0;i<n-1;i++){if(sl[i]===0){m[i]=0;m[i+1]=0}else{const a=m[i]/sl[i],b=m[i+1]/sl[i],h=a*a+b*b;if(h>9){const t=3/Math.sqrt(h);m[i]=t*a*sl[i];m[i+1]=t*b*sl[i]}}}
+  let d="M"+p[0][0]+","+p[0][1];for(let i=0;i<n-1;i++){const c=dx[i]/3;d+=" C"+(p[i][0]+c)+","+(p[i][1]+m[i]*c)+" "+(p[i+1][0]-c)+","+(p[i+1][1]-m[i+1]*c)+" "+p[i+1][0]+","+p[i+1][1]}return d};
+ let g="<defs>"+series.filter(s=>!s.dash).map((s,k)=>`<linearGradient id="${uid}${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col(s.color)}" stop-opacity=".38"/><stop offset="1" stop-color="${col(s.color)}" stop-opacity="0"/></linearGradient>`).join("")+"</defs>";
+ for(let i=0;i<=4;i++){const v=max*i/4,yy=y(v);g+=`<line x1="${L}" x2="${W-Rm}" y1="${yy}" y2="${yy}" stroke="#e8ecf0" ${i?'stroke-dasharray="3 5"':""}/><text x="${L-10}" y="${yy+4}" font-size="11" fill="#8d99a5" text-anchor="end">${i?fmt(v):"0"}</text>`}
+ labels.forEach((l,i)=>g+=`<text x="${x(i)}" y="${H-8}" font-size="11" fill="${ok[i]?"#5b6670":"#c3cad1"}" font-weight="${ok[i]?700:500}" text-anchor="middle">${l}</text>`);
+ let ai=0;series.forEach(s=>{const c=col(s.color),pts=idx.map(i=>[x(i),y(s.vals[i])]),d=smooth(pts);
+  if(!s.dash&&d){g+=`<path d="${d} L${pts[pts.length-1][0]},${y(0)} L${pts[0][0]},${y(0)} Z" fill="url(#${uid}${ai++})"/>`}
+  if(d)g+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="${s.dash?2.2:3.6}" ${s.dash?'stroke-dasharray="2 7"':""} stroke-linecap="round" stroke-linejoin="round"/>`});
+ idx.forEach((i,k)=>{const last=k===idx.length-1,tw=200,th=26+17*series.length,tx=x(i)>W-tw-30?x(i)-tw-12:x(i)+12;
+  g+=`<g class="tp${last?" last":""}"><line class="gd" x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${H-B}" stroke="#15191e" stroke-opacity=".18" stroke-dasharray="3 4"/><rect x="${x(i)-step/2}" y="${T}" width="${step}" height="${H-T-B}" fill="transparent"/>`+
+  series.map(s=>`<circle class="dot" cx="${x(i)}" cy="${y(s.vals[i])}" r="${s.dash?4:6}" fill="#fff" stroke="${col(s.color)}" stroke-width="3"/>`).join("")+
+  `<g class="tt"><rect x="${tx}" y="${T+2}" width="${tw}" height="${th}" rx="10" fill="#15191e"/><text x="${tx+12}" y="${T+20}" font-size="12" font-weight="800" fill="#fff">${labels[i]}</text>`+
+  series.map((s,j)=>`<circle cx="${tx+16}" cy="${T+34+j*17}" r="4" fill="${col(s.color)}"/><text x="${tx+26}" y="${T+38+j*17}" font-size="11" fill="#e6eaee">${esc(s.name)}: <tspan font-weight="800">${rp(s.vals[i])}</tspan></text>`).join("")+`</g></g>`});
+ return`<svg class="lc" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Tren income">${g}</svg><div class="leg">${series.map(s=>`<span><i style="background:${col(s.color)}"></i>${esc(s.name)}</span>`).join("")}</div>`;
 }
 
 /* ============ MODAL ============ */
 function openModal(title,html,wide){$("mTitle").textContent=title;$("mBody").innerHTML=html;$("mcard").classList.toggle("wide",!!wide);$("modal").classList.add("open")}
 function closeModal(){$("modal").classList.remove("open")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
-const chip=(v,l,c)=>`<span class="ch" style="border-left-color:${c}"><b>${v}</b>${l}</span>`;
+const chip=(v,l,c)=>`<span class="ch" style="--c:${c}"><b>${v}</b>${l}</span>`;
 const tbl=(heads,rows,emptyMsg)=>`<div class="tw"><table class="t"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")||`<tr><td colspan="${heads.length}" class="empty">${emptyMsg||"Tidak ada data."}</td></tr>`}</tbody></table></div>`;
 function incHeads(){return["Learning Point",...(showP()?["Plan YTD"]:[]),...(showA()?["Actual YTD"]:[]),...(cmp()?["Capaian"]:[])]}
 function incRows(ms,kind){
