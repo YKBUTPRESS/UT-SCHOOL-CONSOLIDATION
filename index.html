@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{--y:#ffb703;--yd:#e0a200;--k:#111;--bg:#e5e7eb;--mu:#555;--g:#34a853;--a:#fbbc04;--r:#ea4335;--b:#4285f4}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -230,6 +231,162 @@ button,select,input{font:inherit}
  body{overflow:visible;background:#fff}#app{display:block;height:auto}.main{height:auto;overflow:visible}
  .sidebar,.topbar,.fbar,.demo,.noprint{display:none!important}.card,.kpi{break-inside:avoid}#lokMap{height:300px}
 }
+
+/* ================= REDESIGN v2 · lapisan visual (struktur & JS tidak diubah) ================= */
+:root{--y:#f5a800;--yd:#d99300;--k:#15191e;--bg:#e8ebee;--mu:#5b6670;--g:#2f8f5b;--a:#e8a317;--r:#d64545;--b:#3f6fb5;
+ --ink:#15191e;--ink2:#222a31;--line:#d8dde2;--soft:#f2f4f6;--amb-s:#fdf0cf;
+ --fh:'Barlow Semi Condensed','Arial Narrow',system-ui,sans-serif;--fb:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif}
+body{font-family:var(--fb);background:var(--ink);color:var(--ink);font-size:14px;font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* login & modal */
+#loginModal{background:radial-gradient(120% 90% at 15% 0,#26303a 0,var(--ink) 60%)}
+.lcard{border-radius:16px;border-top:0;padding:30px 34px 30px;box-shadow:0 24px 60px #0007;text-align:left}
+.logo-slot{border:1px solid var(--line);border-radius:12px}
+.lcard .logo-slot{margin:0 0 14px}
+.lcard h2{font-family:var(--fh);font-size:28px;font-weight:700;letter-spacing:-.2px}
+.lcard .sb{text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;color:var(--mu);margin:2px 0 22px}
+.lf label{font-weight:600;color:var(--ink2)}
+.lf input{border:1px solid var(--line);background:var(--soft);border-radius:8px;padding:11px 13px}
+.lf input:focus{border-color:var(--ink);background:#fff;box-shadow:0 0 0 3px #f5a80044}
+.lbtn{background:var(--ink);color:#fff;border-radius:8px;letter-spacing:0;font-weight:700;padding:13px}
+.lbtn:hover{background:#000}
+.lhint{border:1px solid #f1d58a;border-style:solid;background:var(--amb-s);border-radius:8px}
+#modal{background:#10151acc;backdrop-filter:blur(2px)}
+.mcard{border:0;border-radius:14px;box-shadow:0 30px 80px #0008;overflow:hidden}
+.mh{background:#fff;border-bottom:1px solid var(--line);border-radius:0;padding:14px 18px}
+.mh h3{font-family:var(--fh);font-style:normal;font-size:20px;font-weight:700}
+.xbtn{background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:7px;font-weight:600}
+.xbtn:hover{background:var(--ink);color:#fff}
+.ch{border:1px solid var(--line);border-left:4px solid var(--y);border-radius:8px;font-weight:600;background:var(--soft)}
+.ch b{font-family:var(--fh);font-size:18px}
+.desc{color:var(--mu)}
+
+/* shell */
+.sidebar{background:var(--ink);border-right:0;width:244px}
+.sidebar.collapsed{width:72px}
+.sbrand{color:#fff;font-family:var(--fh);font-weight:700;font-size:19px;border-bottom:1px solid #ffffff14;padding:18px 16px}
+.sbrand small{font-family:var(--fb);letter-spacing:0;color:#8d99a5;font-weight:500;font-size:11.5px}
+.sbrand .logo-slot{border:0;border-radius:10px}
+.nav{gap:2px;padding:0 10px;margin-top:16px}
+.nl{color:#aeb8c2;padding:11px 14px;border-left:0;border-radius:9px;font-weight:600;gap:13px;position:relative}
+.nl:hover{background:#ffffff0f;color:#fff}
+.nl.on{background:#ffffff14;color:#fff}
+.nl.on::before{content:"";position:absolute;left:-10px;top:9px;bottom:9px;width:4px;border-radius:0 4px 4px 0;background:var(--y)}
+.nl.on svg{color:var(--y)}
+.nl .soon{background:#ffffff1f;color:#d5dce3;font-weight:600}
+.sfoot{border-top:1px solid #ffffff14;color:#7f8b97}
+.main{background:var(--bg);border-radius:18px 0 0 18px}
+.topbar{background:#fffffff0;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:11px 22px}
+.tgl{background:var(--soft);border:1px solid var(--line);border-radius:8px;color:var(--ink)}
+.tgl:hover{background:var(--ink);color:#fff}
+.ttl{font-family:var(--fh);font-style:normal;font-size:22px;font-weight:700;letter-spacing:-.2px}
+.who{border:1px solid var(--line);border-radius:99px;background:var(--soft);font-weight:600;padding:4px 13px}
+.who.admin{background:var(--ink);border-color:var(--ink);color:var(--y)}
+.logo-slot.sm{border-width:1px}
+.view{padding:20px 22px;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+
+/* filter bar & buttons */
+.fbar{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 14px;margin:16px 22px 0}
+.fbar label{font-weight:600;color:var(--mu);font-size:12.5px}
+.fs{border:1px solid var(--line);border-radius:7px;background:var(--soft);padding:6px 9px;font-size:12.5px}
+.fs:focus{border-color:var(--ink);background:#fff}
+.bt{background:var(--y);color:var(--ink);border:0;border-radius:8px;padding:8px 14px;font-weight:700;box-shadow:inset 0 -2px 0 #0002}
+.bt:hover{background:var(--yd);transform:none}
+.bt.w{background:#fff;border:1px solid var(--line);box-shadow:none;color:var(--ink2)}
+.bt.w:hover{background:var(--soft)}
+.src{color:var(--mu);font-weight:600}
+.demo{margin:12px 22px 0;background:var(--amb-s);border:1px solid #f1d58a;border-radius:10px;color:#7a5a00}
+
+/* cards */
+.grid,.kpis,.pillars{gap:14px}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.hd{font-family:var(--fh);font-size:17px;font-weight:700;text-transform:none;border-left:0;padding-left:0;margin-bottom:12px;color:var(--ink)}
+.hd small{font-family:var(--fb);color:var(--mu);font-weight:500;font-size:12px}
+.i{color:#97a1ab}
+.click:hover{box-shadow:0 6px 18px #15191e1a;transform:none;border-color:#c3cad1}
+
+/* KPI: ruang gelap sebagai satu-satunya titik kuat */
+.kpi{background:var(--ink);border:0;border-radius:14px;padding:18px 20px 16px;color:#fff;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;left:0;top:0;height:100%;width:4px;background:var(--y)}
+.kpi:hover{box-shadow:0 10px 26px #15191e40;transform:none}
+.kpi span{text-transform:none;font-size:13px;font-weight:600;color:#aab4be}
+.kpi b{font-family:var(--fh);font-size:44px;font-weight:700;line-height:1.05;color:#fff;letter-spacing:-.5px;margin-top:2px}
+.kpi b small{font-size:22px;color:#8d99a5;font-weight:600}
+.kpi em{color:#aab4be;font-weight:500;font-size:12.5px;margin-top:5px}
+.vb{background:#ffffff1f;height:6px;border-radius:99px;margin-top:10px}
+.vb i{border-radius:99px}
+.card .vb,.sbox .vb,.row .vb{background:#e4e8ec}
+
+/* map, lists, charts */
+#lokMap{border:1px solid var(--line);border-radius:10px}
+.legend{border:1px solid var(--line);border-radius:9px;font-weight:600;box-shadow:0 4px 14px #0002}
+.legend i{border:0}
+.tog button{border:1px solid var(--line);border-radius:99px;background:#fff;font-weight:600;padding:3px 13px;color:var(--ink2)}
+.tog button:hover{background:var(--soft)}
+.tog button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.at,.rrow{font-weight:600;border-radius:8px;padding:5px 6px}
+.at:hover,.rrow:hover{background:var(--soft)}
+.gc b{font-family:var(--fh);font-size:36px;color:var(--ink)}
+.gc span{color:var(--mu);font-weight:600}
+.rank select{border:1px solid var(--line);border-radius:7px;background:var(--soft)}
+.leg{color:var(--mu);font-weight:600}
+.ph{background:var(--amb-s);border:0;border-left:5px solid var(--y);border-radius:8px;text-align:left;font-family:var(--fh);font-style:normal;font-size:18px;font-weight:700;padding:8px 14px}
+.sh{font-family:var(--fh);font-size:15px;font-weight:700}
+.row{font-weight:500}
+.sectt{background:var(--soft);color:var(--ink);border:1px solid var(--line);border-left:4px solid var(--y);border-radius:8px;letter-spacing:0;font-family:var(--fh);font-size:15px;font-weight:700}
+.sbox{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sbox h4{font-family:var(--fh);font-size:16px}
+
+/* tables */
+.t{font-size:12.5px}
+.t th{background:var(--soft);border:0;border-bottom:1px solid var(--line);color:var(--mu);font-weight:600;padding:9px 10px}
+.t td{border:0;border-bottom:1px solid #e9edf0;padding:8px 10px}
+.t tbody tr:nth-child(even){background:transparent}
+.t tr.cl:hover td{background:var(--soft)}
+.tw{border:1px solid var(--line);border-radius:10px}
+.pill{border:0;font-weight:700;padding:2px 10px}
+.pill.g{background:#d9efe2;color:#1d6b42}.pill.a{background:#fbebc0;color:#80570a}.pill.r{background:#f8d9d9;color:#a12a2a}.pill.n{background:#e8ebee;color:var(--mu)}
+.hmap .cell{border:0;border-radius:6px;height:28px}
+.cell.g{background:#d9efe2;color:#1d6b42}.cell.a{background:#fbebc0;color:#80570a}.cell.r{background:#f8d9d9;color:#a12a2a}.cell.n{background:#eceff2;color:#9aa4ae}
+.hmap .hh{color:var(--mu);font-weight:600}
+.stitle{background:var(--ink);border-radius:12px;text-align:left;padding:18px 22px}
+.stitle b{font-family:var(--fh);letter-spacing:0;font-size:26px}
+.lph td{background:var(--amb-s)!important;border-top:1px solid #f1d58a}
+
+/* toast, drop, steps */
+.toast{background:var(--ink);border-left-width:5px;border-radius:10px;font-weight:500}
+.drop{border:2px dashed #b7c0c9;border-radius:12px;background:#fff;font-weight:600}
+.drop:hover,.drop.over{background:var(--amb-s);border-color:var(--y)}
+.btn-s{border:1px solid var(--line);border-radius:7px;background:#fff;font-weight:600;padding:3px 10px}
+.btn-s.d{background:#f8d9d9;border-color:#efbcbc;color:#a12a2a}
+.btn-s:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* daftar aset */
+.ast-bar .fs{border:1px solid var(--line);border-radius:8px;background:#fff}
+.seg{border:1px solid var(--line);border-radius:8px;background:#fff}
+.seg button{border-right:1px solid var(--line);font-weight:600;color:var(--ink2)}
+.seg button:hover{background:var(--soft)}
+.seg button.on{background:var(--ink);color:#fff}
+.ast-box{border:1px solid var(--line);border-radius:12px}
+.ast-box.hl{background:var(--ink);border-color:var(--ink)}
+.ast-num{font-family:var(--fh);font-size:38px;font-weight:700}
+.ast-meter{background:#e4e8ec;border-radius:99px}
+.ast-reg{border-bottom:1px solid var(--line)}
+.ast-reg h3{font-family:var(--fh);font-size:19px;font-weight:700}
+.ac{border:1px solid var(--line);border-radius:12px;box-shadow:none}
+.ac.bad{border-left:4px solid var(--r)}.ac.ok{border-left:4px solid var(--g)}
+.ac-h h4{font-family:var(--fh);font-size:17px;font-weight:700}
+.ac details{border-top:1px solid var(--line)}
+.ast-miss{border:1px dashed #b7c0c9;border-radius:12px;background:#fff}
+.ast-miss .tags button{border:1px solid var(--line);font-weight:500}
+.ast-miss .tags button:hover{border-color:var(--ink);background:var(--amb-s)}
+.ast-empty{border:1px dashed #b7c0c9;border-radius:12px;background:#fff}
+
+@media(max-width:700px){.main{border-radius:0}.view{padding:12px}.fbar{margin:12px 12px 0}.demo{margin:10px 12px 0}.kpi b{font-size:34px}}
+@media print{.main{border-radius:0}.kpi{background:#fff;color:#000;border:1px solid #999}.kpi b,.kpi span,.kpi em{color:#000}}
 </style>
 </head>
 <body>
@@ -282,7 +439,7 @@ button,select,input{font:inherit}
     <button class="bt w" onclick="window.print()">🖨 Cetak</button>
    </div>
   </div>
-  <div class="demo hide" id="batchNote" style="background:#e8f0fe;border-color:#4285f4;color:#1a3c7a"></div>
+  <div class="demo hide" id="batchNote" style="background:#e8f0fe;border-color:#3f6fb5;color:#1a3c7a"></div>
   <div class="demo hide" id="demoBar"><b>Data demo.</b> Angka dibuat otomatis untuk uji tampilan. Setelah Apps Script &amp; Spreadsheet siap, isi <code>CONFIG.API_URL</code> agar dashboard menampilkan laporan asli.</div>
 
   <!-- DASHBOARD -->
@@ -330,7 +487,7 @@ const PA_LABEL={both:"Plan vs Actual",plan:"Plan",actual:"Actual"};
 const MONTHS=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 const MON=MONTHS.map(m=>m.slice(0,3));
 const REGIONS=["Sumatera","Jawa","NTB","Kalimantan","Sulawesi","Papua & Maluku"];
-const REG_COL={Sumatera:"#4285f4",Jawa:"#f97316",NTB:"#a855f7",Kalimantan:"#14b8a6",Sulawesi:"#ec4899","Papua & Maluku":"#64748b"};
+const REG_COL={Sumatera:"#3f6fb5",Jawa:"#f97316",NTB:"#7b61c9",Kalimantan:"#14b8a6",Sulawesi:"#ec4899","Papua & Maluku":"#64748b"};
 const COORDS_LIST=["Medan","Surabaya","Makassar","Langsung HO"];
 
 /* ============ MASTER LP: [nama, wilayah, koordinator, lat, lng (perkiraan)] ============ */
@@ -462,7 +619,7 @@ const nf=n=>Math.round(n||0).toLocaleString("id-ID");
 function rp(n){n=n||0;if(Math.abs(n)>=1e9)return"Rp "+(n/1e9).toFixed(2).replace(".",",")+" M";if(Math.abs(n)>=1e6)return"Rp "+nf(n/1e6)+" Jt";return"Rp "+nf(n)}
 const pc=(a,b)=>b>0?a/b*100:null;
 const fp=p=>p==null?"—":p.toFixed(1).replace(".",",")+"%";
-const band=p=>p==null?"#cbd0d6":p>=85?"#34a853":p>=70?"#fbbc04":"#ea4335";
+const band=p=>p==null?"#cbd0d6":p>=85?"#2f8f5b":p>=70?"#e8a317":"#d64545";
 const heatBg=p=>p==null?"#f3f4f6":p>=85?"#c6efce":p>=70?"#ffeb9c":"#ffc7ce";
 const sum=(a,f)=>a.reduce((s,x)=>s+(f(x)||0),0);
 const vbar=(p,c)=>`<div class="vb"><i style="width:${Math.max(0,Math.min(100,p||0))}%;background:${c||band(p)}"></i></div>`;
@@ -474,7 +631,7 @@ const pk=x=>!x.rep?null:cmp()?x.achv:pv(x);
 const pkTxt=x=>!x.rep?"—":cmp()?fp(x.achv):rs(pv(x));
 const pkMax=ms=>Math.max(1,...ms.map(x=>x.rep?pv(x):0));
 const pkPct=(x,mx)=>cmp()?x.achv:pv(x)/mx*100;
-const pkCol=x=>cmp()?band(x.achv):S.pa==="plan"?"#4285f4":"#ffb703";
+const pkCol=x=>cmp()?band(x.achv):S.pa==="plan"?"#3f6fb5":"#f5a800";
 const stLabel={submitted:["Sudah lapor","g"],draft:["Draft","a"],missing:["Belum lapor","r"]};
 const stPill=s=>`<span class="pill ${stLabel[s][1]}">${stLabel[s][0]}</span>`;
 function lpList(){return LPS.filter(l=>(S.region==="all"||l.region===S.region)&&(S.coord==="all"||(S.coord==="direct"?!l.coord:l.coord===S.coord)))}
@@ -517,8 +674,8 @@ function gauge(parts,big,sub){
  return`<div class="gauge"><svg viewBox="0 0 160 160"><circle r="${r}" cx="80" cy="80" fill="none" stroke="#e5e7eb" stroke-width="18"/>${segs}</svg><div class="gc"><b>${big}</b><span>${sub}</span></div></div>`;
 }
 function incGauge(plan,actual){
- if(S.pa==="plan")return gauge([{v:plan,c:"#4285f4",l:"Plan "+rp(plan)}],rs(plan),rp(plan)+"<br>plan YTD");
- if(S.pa==="actual")return gauge([{v:actual,c:"#ffb703",l:"Actual "+rp(actual)}],rs(actual),rp(actual)+"<br>actual YTD");
+ if(S.pa==="plan")return gauge([{v:plan,c:"#3f6fb5",l:"Plan "+rp(plan)}],rs(plan),rp(plan)+"<br>plan YTD");
+ if(S.pa==="actual")return gauge([{v:actual,c:"#f5a800",l:"Actual "+rp(actual)}],rs(actual),rp(actual)+"<br>actual YTD");
  const p=pc(actual,plan);return gauge([{v:Math.min(actual,plan),c:band(p),l:"Actual "+rp(actual)},{v:Math.max(plan-actual,0),c:"#e5e7eb",l:"Gap "+rp(plan-actual)}],fp(p),rp(actual)+"<br>dari "+rp(plan));
 }
 function lineChart(labels,series){
@@ -545,13 +702,13 @@ function showInfo(key){
  const ms=lpList().map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1]+" "+S.year,md=PA_LABEL[S.pa];
  if(key==="tot"||key==="mand"||key==="mandt"){
   const t=key==="tot"?[T.plan,T.actual]:key==="mand"?[T.mPlan,T.mAct]:[T.dPlan,T.dAct],nm=key==="tot"?"Income Total":key==="mand"?"Income Mandiri":"Income Mandatory";
-  openModal(nm+" · "+md+" · s.d. "+per,`<div class="desc">Income kumulatif tahun berjalan (YTD), dari laporan terakhir tiap LP. ${cmp()?"Diurutkan dari capaian terendah.":"Hanya menampilkan data "+md+"; diurutkan dari nilai terbesar."}</div><div class="chips">${showP()?chip(rp(t[0]),"Plan","#4285f4"):""}${showA()?chip(rp(t[1]),"Actual","#34a853"):""}${cmp()?chip(fp(pc(t[1],t[0])),"Capaian","#ffb703")+chip(rp(t[0]-t[1]),"Gap","#ea4335"):""}</div>`+tbl(incHeads(),incRows(ms,key)),true);
+  openModal(nm+" · "+md+" · s.d. "+per,`<div class="desc">Income kumulatif tahun berjalan (YTD), dari laporan terakhir tiap LP. ${cmp()?"Diurutkan dari capaian terendah.":"Hanya menampilkan data "+md+"; diurutkan dari nilai terbesar."}</div><div class="chips">${showP()?chip(rp(t[0]),"Plan","#3f6fb5"):""}${showA()?chip(rp(t[1]),"Actual","#2f8f5b"):""}${cmp()?chip(fp(pc(t[1],t[0])),"Capaian","#f5a800")+chip(rp(t[0]-t[1]),"Gap","#d64545"):""}</div>`+tbl(incHeads(),incRows(ms,key)),true);
  }else if(key==="sis"){
   const rows=ms.filter(x=>x.rep).sort((a,b)=>cmp()?pc(a.siswa,a.sPlan)-pc(b.siswa,b.sPlan):S.pa==="plan"?b.sPlan-a.sPlan:b.siswa-a.siswa).map(x=>{const p=pc(x.siswa,x.sPlan);return`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td>${showA()?`<td>${x.siswa}</td>`:""}${showP()?`<td>${x.sPlan}</td>`:""}${cmp()?`<td style="background:${heatBg(p)}"><b>${fp(p)}</b></td>`:""}${showA()?`<td>${x.ojt}</td>`:""}</tr>`});
-  openModal("Siswa Reguler · "+md+" · s.d. "+per,`<div class="desc">Siswa reguler seluruh batch. Hanya menampilkan data ${md}.</div><div class="chips">${showA()?chip(nf(T.siswa),"Siswa","#34a853"):""}${showP()?chip(nf(T.sPlan),"Plan","#4285f4"):""}${cmp()?chip(fp(pc(T.siswa,T.sPlan)),"Terisi","#ffb703"):""}${showA()?chip(T.ojt,"Lokasi OJT","#a855f7"):""}</div>`+tbl(["Learning Point",...(showA()?["Siswa"]:[]),...(showP()?["Plan"]:[]),...(cmp()?["%"]:[]),...(showA()?["OJT"]:[])],rows));
+  openModal("Siswa Reguler · "+md+" · s.d. "+per,`<div class="desc">Siswa reguler seluruh batch. Hanya menampilkan data ${md}.</div><div class="chips">${showA()?chip(nf(T.siswa),"Siswa","#2f8f5b"):""}${showP()?chip(nf(T.sPlan),"Plan","#3f6fb5"):""}${cmp()?chip(fp(pc(T.siswa,T.sPlan)),"Terisi","#f5a800"):""}${showA()?chip(T.ojt,"Lokasi OJT","#7b61c9"):""}</div>`+tbl(["Learning Point",...(showA()?["Siswa"]:[]),...(showP()?["Plan"]:[]),...(cmp()?["%"]:[]),...(showA()?["OJT"]:[])],rows));
  }else if(key==="cust"){
   const rows=ms.filter(x=>x.rep).sort((a,b)=>S.pa==="plan"?b.fP-a.fP:b.cust-a.cust).map(x=>{const p=pc(x.fU,x.fP);return`<tr class="cl" onclick="openLP('${x.lp.id}')"><td><b>${esc(x.lp.name)}</b></td>${showA()?`<td>${x.cust}</td><td>${x.fU}</td>`:""}${showP()?`<td>${x.fP}</td>`:""}${cmp()?`<td style="background:${heatBg(p)}"><b>${fp(p)}</b></td>`:""}</tr>`});
-  openModal("New Customer / Project & Fasus · "+md+" · s.d. "+per,`<div class="desc">New customer/project (Big 5) dan pemakaian fasus NT UTS. Hanya menampilkan data ${md}.</div><div class="chips">${showA()?chip(T.cust,"New customer/project","#34a853")+chip(T.fU,"Fasus terpakai","#4285f4"):""}${showP()?chip(T.fP,"Fasus direncanakan","#4285f4"):""}${cmp()?chip(fp(pc(T.fU,T.fP)),"Fasus %","#ffb703"):""}</div>`+tbl(["Learning Point",...(showA()?["Customer / Project","Fasus terpakai"]:[]),...(showP()?["Fasus plan"]:[]),...(cmp()?["%"]:[])],rows));
+  openModal("New Customer / Project & Fasus · "+md+" · s.d. "+per,`<div class="desc">New customer/project (Big 5) dan pemakaian fasus NT UTS. Hanya menampilkan data ${md}.</div><div class="chips">${showA()?chip(T.cust,"New customer/project","#2f8f5b")+chip(T.fU,"Fasus terpakai","#3f6fb5"):""}${showP()?chip(T.fP,"Fasus direncanakan","#3f6fb5"):""}${cmp()?chip(fp(pc(T.fU,T.fP)),"Fasus %","#f5a800"):""}</div>`+tbl(["Learning Point",...(showA()?["Customer / Project","Fasus terpakai"]:[]),...(showP()?["Fasus plan"]:[]),...(cmp()?["%"]:[])],rows));
  }
 }
 
@@ -639,9 +796,9 @@ function renderDashboard(){
  const lps=lpList(),ms=lps.map(l=>metrics(l)),T=agg(ms),per=MONTHS[S.month-1],P=S.pa;
  const kInc=cmp()?`<div class="kpi" onclick="showInfo('tot')"><span>Capaian income (YTD) <i class="i">ⓘ</i></span><b>${fp(T.achv)}</b>${vbar(T.achv)}<em>${rp(T.actual)} dari plan ${rp(T.plan)}</em></div>`
   :`<div class="kpi" onclick="showInfo('tot')"><span>Income ${P==="plan"?"Plan":"Actual"} (YTD) <i class="i">ⓘ</i></span><b>${rp(P==="plan"?T.plan:T.actual)}</b><em>Mandiri ${rp(P==="plan"?T.mPlan:T.mAct)} · Mandatory ${rp(P==="plan"?T.dPlan:T.dAct)}</em></div>`;
- const kSis=cmp()?`<div class="kpi" onclick="showInfo('sis')"><span>Siswa reguler <i class="i">ⓘ</i></span><b>${nf(T.siswa)}<small> / ${nf(T.sPlan)}</small></b>${vbar(pc(T.siswa,T.sPlan),"#4285f4")}<em>${fp(pc(T.siswa,T.sPlan))} dari plan · ${T.ojt} lokasi OJT</em></div>`
+ const kSis=cmp()?`<div class="kpi" onclick="showInfo('sis')"><span>Siswa reguler <i class="i">ⓘ</i></span><b>${nf(T.siswa)}<small> / ${nf(T.sPlan)}</small></b>${vbar(pc(T.siswa,T.sPlan),"#3f6fb5")}<em>${fp(pc(T.siswa,T.sPlan))} dari plan · ${T.ojt} lokasi OJT</em></div>`
   :`<div class="kpi" onclick="showInfo('sis')"><span>Siswa reguler ${P==="plan"?"(Plan)":"(Actual)"} <i class="i">ⓘ</i></span><b>${nf(P==="plan"?T.sPlan:T.siswa)}</b><em>${P==="plan"?"Plan siswa seluruh batch reguler":T.ojt+" lokasi OJT"}</em></div>`;
- const kCus=cmp()?`<div class="kpi" onclick="showInfo('cust')"><span>New customer / project <i class="i">ⓘ</i></span><b>${T.cust}</b>${vbar(pc(T.fU,T.fP),"#a855f7")}<em>Fasus NT UTS terpakai ${T.fU} / ${T.fP} (${fp(pc(T.fU,T.fP))})</em></div>`
+ const kCus=cmp()?`<div class="kpi" onclick="showInfo('cust')"><span>New customer / project <i class="i">ⓘ</i></span><b>${T.cust}</b>${vbar(pc(T.fU,T.fP),"#7b61c9")}<em>Fasus NT UTS terpakai ${T.fU} / ${T.fP} (${fp(pc(T.fU,T.fP))})</em></div>`
   :P==="plan"?`<div class="kpi" onclick="showInfo('cust')"><span>Fasus NT UTS (Plan) <i class="i">ⓘ</i></span><b>${T.fP}</b><em>Fasus direncanakan</em></div>`
   :`<div class="kpi" onclick="showInfo('cust')"><span>New customer / project <i class="i">ⓘ</i></span><b>${T.cust}</b><em>Fasus NT UTS terpakai ${T.fU}</em></div>`;
  $("kpis").innerHTML=kInc+kSis+kCus;
@@ -650,7 +807,7 @@ function renderDashboard(){
 }
 var lokLg=null;
 function mapLegend(){
- if(cmp())return'<i style="background:#34a853"></i>Capaian ≥ 85%<br><i style="background:#fbbc04"></i>70–84%<br><i style="background:#ea4335"></i>&lt; 70%<br><i style="background:#cbd0d6"></i>Belum ada laporan<br><span style="font-weight:600;color:#555">Ukuran = actual income</span>';
+ if(cmp())return'<i style="background:#2f8f5b"></i>Capaian ≥ 85%<br><i style="background:#e8a317"></i>70–84%<br><i style="background:#d64545"></i>&lt; 70%<br><i style="background:#cbd0d6"></i>Belum ada laporan<br><span style="font-weight:600;color:#555">Ukuran = actual income</span>';
  const n=S.pa==="plan"?"Plan":"Actual";
  return`<i style="background:${pkCol(null)}"></i>${n} income (YTD)<br><i style="background:#cbd0d6"></i>Belum ada laporan<br><span style="font-weight:600;color:#555">Ukuran = ${n.toLowerCase()} income</span>`;
 }
@@ -688,14 +845,14 @@ function renderAttn(ms){
   else{const mx=pkMax(ms);list=ms.filter(x=>x.rep).sort((a,b)=>pv(a)-pv(b)).slice(0,8).map(x=>({x,p:pv(x)/mx*100,b:rs(pv(x)),c:pkCol(x)}))}
  }else{
   if(S.pa==="plan"){$("attn").innerHTML=onlyA;return}
-  list=ms.filter(x=>x.bad>0).sort((a,b)=>b.bad-a.bad).map(x=>({x,p:100-x.bad*20,b:x.bad+" rusak",c:"#ea4335"}));
+  list=ms.filter(x=>x.bad>0).sort((a,b)=>b.bad-a.bad).map(x=>({x,p:100-x.bad*20,b:x.bad+" rusak",c:"#d64545"}));
  }
  $("attn").innerHTML=list.map(o=>`<div class="at" onclick="openLP('${o.x.lp.id}')" title="Klik untuk detail"><span>${esc(o.x.lp.name)}</span>${vbar(o.p,o.c)}<b>${o.b}</b></div>`).join("")||'<div class="empty">Tidak ada item 👍</div>';
 }
 function renderRank(ms){
  ms=ms||lpList().map(l=>metrics(l));
  $("rankTitle").textContent=cmp()?"Capaian Income per LP":"Income "+PA_LABEL[S.pa]+" per LP";
- $("rankLeg").innerHTML=cmp()?'<span><i style="background:#34a853"></i>≥ 85%</span><span><i style="background:#fbbc04"></i>70–84%</span><span><i style="background:#ea4335"></i>&lt; 70%</span><span style="color:#777;font-weight:600">Klik baris untuk detail LP</span>':`<span><i style="background:${pkCol(null)}"></i>${PA_LABEL[S.pa]} income (YTD)</span><span style="color:#777;font-weight:600">Klik baris untuk detail LP</span>`;
+ $("rankLeg").innerHTML=cmp()?'<span><i style="background:#2f8f5b"></i>≥ 85%</span><span><i style="background:#e8a317"></i>70–84%</span><span><i style="background:#d64545"></i>&lt; 70%</span><span style="color:#777;font-weight:600">Klik baris untuk detail LP</span>':`<span><i style="background:${pkCol(null)}"></i>${PA_LABEL[S.pa]} income (YTD)</span><span style="color:#777;font-weight:600">Klik baris untuk detail LP</span>`;
  const mx=pkMax(ms),f={achv_asc:(a,b)=>(pk(a)??1e18)-(pk(b)??1e18),achv_desc:(a,b)=>(pk(b)??-1)-(pk(a)??-1),plan:(a,b)=>b.plan-a.plan,name:(a,b)=>a.lp.name.localeCompare(b.lp.name)}[S.rank];
  $("rankList").innerHTML=[...ms].sort(f).map(x=>`<div class="rrow" onclick="openLP('${x.lp.id}')" title="${esc(x.lp.name)}"><span>${esc(x.lp.name)}</span>${x.rep?vbar(pkPct(x,mx),pkCol(x)):vbar(null)}<b>${pkTxt(x)}</b></div>`).join("");
 }
@@ -709,24 +866,24 @@ function renderTrend(lps){
 function renderPillars(ms,T){
  const fn=[["Seleksi",T.sel],["Psikotes",T.psi],["Interview",T.itv],["MCU",T.mcu]],ba=batchAgg(ms),P=S.pa;
  const kes=P==="plan"?onlyA:`<div class="sh">Rekrutmen & MCU ${S.batch==="all"?"Batch 39":esc(S.batch)}</div>
-  ${fn.map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,T.sel),"#ffb703")}<b>${v}</b></div>`).join("")}
+  ${fn.map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,T.sel),"#f5a800")}<b>${v}</b></div>`).join("")}
   <div class="sh">Pelaksanaan Bintalsik</div>
-  <div class="mini">${chip(T.binN,"LP melaksanakan","#4285f4")}${chip(T.binSel,"Seleksi","#ffb703")}${chip(T.binPsi,"Psikotes","#ffb703")}${chip(T.binItv,"Interview","#ffb703")}${chip(T.binMcu,"MCU","#34a853")}${chip(T.binLok,"Lokasi","#a855f7")}</div>`;
+  <div class="mini">${chip(T.binN,"LP melaksanakan","#3f6fb5")}${chip(T.binSel,"Seleksi","#f5a800")}${chip(T.binPsi,"Psikotes","#f5a800")}${chip(T.binItv,"Interview","#f5a800")}${chip(T.binMcu,"MCU","#2f8f5b")}${chip(T.binLok,"Lokasi","#7b61c9")}</div>`;
  const aka=Object.entries(ba).sort().map(([n,g])=>{
-  const sis=cmp()?`<div class="row" style="grid-template-columns:70px 1fr 90px"><span>Siswa</span>${vbar(pc(g.siswa,g.plan),"#4285f4")}<b>${g.siswa} dari ${g.plan}</b></div>`:P==="plan"?`<div class="mini">${chip(g.plan,"Plan siswa","#4285f4")}</div>`:`<div class="mini">${chip(g.siswa,"Siswa","#34a853")}</div>`;
-  return`<div class="sh">${esc(n)}</div>${sis}<div class="mini">${showA()?chip(g.kelas,"Kelas","#ffb703")+chip(g.ojt,"Lokasi OJT","#a855f7"):""}${chip(g.lp,"LP","#999")}</div>`}).join("")||'<div class="empty">Belum ada data.</div>';
- const csr=P==="plan"?onlyA:`<div class="mini">${chip(T.csrP,"Program","#34a853")}${chip(T.csrS,"Sekolah / PT","#4285f4")}${chip(nf(T.csrQ),"Peserta","#ffb703")}</div>`;
+  const sis=cmp()?`<div class="row" style="grid-template-columns:70px 1fr 90px"><span>Siswa</span>${vbar(pc(g.siswa,g.plan),"#3f6fb5")}<b>${g.siswa} dari ${g.plan}</b></div>`:P==="plan"?`<div class="mini">${chip(g.plan,"Plan siswa","#3f6fb5")}</div>`:`<div class="mini">${chip(g.siswa,"Siswa","#2f8f5b")}</div>`;
+  return`<div class="sh">${esc(n)}</div>${sis}<div class="mini">${showA()?chip(g.kelas,"Kelas","#f5a800")+chip(g.ojt,"Lokasi OJT","#7b61c9"):""}${chip(g.lp,"LP","#999")}</div>`}).join("")||'<div class="empty">Belum ada data.</div>';
+ const csr=P==="plan"?onlyA:`<div class="mini">${chip(T.csrP,"Program","#2f8f5b")}${chip(T.csrS,"Sekolah / PT","#3f6fb5")}${chip(nf(T.csrQ),"Peserta","#f5a800")}</div>`;
  const incRow=(l,pl,ac)=>cmp()?`<div class="row" style="grid-template-columns:70px 1fr 52px"><span>${l}</span>${vbar(pc(ac,pl))}<b>${fp(pc(ac,pl))}</b></div><div class="tcell">Plan ${rp(pl)} · Actual ${rp(ac)}</div>`:`<div class="row" style="grid-template-columns:70px 1fr"><span>${l}</span><b style="text-align:left">${rp(P==="plan"?pl:ac)}</b></div>`;
  const kHead=cmp()?"Achievement":P==="plan"?"Plan":"Actual";
  const bigv=cmp()?`${rp(T.actual)} <small style="font-size:15px;color:#555">(${fp(T.achv)})</small>`:rp(P==="plan"?T.plan:T.actual);
- const fasus=cmp()?`${chip(T.fU,"Terpakai","#34a853")}${chip(T.fP,"Direncanakan","#4285f4")}${chip(fp(pc(T.fU,T.fP)),"Optimalisasi","#ffb703")}`:P==="plan"?chip(T.fP,"Direncanakan","#4285f4"):chip(T.fU,"Terpakai","#34a853");
+ const fasus=cmp()?`${chip(T.fU,"Terpakai","#2f8f5b")}${chip(T.fP,"Direncanakan","#3f6fb5")}${chip(fp(pc(T.fU,T.fP)),"Optimalisasi","#f5a800")}`:P==="plan"?chip(T.fP,"Direncanakan","#3f6fb5"):chip(T.fU,"Terpakai","#2f8f5b");
  $("pillars").innerHTML=`
  <div class="card"><div class="ph">KESISWAAN</div>${kes}</div>
  <div class="card"><div class="ph">AKADEMIK</div>${aka}<div class="sh">Program CSR</div>${csr}</div>
  <div class="card"><div class="ph">KIPL</div><div class="sh">${kHead} as of ${MONTHS[S.month-1]}</div>
   <div style="font-size:24px;font-weight:800">${bigv}</div>
   ${incRow("Mandiri",T.mPlan,T.mAct)}${incRow("Mandatory",T.dPlan,T.dAct)}
-  ${showA()?`<div class="sh">New Project / New Customer</div><div class="mini">${chip(T.cust,"Total (Big 5)","#34a853")}</div>`:""}
+  ${showA()?`<div class="sh">New Project / New Customer</div><div class="mini">${chip(T.cust,"Total (Big 5)","#2f8f5b")}</div>`:""}
   <div class="sh">Optimalisasi Fasus NT UTS</div><div class="mini">${fasus}</div></div>`;
 }
 function setHeat(k){S.heat=k;$("tgReg").classList.toggle("on",k==="region");$("tgCoo").classList.toggle("on",k==="coord");renderHeat()}
@@ -787,7 +944,7 @@ function viewInput(){
   <div class="drop" onclick="$('upFile').click()" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="event.preventDefault();this.classList.remove('over');handleFiles(event.dataTransfer.files)">⬆ Klik atau seret file template yang sudah diisi ke sini<small>Sistem membaca, memeriksa, lalu menampilkan hasil cek sebelum apa pun disimpan</small></div>
   <input type="file" id="upFile" class="hide" multiple accept=".xlsx,.xls" onchange="handleFiles(this.files);this.value=''">
   ${UP.msg?`<div class="desc" style="margin-top:10px;font-weight:700">${esc(UP.msg)}</div>`:""}
-  ${UP.files.length?`<div style="margin-top:12px"><div class="chips" style="margin-bottom:8px">${chip(okN,"siap diimpor","#34a853")}${chip(errN,"ditolak","#ea4335")}${chip(UP.files.length,"file dibaca","#4285f4")}</div>
+  ${UP.files.length?`<div style="margin-top:12px"><div class="chips" style="margin-bottom:8px">${chip(okN,"siap diimpor","#2f8f5b")}${chip(errN,"ditolak","#d64545")}${chip(UP.files.length,"file dibaca","#3f6fb5")}</div>
   ${tbl(["File","Laporan","Hasil","Catatan"],UP.files.map((f,i)=>`<tr><td>${esc(f.fileName)}</td><td><b>${esc(f.label)}</b></td><td>${pill(f)}</td><td>${notes(f)||"—"}<button class="btn-s" style="margin-top:4px" onclick="removeUpload(${i})">Buang</button></td></tr>`))}
   <div style="margin-top:10px;display:flex;gap:8px"><button class="bt" ${UP.busy||!okN?"disabled":""} onclick="importUploads()">${UP.busy?"Menyimpan…":"✔ Impor "+okN+" laporan"}</button><button class="bt w" onclick="UP.files=[];UP.msg='';renderAll()">Kosongkan daftar</button></div></div>`:""}</div>
  <div class="card" style="margin-bottom:10px"><div class="hd">Laporan tersimpan<span class="fl"><select class="fs" style="min-width:90px" onchange="switchYear(+this.value)">${yearList().map(y=>`<option value="${y}" ${S.year===y?"selected":""}>${y}</option>`).join("")}</select><select class="fs" style="min-width:150px" onchange="UP.month=+this.value;renderAll()">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${m===i+1?"selected":""}>${MONTHS[i]} ${S.year}</option>`).join("")}</select></span></div>
@@ -927,17 +1084,17 @@ function openLP(id){
   const tr=lineChart(MON.slice(0,S.month),ser);
   const inc=(t,o)=>`<div class="sbox"><h4>${t}</h4>${showP()?`<div class="row" style="grid-template-columns:50px 1fr"><span>Plan</span><b style="text-align:left">${rp(o.plan)}</b></div>`:""}${showA()?`<div class="row" style="grid-template-columns:50px 1fr"><span>Actual</span><b style="text-align:left">${rp(o.actual)}</b></div>`:""}${cmp()?`${vbar(pc(o.actual,o.plan))}<div class="tcell" style="margin-top:4px">Achv <b>${fp(pc(o.actual,o.plan))}</b></div>`:""}</div>`;
   const incHead=cmp()?`Achievement as of ${MONTHS[r.month-1]} · ${rp(m.actual)} (${fp(m.achv)})`:`${PA_LABEL[P]} as of ${MONTHS[r.month-1]} · ${rp(pv(m))}`;
-  const sisChip=b=>cmp()?chip(b.siswa+" dari "+b.siswaPlan+" ("+fp(pc(b.siswa,b.siswaPlan))+")","Siswa",band(pc(b.siswa,b.siswaPlan))):P==="plan"?chip(b.siswaPlan,"Plan siswa","#4285f4"):chip(b.siswa,"Siswa","#34a853");
-  const fas=cmp()?`${vbar(pc(k.fasusUsed,k.fasusPlan),"#34a853")}<div class="tcell" style="margin-top:4px">${k.fasusUsed} fasus terpakai dari ${k.fasusPlan} direncanakan (${fp(pc(k.fasusUsed,k.fasusPlan))})</div>`:P==="plan"?`<div class="tcell">${k.fasusPlan} fasus direncanakan</div>`:`<div class="tcell">${k.fasusUsed} fasus terpakai</div>`;
-  body=`<div class="chips">${chip(PA_LABEL[P],"mode data","#ffb703")}${chip(r.pic,"PIC","#999")}${chip(MONTHS[r.month-1],"laporan terakhir","#4285f4")}</div>
+  const sisChip=b=>cmp()?chip(b.siswa+" dari "+b.siswaPlan+" ("+fp(pc(b.siswa,b.siswaPlan))+")","Siswa",band(pc(b.siswa,b.siswaPlan))):P==="plan"?chip(b.siswaPlan,"Plan siswa","#3f6fb5"):chip(b.siswa,"Siswa","#2f8f5b");
+  const fas=cmp()?`${vbar(pc(k.fasusUsed,k.fasusPlan),"#2f8f5b")}<div class="tcell" style="margin-top:4px">${k.fasusUsed} fasus terpakai dari ${k.fasusPlan} direncanakan (${fp(pc(k.fasusUsed,k.fasusPlan))})</div>`:P==="plan"?`<div class="tcell">${k.fasusPlan} fasus direncanakan</div>`:`<div class="tcell">${k.fasusUsed} fasus terpakai</div>`;
+  body=`<div class="chips">${chip(PA_LABEL[P],"mode data","#f5a800")}${chip(r.pic,"PIC","#999")}${chip(MONTHS[r.month-1],"laporan terakhir","#3f6fb5")}</div>
   ${S.batch!=="all"&&!m.nb?`<div class="sbox"><div class="empty">${esc(S.batch)} tidak ditemukan pada laporan LP ini (s.d. ${MONTHS[S.month-1]}).</div></div>`:""}
   ${S.batch!=="all"?`<div class="sbox"><h4>Riwayat ${esc(S.batch)} · ${spanText(S.batch)}</h4>${tbl(histHeads(),histRows(S.batch,id),"Tidak ada laporan batch ini untuk LP ini.")}</div>`:""}
   <div class="sectt">KESISWAAN</div>
-  ${P==="plan"?`<div class="sbox">${onlyA}</div>`:`${kb.batches.map(b=>`<div class="sbox"><h4>Rekrutmen & MCU ${esc(b.name)}</h4>${[["Seleksi",b.seleksi],["Psikotes",b.psikotes],["Interview",b.interview],["MCU",b.mcu]].map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,b.seleksi),"#ffb703")}<b>${v}</b></div>`).join("")}</div>`).join("")}
-  <div class="sbox"><h4>Pelaksanaan Bintalsik</h4>${bs?`<div class="mini">${chip(bs.seleksi,"Seleksi","#ffb703")}${chip(bs.psikotes,"Psikotes","#ffb703")}${chip(bs.interview,"Interview","#ffb703")}${chip(bs.mcu,"MCU","#34a853")}${chip(esc(bs.lokasi),"Lokasi","#a855f7")}</div>`:'<div class="empty">Tidak ada pelaksanaan Bintalsik.</div>'}</div>`}
+  ${P==="plan"?`<div class="sbox">${onlyA}</div>`:`${kb.batches.map(b=>`<div class="sbox"><h4>Rekrutmen & MCU ${esc(b.name)}</h4>${[["Seleksi",b.seleksi],["Psikotes",b.psikotes],["Interview",b.interview],["MCU",b.mcu]].map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,b.seleksi),"#f5a800")}<b>${v}</b></div>`).join("")}</div>`).join("")}
+  <div class="sbox"><h4>Pelaksanaan Bintalsik</h4>${bs?`<div class="mini">${chip(bs.seleksi,"Seleksi","#f5a800")}${chip(bs.psikotes,"Psikotes","#f5a800")}${chip(bs.interview,"Interview","#f5a800")}${chip(bs.mcu,"MCU","#2f8f5b")}${chip(esc(bs.lokasi),"Lokasi","#7b61c9")}</div>`:'<div class="empty">Tidak ada pelaksanaan Bintalsik.</div>'}</div>`}
   <div class="sectt">AKADEMIK</div>
-  ${r.akademik.batches.map(b=>`<div class="sbox"><h4>${esc(b.name)}</h4><div class="mini">${showA()?chip(b.kelas,"Kelas","#ffb703"):""}${sisChip(b)}${showA()?chip(b.ojt,"Lokasi OJT","#a855f7"):""}</div></div>`).join("")}
-  <div class="sbox"><h4>Program CSR</h4>${P==="plan"?onlyA:`<div class="mini">${chip(r.akademik.csr.program,"Program","#34a853")}${chip(r.akademik.csr.sekolah,"Sekolah / PT","#4285f4")}${chip(r.akademik.csr.peserta,"Peserta","#ffb703")}</div>`}</div>
+  ${r.akademik.batches.map(b=>`<div class="sbox"><h4>${esc(b.name)}</h4><div class="mini">${showA()?chip(b.kelas,"Kelas","#f5a800"):""}${sisChip(b)}${showA()?chip(b.ojt,"Lokasi OJT","#7b61c9"):""}</div></div>`).join("")}
+  <div class="sbox"><h4>Program CSR</h4>${P==="plan"?onlyA:`<div class="mini">${chip(r.akademik.csr.program,"Program","#2f8f5b")}${chip(r.akademik.csr.sekolah,"Sekolah / PT","#3f6fb5")}${chip(r.akademik.csr.peserta,"Peserta","#f5a800")}</div>`}</div>
   <div class="sectt">KIPL</div>
   <div class="sbox"><h4>${incHead}</h4><div class="split">${inc("Mandiri",k.mandiri)}${inc("Mandatory",k.mandatory)}</div><div style="margin-top:10px">${tr}</div></div>
   ${showA()?`<div class="sbox"><h4>New Project / New Customer (Big 5)</h4>${k.customers.length?`<table class="t"><tbody>${k.customers.map((c,i)=>`<tr><td>${i+1}</td><td>${esc(c.name)}</td><td><span class="pill ${c.type==="New Customer"?"g":"a"}">${c.type}</span></td></tr>`).join("")}</tbody></table>`:'<div class="empty">Belum ada.</div>'}</div>`:""}
