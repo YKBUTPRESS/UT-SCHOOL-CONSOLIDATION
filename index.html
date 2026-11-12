@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--y:#ffb703;--yd:#e0a200;--k:#111;--bg:#e5e7eb;--mu:#555;--g:#34a853;--a:#fbbc04;--r:#ea4335;--b:#4285f4}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -387,6 +387,126 @@ body{font-family:var(--fb);background:var(--ink);color:var(--ink);font-size:14px
 
 @media(max-width:700px){.main{border-radius:0}.view{padding:12px}.fbar{margin:12px 12px 0}.demo{margin:10px 12px 0}.kpi b{font-size:34px}}
 @media print{.main{border-radius:0}.kpi{background:#fff;color:#000;border:1px solid #999}.kpi b,.kpi span,.kpi em{color:#000}}
+
+/* ================= REDESIGN v3 · layout baru: navigasi pill melayang, kartu bento, login split ================= */
+:root{--fh:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--fb:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+ --bg:#eef1f5;--line:#e3e8ee;--sh:0 1px 2px #141c280a,0 10px 30px #141c2810;--amb2:#ffc83d}
+body{background:radial-gradient(900px 480px at 0 -10%,#ffe9b0aa,transparent 70%),radial-gradient(700px 400px at 100% 0,#d9e4f5,transparent 70%),var(--bg);overflow:hidden}
+#app{flex-direction:column;background:transparent}
+
+/* navigasi: pill melayang di atas, bukan sidebar */
+.sidebar,.sidebar.collapsed{width:auto;height:auto;flex-direction:row;align-items:center;margin:16px 28px 0;padding:7px 10px 7px 8px;border-radius:999px;background:var(--ink);box-shadow:0 12px 32px #141c2833;border:0;position:relative;z-index:1000}
+.sbrand{border:0;padding:0 14px 0 0;gap:10px;font-size:17px;color:#fff}
+.sbrand .logo-slot.sm{width:40px;height:40px;border-radius:50%;background:#fff}
+.sbrand small{font-size:11px}
+.nav,.nav{flex-direction:row;align-items:center;margin:0;padding:0;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none}
+.nl{padding:9px 16px;border-radius:999px;gap:9px;font-size:13.5px;color:#b7c0ca;border:0}
+.nl svg{width:17px;height:17px}
+.nl:hover{background:#ffffff14;color:#fff}
+.nl.on{background:var(--y);color:var(--ink)}
+.nl.on svg{color:var(--ink)}
+.nl.on::before{display:none}
+.nl .soon{background:#00000022;color:inherit;font-size:9.5px}
+#nav>div:not(.nl){margin:0 0 0 auto!important}
+.sfoot{display:none}
+.sidebar.collapsed .nt{display:inline}
+.main{background:transparent;border-radius:0;height:auto;flex:1;min-height:0}
+.topbar{position:static;background:transparent;backdrop-filter:none;border:0;padding:26px 30px 2px;align-items:flex-end}
+.tgl{display:none}
+.ttl{font-family:var(--fh);font-size:34px;font-weight:700;letter-spacing:-.8px;line-height:1.1;text-transform:lowercase;white-space:normal}
+.ttl::first-letter{text-transform:uppercase}
+.who{background:#fff;box-shadow:var(--sh);border:0;padding:7px 15px;font-weight:700}
+.who.admin{background:var(--amb2);color:var(--ink)}
+.view{padding:16px 28px 48px}
+
+/* bilah filter menyatu dengan halaman */
+.fbar{background:transparent;border:0;padding:0;margin:16px 28px 0}
+.fs{background:#fff;border:0;border-radius:999px;padding:8px 14px;box-shadow:0 1px 2px #141c280d,0 0 0 1px var(--line)}
+.fs:focus{box-shadow:0 0 0 2px var(--ink)}
+.bt{border-radius:999px;padding:9px 16px;box-shadow:none;background:var(--ink);color:#fff}
+.bt:hover{background:#000}
+.bt.w{background:#fff;color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.bt.w:hover{background:#fff;box-shadow:0 0 0 1px var(--ink)}
+.demo{margin:12px 28px 0;border-radius:14px}
+
+/* kartu bento */
+.grid,.kpis,.pillars{gap:18px}
+.card{border:0;border-radius:22px;padding:22px 24px;box-shadow:var(--sh)}
+.hd{font-size:19px;letter-spacing:-.2px;margin-bottom:14px}
+.click:hover{box-shadow:0 2px 4px #141c2812,0 16px 40px #141c2822;border-color:transparent}
+.kpi{border-radius:28px;padding:26px 28px 24px;background:#fff;color:var(--ink);box-shadow:var(--sh)}
+.kpi::after{display:none}
+.kpi:hover{box-shadow:0 2px 4px #141c2812,0 16px 40px #141c2822}
+.kpi span{color:var(--mu);font-weight:700;font-size:13.5px}
+.kpi b{font-size:50px;font-weight:800;color:var(--ink);letter-spacing:-1.5px}
+.kpi b small{color:#98a2ad;font-size:22px}
+.kpi em{color:var(--mu);font-weight:600}
+.vb{background:#e9edf2;height:8px}
+.kpi:nth-child(1){background:linear-gradient(140deg,var(--amb2),var(--y));box-shadow:0 18px 40px #f5a80055}
+.kpi:nth-child(1) span,.kpi:nth-child(1) em{color:#3d2f00}
+.kpi:nth-child(1) b{font-size:64px}
+.kpi:nth-child(1) .vb{background:#00000024}
+.kpi:nth-child(1) .vb i{background:var(--ink)!important}
+#lokMap{border:0;border-radius:16px}
+.legend{border:0;border-radius:12px}
+.tog button{border:0;background:var(--soft);padding:5px 14px}
+.tog button.on{background:var(--ink);color:#fff}
+.ph{border:0;border-radius:999px;display:inline-block;background:var(--ink);color:var(--y);font-size:14px;padding:6px 18px;margin-bottom:14px}
+.sectt{border:0;border-radius:999px;padding:8px 18px;background:var(--ink);color:var(--y)}
+.sbox{border:0;border-radius:18px;background:var(--soft)}
+.at,.rrow{padding:7px 9px;border-radius:12px}
+.t th{background:transparent;border-bottom:1px solid var(--line);font-weight:700}
+.t td{border-bottom:1px solid #eef1f5;padding:10px}
+.tw{border:0;border-radius:0}
+.t tr.cl:hover td{background:var(--soft)}
+.t tr.cl:hover td:first-child{border-radius:12px 0 0 12px}.t tr.cl:hover td:last-child{border-radius:0 12px 12px 0}
+.hmap .cell{border-radius:9px;height:30px}
+.stitle{border-radius:22px}
+.ast-box,.ac,.ast-miss,.ast-empty,.drop{border:0;border-radius:20px;box-shadow:var(--sh)}
+.ast-box.hl{box-shadow:none}
+.ac.bad{box-shadow:inset 5px 0 0 var(--r),var(--sh)}.ac.ok{box-shadow:inset 5px 0 0 var(--g),var(--sh)}
+.ac.bad,.ac.ok{border-left:0}
+.ast-miss,.ast-empty,.drop{box-shadow:0 0 0 1.5px #c9d1da inset;background:#ffffffa0}
+.seg{border:0;border-radius:999px;box-shadow:0 0 0 1px var(--line)}
+.seg button{border:0}
+.ast-bar .fs{border-radius:999px}
+.btn-s{border-radius:999px}
+
+/* modal */
+#modal{background:#0f1317b0}
+.mcard{border-radius:28px}
+.mh{border:0;padding:20px 26px 8px}
+.mh h3{font-size:24px;letter-spacing:-.4px}
+.mb{padding:10px 26px 26px}
+.xbtn{border-radius:999px;border:0;background:var(--soft);padding:7px 15px}
+.toast{border-radius:16px}
+
+/* login: panel merek + formulir */
+#loginModal{background:radial-gradient(700px 420px at 12% 8%,#f5a80055,transparent 70%),#0f1317}
+#loginModal .lcard{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);max-width:900px;padding:0;border-radius:32px;overflow:hidden;text-align:left;box-shadow:0 40px 100px #000a}
+.lcard::before{content:"Satu layar untuk seluruh Learning Point.\A Capaian, siswa, aset, dan laporan bulanan.";white-space:pre-line;grid-column:1;grid-row:1/9;display:flex;align-items:flex-end;padding:44px 40px;color:#fff;font:700 31px/1.15 var(--fh);letter-spacing:-.6px;background:radial-gradient(circle at 82% 14%,var(--y) 0 64px,transparent 65px),radial-gradient(circle at 62% 30%,#ffffff12 0 120px,transparent 121px),linear-gradient(160deg,#1d252d,#0f1317)}
+.lcard>*{grid-column:2;margin-left:42px;margin-right:42px}
+.lcard>.logo-slot{margin-top:46px}
+.lcard>.lerr{margin-bottom:38px}
+.lcard h2{font-size:34px;letter-spacing:-1px}.lcard h2 span{color:var(--yd)}
+.lf input{border-radius:12px;border:0;box-shadow:0 0 0 1px var(--line);background:#fff}
+.lf input:focus{box-shadow:0 0 0 2px var(--ink)}
+.lbtn{border-radius:999px;background:var(--y);color:var(--ink);box-shadow:none}
+.lbtn:hover{background:var(--yd)}
+
+@media(max-width:900px){.ttl{font-size:28px}}
+@media(max-width:700px){
+ .lcard::before{display:none}.lcard>*{grid-column:1;margin-left:26px;margin-right:26px}.lcard>.logo-slot{margin-top:30px}.lcard>.lerr{margin-bottom:26px}
+ /* navigasi jadi tab bar bawah */
+ body{overflow:hidden}
+ .sidebar,.sidebar.collapsed{position:fixed;left:12px;right:12px;bottom:12px;top:auto;margin:0;padding:6px;justify-content:center}
+ .sbrand{display:none}.nav{justify-content:space-around;gap:0}
+ .nl{flex-direction:column;gap:2px;padding:7px 12px;font-size:10.5px}.sidebar.collapsed .nt{display:inline}.nl .soon{display:none}
+ #nav>div:not(.nl){margin:0!important}
+ .main{padding-bottom:84px}.topbar{padding:18px 16px 0}.ttl{font-size:24px}.view{padding:12px 14px 40px}.fbar{margin:12px 14px 0}.demo{margin:10px 14px 0}
+ .kpi b{font-size:38px}.kpi:nth-child(1) b{font-size:48px}
+}
+@media print{.sidebar{display:none}.card,.kpi{box-shadow:none;border:1px solid #bbb}.kpi:nth-child(1){background:#fff}}
 </style>
 </head>
 <body>
