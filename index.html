@@ -549,6 +549,65 @@ svg.lc{display:block;overflow:visible}
 .pillars>*:nth-child(2) .ph{background:var(--b);color:#fff}
 .pillars>*:nth-child(3) .ph{background:var(--g);color:#fff}
 .sbox{background:var(--soft)}
+
+/* ================= REDESIGN v5 · ringkasan, kartu pilar, grafik kombinasi ================= */
+.tp .hl,.tp .tt{opacity:0;pointer-events:none;transition:opacity .12s}
+.tp:hover .hl,.tp:hover .tt{opacity:1}
+.tp .tt{filter:drop-shadow(0 8px 16px #15191e50)}
+.tp .dot,.tp .gd{display:none}
+
+/* ubin angka */
+.sgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}
+.sgrid.s3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.st{position:relative;overflow:hidden;border-radius:16px;padding:13px 13px 11px;background:var(--soft);background:color-mix(in srgb,var(--c) 11%,#fff)}
+.st::after{content:"";position:absolute;right:-16px;top:-16px;width:50px;height:50px;border-radius:50%;background:color-mix(in srgb,var(--c) 22%,transparent)}
+.st b{position:relative;display:block;font:800 27px/1 var(--fh);letter-spacing:-.8px;color:var(--ink);color:color-mix(in srgb,var(--c) 55%,#10151a)}
+.st span{position:relative;display:block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--mu);line-height:1.25}
+
+/* corong rekrutmen */
+.fnls{display:flex;flex-direction:column;align-items:center;gap:6px;margin:8px 0 4px}
+.fnl{width:var(--w);display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:baseline;padding:11px 18px;border-radius:16px;color:var(--ink);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.fnl.k0{background:#ffd25e}.fnl.k1{background:#f5a800}.fnl.k2{background:#cf8c00;color:#fff}.fnl.k3{background:#8f5f00;color:#fff}
+.fnl span{font-weight:700;font-size:13px}
+.fnl b{font:800 21px/1 var(--fh);letter-spacing:-.5px}
+.fnl em{font-style:normal;font-weight:800;font-size:11.5px;opacity:.78;min-width:38px;text-align:right}
+
+/* cincin progres */
+.rg{--s:96px;position:relative;flex:none;width:var(--s);height:var(--s);border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),#e4e9ee 0)}
+.rg::before{content:"";position:absolute;inset:calc(var(--s)*.12);border-radius:50%;background:#fff}
+.rg b{position:relative;font:800 18px var(--fh);letter-spacing:-.5px}
+.rg.sm{--s:64px}.rg.sm b{font-size:14px}
+.rgs{display:flex;justify-content:space-around;gap:12px;margin:12px 0 4px}
+.rgw{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px}
+.rgw strong{font:700 15px var(--fh);margin-top:4px}
+.rgw span{font-size:11.5px;color:var(--mu);line-height:1.45;font-weight:600}
+.bbox{background:#fff;border-radius:20px;padding:14px;margin-bottom:10px;box-shadow:0 1px 2px #141c280a,0 6px 18px #141c280a}
+.bh{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.bh strong{display:block;font:700 17px var(--fh)}
+.bh span{font-size:12px;color:var(--mu);font-weight:600}
+.bn{flex:none;min-width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:#e6eefb;color:#2c4f86;font:800 20px var(--fh);padding:0 6px}
+.bigv{font:800 36px/1.05 var(--fh);letter-spacing:-1.2px;margin:2px 0 4px}
+.bigv small{font-size:15px;color:var(--mu);font-weight:700;letter-spacing:0}
+.kv{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px dashed var(--line);font-weight:600}
+.kv b{font-family:var(--fh);font-size:16px}
+.pillars .sh{margin:18px 0 6px;color:var(--mu);font-size:13px;font-weight:800}
+
+/* halaman ringkasan */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.1fr);gap:24px;align-items:center;color:#fff;border-radius:30px;padding:30px 34px;margin-bottom:18px;background:radial-gradient(circle at 96% -10%,#f5a80066 0,transparent 52%),radial-gradient(circle at 0 120%,#3f6fb544 0,transparent 50%),linear-gradient(135deg,#1d252d,#0f1317)}
+.hero small{color:var(--y);font-weight:800;letter-spacing:.1em;font-size:12px}
+.hero h2{font:800 36px/1.05 var(--fh);letter-spacing:-1.2px;margin:8px 0 8px}
+.hero p{color:#aab4be;font-weight:500}
+.hero-s{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.hero-s div{background:#ffffff12;border-radius:20px;padding:18px 16px}
+.hero-s b{display:block;font:800 30px/1 var(--fh);letter-spacing:-1px}
+.hero-s div:first-child b{color:var(--y)}
+.hero-s span{display:block;margin-top:8px;color:#aab4be;font-size:12px;font-weight:600;line-height:1.3}
+.astn{display:flex;align-items:center;gap:20px;margin-top:18px}
+.ab{flex:none;width:62px;height:62px;border-radius:20px;display:grid;place-items:center;font:800 26px var(--fh)}
+.ab.ok{background:#d9efe2;color:#1d6b42}.ab.bad{background:#f8d9d9;color:#a12a2a}
+@media(max-width:1000px){.hero{grid-template-columns:1fr}.hero-s{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.hero{padding:22px}.hero h2{font-size:28px}.sgrid{grid-template-columns:repeat(2,1fr)}.sgrid.s3{grid-template-columns:repeat(3,1fr)}.astn{flex-wrap:wrap}}
+@media print{.hero{background:#fff;color:#000;border:1px solid #999}.hero p,.hero-s span{color:#333}.hero-s b,.hero small{color:#000}.hero-s div{background:#f2f4f6}}
 </style>
 </head>
 <body>
@@ -717,7 +776,7 @@ function yearList(){
  const lo=Math.max(2000,Math.min(...ys)-1),hi=Math.min(2100,Math.max(...ys)+1),out=[];
  for(let y=lo;y<=hi;y++)out.push(y);return out;
 }
-function syncMonth(){const d=dueNow();if(!S.monthTouched||S.month>d)S.month=d}
+function syncMonth(){const d=dueNow();if(!S.monthTouched)S.month=d}
 /* ---- Filter batch: kontinuitas lintas tahun ----
    Batch tersimpan per laporan di tabel Rekrutmen ("Batch 39") dan Reguler ("Reguler Batch 39"); keduanya disatukan lewat nomor batch.
    Satu batch bisa dimulai di satu tahun dan selesai di tahun berikutnya. Karena itu daftar batch & datanya TIDAK dibatasi pada tahun terpilih:
@@ -841,29 +900,28 @@ function incGauge(plan,actual){
  const p=pc(actual,plan);return gauge([{v:Math.min(actual,plan),c:band(p),l:"Actual "+rp(actual)},{v:Math.max(plan-actual,0),c:"#e5e7eb",l:"Gap "+rp(plan-actual)}],fp(p),rp(actual)+"<br>dari "+rp(plan));
 }
 function lineChart(labels,series){
- const W=640,H=260,L=58,B=30,T=16,Rm=18,uid="lg"+(lineChart.n=(lineChart.n||0)+1),col=c=>c==="#111"?"#f5a800":c,
-  ok=labels.map((_,i)=>series.some(s=>s.vals[i]>0)),idx=labels.map((_,i)=>i).filter(i=>ok[i]),
-  max=Math.max(1,...series.flatMap(s=>s.vals))*1.15,
-  x=i=>L+(labels.length<2?(W-L-Rm)/2:i*(W-L-Rm)/(labels.length-1)),y=v=>T+(H-T-B)*(1-v/max),
-  step=labels.length<2?60:(W-L-Rm)/(labels.length-1),
-  fmt=v=>v>=1e9?(v/1e9).toFixed(1).replace(".",",")+" M":Math.round(v/1e6)+" Jt";
- const smooth=p=>{const n=p.length;if(n<2)return"";const dx=[],sl=[],m=[];
-  for(let i=0;i<n-1;i++){dx[i]=p[i+1][0]-p[i][0];sl[i]=(p[i+1][1]-p[i][1])/dx[i]}
-  m[0]=sl[0];m[n-1]=sl[n-2];for(let i=1;i<n-1;i++)m[i]=sl[i-1]*sl[i]<=0?0:(sl[i-1]+sl[i])/2;
-  for(let i=0;i<n-1;i++){if(sl[i]===0){m[i]=0;m[i+1]=0}else{const a=m[i]/sl[i],b=m[i+1]/sl[i],h=a*a+b*b;if(h>9){const t=3/Math.sqrt(h);m[i]=t*a*sl[i];m[i+1]=t*b*sl[i]}}}
-  let d="M"+p[0][0]+","+p[0][1];for(let i=0;i<n-1;i++){const c=dx[i]/3;d+=" C"+(p[i][0]+c)+","+(p[i][1]+m[i]*c)+" "+(p[i+1][0]-c)+","+(p[i+1][1]-m[i+1]*c)+" "+p[i+1][0]+","+p[i+1][1]}return d};
- let g="<defs>"+series.filter(s=>!s.dash).map((s,k)=>`<linearGradient id="${uid}${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col(s.color)}" stop-opacity=".38"/><stop offset="1" stop-color="${col(s.color)}" stop-opacity="0"/></linearGradient>`).join("")+"</defs>";
+ const N=12,lab=Array.from({length:N},(_,i)=>labels[i]||MON[i]),W=640,H=270,L=58,B=30,T=22,Rm=14,uid="lg"+(lineChart.n=(lineChart.n||0)+1),col=c=>c==="#111"?"#f5a800":c,
+  ok=lab.map((_,i)=>series.some(s=>s.vals[i]>0)),idx=lab.map((_,i)=>i).filter(i=>ok[i]),
+  max=Math.max(1,...series.flatMap(s=>s.vals.filter(v=>v>0)))*1.22,step=(W-L-Rm)/N,xc=i=>L+step*(i+.5),y=v=>T+(H-T-B)*(1-v/max),y0=y(0),
+  n=series.length,bw=Math.min(24,step*.74/n),gap=3,fmt=v=>v>=1e9?(v/1e9).toFixed(1).replace(".",",")+" M":Math.round(v/1e6)+" Jt";
+ const smooth=p=>{const k=p.length;if(k<2)return"";const dx=[],sl=[],m=[];
+  for(let i=0;i<k-1;i++){dx[i]=p[i+1][0]-p[i][0];sl[i]=(p[i+1][1]-p[i][1])/dx[i]}
+  m[0]=sl[0];m[k-1]=sl[k-2];for(let i=1;i<k-1;i++)m[i]=sl[i-1]*sl[i]<=0?0:(sl[i-1]+sl[i])/2;
+  for(let i=0;i<k-1;i++){if(sl[i]===0){m[i]=0;m[i+1]=0}else{const a=m[i]/sl[i],b=m[i+1]/sl[i],h=a*a+b*b;if(h>9){const t=3/Math.sqrt(h);m[i]=t*a*sl[i];m[i+1]=t*b*sl[i]}}}
+  let d="M"+p[0][0]+","+p[0][1];for(let i=0;i<k-1;i++){const c=dx[i]/3;d+=" C"+(p[i][0]+c)+","+(p[i][1]+m[i]*c)+" "+(p[i+1][0]-c)+","+(p[i+1][1]-m[i+1]*c)+" "+p[i+1][0]+","+p[i+1][1]}return d};
+ const bar=(x,v,f)=>{const yt=y(v),h=y0-yt;if(h<=0)return"";const r=Math.min(7,bw/2,h);return`<path d="M${x},${y0} V${yt+r} Q${x},${yt} ${x+r},${yt} H${x+bw-r} Q${x+bw},${yt} ${x+bw},${yt+r} V${y0} Z" fill="${f}"/>`};
+ let g="<defs>"+series.map((s,k)=>`<linearGradient id="${uid}${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col(s.color)}"/><stop offset="1" stop-color="${col(s.color)}" stop-opacity=".62"/></linearGradient>`).join("")+"</defs>";
  for(let i=0;i<=4;i++){const v=max*i/4,yy=y(v);g+=`<line x1="${L}" x2="${W-Rm}" y1="${yy}" y2="${yy}" stroke="#e8ecf0" ${i?'stroke-dasharray="3 5"':""}/><text x="${L-10}" y="${yy+4}" font-size="11" fill="#8d99a5" text-anchor="end">${i?fmt(v):"0"}</text>`}
- labels.forEach((l,i)=>g+=`<text x="${x(i)}" y="${H-8}" font-size="11" fill="${ok[i]?"#5b6670":"#c3cad1"}" font-weight="${ok[i]?700:500}" text-anchor="middle">${l}</text>`);
- let ai=0;series.forEach(s=>{const c=col(s.color),pts=idx.map(i=>[x(i),y(s.vals[i])]),d=smooth(pts);
-  if(!s.dash&&d){g+=`<path d="${d} L${pts[pts.length-1][0]},${y(0)} L${pts[0][0]},${y(0)} Z" fill="url(#${uid}${ai++})"/>`}
-  if(d)g+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="${s.dash?2.2:3.6}" ${s.dash?'stroke-dasharray="2 7"':""} stroke-linecap="round" stroke-linejoin="round"/>`});
- idx.forEach((i,k)=>{const last=k===idx.length-1,tw=200,th=26+17*series.length,tx=x(i)>W-tw-30?x(i)-tw-12:x(i)+12;
-  g+=`<g class="tp${last?" last":""}"><line class="gd" x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${H-B}" stroke="#15191e" stroke-opacity=".18" stroke-dasharray="3 4"/><rect x="${x(i)-step/2}" y="${T}" width="${step}" height="${H-T-B}" fill="transparent"/>`+
-  series.map(s=>`<circle class="dot" cx="${x(i)}" cy="${y(s.vals[i])}" r="${s.dash?4:6}" fill="#fff" stroke="${col(s.color)}" stroke-width="3"/>`).join("")+
-  `<g class="tt"><rect x="${tx}" y="${T+2}" width="${tw}" height="${th}" rx="10" fill="#15191e"/><text x="${tx+12}" y="${T+20}" font-size="12" font-weight="800" fill="#fff">${labels[i]}</text>`+
-  series.map((s,j)=>`<circle cx="${tx+16}" cy="${T+34+j*17}" r="4" fill="${col(s.color)}"/><text x="${tx+26}" y="${T+38+j*17}" font-size="11" fill="#e6eaee">${esc(s.name)}: <tspan font-weight="800">${rp(s.vals[i])}</tspan></text>`).join("")+`</g></g>`});
- return`<svg class="lc" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Tren income">${g}</svg><div class="leg">${series.map(s=>`<span><i style="background:${col(s.color)}"></i>${esc(s.name)}</span>`).join("")}</div>`;
+ lab.forEach((l,i)=>g+=`<text x="${xc(i)}" y="${H-8}" font-size="11" fill="${ok[i]?"#15191e":"#c3cad1"}" font-weight="${ok[i]?800:500}" text-anchor="middle">${l}</text>`+(ok[i]?"":`<line x1="${xc(i)-9}" x2="${xc(i)+9}" y1="${y0-1}" y2="${y0-1}" stroke="#dfe4ea" stroke-width="3" stroke-linecap="round"/>`));
+ const xs=(i,j)=>xc(i)-(n*bw+(n-1)*gap)/2+j*(bw+gap),act=series.find(s=>!s.dash)||series[0],pln=series.find(s=>s.dash);
+ idx.forEach(i=>series.forEach((s,j)=>g+=bar(xs(i,j),s.vals[i],s.dash?"#dde3ea":`url(#${uid}${j})`)));
+ if(idx.length>1){const pts=idx.map(i=>[xc(i),y(act.vals[i])]);g+=`<path d="${smooth(pts)}" fill="none" stroke="#15191e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#fff" stroke="#15191e" stroke-width="2.2"/>`).join("")}
+ idx.forEach(i=>{const top=Math.max(...series.map(s=>s.vals[i])),pc2=pln&&pln.vals[i]>0?act.vals[i]/pln.vals[i]*100:null,tc=pc2==null?"#15191e":pc2>=85?"#1d6b42":pc2>=70?"#80570a":"#a12a2a",tw=200,th=26+17*n,tx=xc(i)>W/2?xc(i)-tw-16:xc(i)+16;
+  g+=`<text x="${xc(i)}" y="${y(top)-8}" font-size="11.5" font-weight="800" text-anchor="middle" fill="${tc}">${pc2==null?fmt(act.vals[i]):Math.round(pc2)+"%"}</text>`+
+  `<g class="tp"><rect class="hl" x="${xc(i)-step/2}" y="${T-8}" width="${step}" height="${H-T-B+8}" rx="10" fill="#15191e" fill-opacity=".05"/><rect x="${xc(i)-step/2}" y="${T-8}" width="${step}" height="${H-T-B+8}" fill="transparent"/>`+
+  `<g class="tt"><rect x="${tx}" y="${T}" width="${tw}" height="${th}" rx="10" fill="#15191e"/><text x="${tx+12}" y="${T+18}" font-size="12" font-weight="800" fill="#fff">${lab[i]}</text>`+
+  series.map((s,j)=>`<circle cx="${tx+16}" cy="${T+32+j*17}" r="4" fill="${s.dash?"#aab4be":col(s.color)}"/><text x="${tx+26}" y="${T+36+j*17}" font-size="11" fill="#e6eaee">${esc(s.name)}: <tspan font-weight="800">${rp(s.vals[i])}</tspan></text>`).join("")+`</g></g>`});
+ return`<svg class="lc" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Tren income">${g}</svg><div class="leg">${series.map(s=>`<span><i style="background:${s.dash?"#dde3ea":col(s.color)}"></i>${esc(s.name)}</span>`).join("")}</div>`;
 }
 
 /* ============ MODAL ============ */
@@ -956,7 +1014,7 @@ function toggleFullScreen(){const el=document.documentElement;if(!document.fulls
 /* ============ RENDER ============ */
 function renderFilters(){
  $("fL").innerHTML=`<label>Tahun:</label><select class="fs" style="min-width:90px" onchange="switchYear(+this.value)">${yearList().map(y=>`<option value="${y}" ${S.year===y?"selected":""}>${y}</option>`).join("")}</select>
- <label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:dueNow()},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${S.year}</option>`).join("")}</select>
+ <label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${S.year}${i+1>dueNow()?" · belum jatuh tempo":""}</option>`).join("")}</select>
  <label>Wilayah:</label><select class="fs" onchange="S.region=this.value;renderAll()"><option value="all">-- Semua Wilayah --</option>${REGIONS.map(r=>`<option ${S.region===r?"selected":""}>${esc(r)}</option>`).join("")}</select>
  <label>Koordinator:</label><select class="fs" style="min-width:110px" onchange="S.coord=this.value;renderAll()"><option value="all">Semua</option>${["Medan","Surabaya","Makassar"].map(c=>`<option value="${c}" ${S.coord===c?"selected":""}>${c}</option>`).join("")}<option value="direct" ${S.coord==="direct"?"selected":""}>Langsung HO</option></select>
  <label>Batch:</label><select class="fs" style="min-width:110px" onchange="S.batch=this.value;renderAll()"><option value="all">Semua Batch</option>${batchList().map(b=>`<option value="${esc(b)}" ${S.batch===b?"selected":""}>${esc(b)}</option>`).join("")}</select>
@@ -1043,29 +1101,27 @@ function renderTrend(lps){
  $("trendNote").textContent=(cmp()?"Plan vs actual":PA_LABEL[S.pa])+" · Mandiri + Mandatory";
  $("trend").innerHTML=lineChart(labels,series);
 }
-function renderPillars(ms,T){
- const fn=[["Seleksi",T.sel],["Psikotes",T.psi],["Interview",T.itv],["MCU",T.mcu]],ba=batchAgg(ms),P=S.pa;
- const kes=P==="plan"?onlyA:`<div class="sh">Rekrutmen & MCU ${S.batch==="all"?"Batch 39":esc(S.batch)}</div>
-  ${fn.map(([l,v])=>`<div class="row"><span>${l}</span>${vbar(pc(v,T.sel),"#f5a800")}<b>${v}</b></div>`).join("")}
-  <div class="sh">Pelaksanaan Bintalsik</div>
-  <div class="mini">${chip(T.binN,"LP melaksanakan","#3f6fb5")}${chip(T.binSel,"Seleksi","#f5a800")}${chip(T.binPsi,"Psikotes","#f5a800")}${chip(T.binItv,"Interview","#f5a800")}${chip(T.binMcu,"MCU","#2f8f5b")}${chip(T.binLok,"Lokasi","#7b61c9")}</div>`;
- const aka=Object.entries(ba).sort().map(([n,g])=>{
-  const sis=cmp()?`<div class="row" style="grid-template-columns:70px 1fr 90px"><span>Siswa</span>${vbar(pc(g.siswa,g.plan),"#3f6fb5")}<b>${g.siswa} dari ${g.plan}</b></div>`:P==="plan"?`<div class="mini">${chip(g.plan,"Plan siswa","#3f6fb5")}</div>`:`<div class="mini">${chip(g.siswa,"Siswa","#2f8f5b")}</div>`;
-  return`<div class="sh">${esc(n)}</div>${sis}<div class="mini">${showA()?chip(g.kelas,"Kelas","#f5a800")+chip(g.ojt,"Lokasi OJT","#7b61c9"):""}${chip(g.lp,"LP","#999")}</div>`}).join("")||'<div class="empty">Belum ada data.</div>';
- const csr=P==="plan"?onlyA:`<div class="mini">${chip(T.csrP,"Program","#2f8f5b")}${chip(T.csrS,"Sekolah / PT","#3f6fb5")}${chip(nf(T.csrQ),"Peserta","#f5a800")}</div>`;
- const incRow=(l,pl,ac)=>cmp()?`<div class="row" style="grid-template-columns:70px 1fr 52px"><span>${l}</span>${vbar(pc(ac,pl))}<b>${fp(pc(ac,pl))}</b></div><div class="tcell">Plan ${rp(pl)} · Actual ${rp(ac)}</div>`:`<div class="row" style="grid-template-columns:70px 1fr"><span>${l}</span><b style="text-align:left">${rp(P==="plan"?pl:ac)}</b></div>`;
- const kHead=cmp()?"Achievement":P==="plan"?"Plan":"Actual";
- const bigv=cmp()?`${rp(T.actual)} <small style="font-size:15px;color:#555">(${fp(T.achv)})</small>`:rp(P==="plan"?T.plan:T.actual);
- const fasus=cmp()?`${chip(T.fU,"Terpakai","#2f8f5b")}${chip(T.fP,"Direncanakan","#3f6fb5")}${chip(fp(pc(T.fU,T.fP)),"Optimalisasi","#f5a800")}`:P==="plan"?chip(T.fP,"Direncanakan","#3f6fb5"):chip(T.fU,"Terpakai","#2f8f5b");
- $("pillars").innerHTML=`
- <div class="card"><div class="ph">KESISWAAN</div>${kes}</div>
+function pillarsHTML(ms,T){
+ const P=S.pa,ba=batchAgg(ms),cl=p=>Math.min(100,Math.max(0,p||0)),tl=(v,l,c)=>`<div class="st" style="--c:${c}"><b>${v}</b><span>${l}</span></div>`;
+ const fn=[["Seleksi",T.sel],["Psikotes",T.psi],["Interview",T.itv],["MCU",T.mcu]],top=T.sel||1;
+ const funnel=`<div class="fnls">${fn.map(([l,v],i)=>{const p=pc(v,top),w=i?Math.max(54,Math.min(100,p==null?100:p)):100;return`<div class="fnl k${i}" style="--w:${w}%"><span>${l}</span><b>${nf(v)}</b><em>${i?fp(p):"awal"}</em></div>`}).join("")}</div>`;
+ const kes=P==="plan"?onlyA:`<div class="sh">Rekrutmen &amp; MCU ${S.batch==="all"?"Batch 39":esc(S.batch)}</div>${funnel}<div class="sh">Pelaksanaan Bintalsik</div><div class="sgrid">${tl(T.binN,"LP melaksanakan","#3f6fb5")}${tl(T.binSel,"Seleksi","#f5a800")}${tl(T.binPsi,"Psikotes","#f5a800")}${tl(T.binItv,"Interview","#f5a800")}${tl(T.binMcu,"MCU","#2f8f5b")}${tl(T.binLok,"Lokasi","#7b61c9")}</div>`;
+ const aka=Object.entries(ba).sort().map(([n,g])=>{const p=pc(g.siswa,g.plan);
+  const head=cmp()?`<div class="bh"><div class="rg sm" style="--p:${cl(p)};--c:${band(p)}"><b>${p==null?"—":Math.round(p)+"%"}</b></div><div><strong>${esc(n)}</strong><span>${g.siswa} dari ${g.plan} siswa</span></div></div>`:`<div class="bh"><div class="bn">${P==="plan"?g.plan:g.siswa}</div><div><strong>${esc(n)}</strong><span>${P==="plan"?"Plan siswa":"Siswa"}</span></div></div>`;
+  return`<div class="bbox">${head}<div class="sgrid s3">${showA()?tl(g.kelas,"Kelas","#f5a800")+tl(g.ojt,"Lokasi OJT","#7b61c9"):""}${tl(g.lp,"LP","#6b7a89")}</div></div>`}).join("")||'<div class="empty">Belum ada data.</div>';
+ const csr=P==="plan"?onlyA:`<div class="sgrid s3">${tl(T.csrP,"Program","#2f8f5b")}${tl(T.csrS,"Sekolah / PT","#3f6fb5")}${tl(nf(T.csrQ),"Peserta","#f5a800")}</div>`;
+ const rgw=(p,l,pl,ac)=>`<div class="rgw"><div class="rg" style="--p:${cl(p)};--c:${band(p)}"><b>${fp(p)}</b></div><strong>${l}</strong><span>Plan ${rp(pl)}<br>Actual ${rp(ac)}</span></div>`;
+ const kv=(l,v)=>`<div class="kv"><span>${l}</span><b>${v}</b></div>`;
+ const inc=cmp()?`<div class="rgs">${rgw(pc(T.mAct,T.mPlan),"Mandiri",T.mPlan,T.mAct)}${rgw(pc(T.dAct,T.dPlan),"Mandatory",T.dPlan,T.dAct)}</div>`:kv("Mandiri",rp(P==="plan"?T.mPlan:T.mAct))+kv("Mandatory",rp(P==="plan"?T.dPlan:T.dAct));
+ const kHead=cmp()?"Achievement":P==="plan"?"Plan":"Actual",bigv=cmp()?`${rp(T.actual)} <small>(${fp(T.achv)})</small>`:rp(P==="plan"?T.plan:T.actual);
+ const fo=pc(T.fU,T.fP),fasus=cmp()?`${vbar(fo,"#f5a800")}<div class="sgrid s3" style="margin-top:10px">${tl(T.fU,"Terpakai","#2f8f5b")}${tl(T.fP,"Direncanakan","#3f6fb5")}${tl(fp(fo),"Optimalisasi","#f5a800")}</div>`:`<div class="sgrid s3">${P==="plan"?tl(T.fP,"Direncanakan","#3f6fb5"):tl(T.fU,"Terpakai","#2f8f5b")}</div>`;
+ return`<div class="card"><div class="ph">KESISWAAN</div>${kes}</div>
  <div class="card"><div class="ph">AKADEMIK</div>${aka}<div class="sh">Program CSR</div>${csr}</div>
- <div class="card"><div class="ph">KIPL</div><div class="sh">${kHead} as of ${MONTHS[S.month-1]}</div>
-  <div style="font-size:24px;font-weight:800">${bigv}</div>
-  ${incRow("Mandiri",T.mPlan,T.mAct)}${incRow("Mandatory",T.dPlan,T.dAct)}
-  ${showA()?`<div class="sh">New Project / New Customer</div><div class="mini">${chip(T.cust,"Total (Big 5)","#2f8f5b")}</div>`:""}
-  <div class="sh">Optimalisasi Fasus NT UTS</div><div class="mini">${fasus}</div></div>`;
+ <div class="card"><div class="ph">KIPL</div><div class="sh" style="margin-top:6px">${kHead} as of ${MONTHS[S.month-1]}</div><div class="bigv">${bigv}</div>${inc}
+  ${showA()?`<div class="sh">New Project / New Customer</div><div class="sgrid s3">${tl(T.cust,"Total (Big 5)","#2f8f5b")}</div>`:""}
+  <div class="sh">Optimalisasi Fasus NT UTS</div>${fasus}</div>`;
 }
+function renderPillars(ms,T){$("pillars").innerHTML=pillarsHTML(ms,T)}
 function setHeat(k){S.heat=k;$("tgReg").classList.toggle("on",k==="region");$("tgCoo").classList.toggle("on",k==="coord");renderHeat()}
 function renderHeat(){
  const lps=lpList(),by=S.heat,P=S.pa;
@@ -1093,22 +1149,12 @@ function renderLPTable(){
 
 /* ============ VIEW LAIN ============ */
 function viewSummary(){
- const T=agg(lpList().map(l=>metrics(l))),li=(a,b)=>`<li>${a}: <b>${b}</b></li>`,P=S.pa;
- const kes=P==="plan"?onlyA:`<h4>Rekrutmen & MCU Batch 39</h4><ul>${li("Total peserta seleksi",T.sel)}${li("Lolos psikotes",T.psi)}${li("Lolos interview",T.itv)}${li("Lolos MCU",T.mcu)}</ul>
-   <h4>Pelaksanaan Bintalsik</h4><ul>${li("LP melaksanakan",T.binN)}${li("Total peserta seleksi",T.binSel)}${li("Lolos psikotes",T.binPsi)}${li("Lolos interview",T.binItv)}${li("Lolos MCU",T.binMcu)}${li("Jumlah lokasi Bintalsik",T.binLok)}</ul>`;
- const sis=cmp()?li("Jumlah siswa",T.siswa+" dari "+T.sPlan+" ("+fp(pc(T.siswa,T.sPlan))+")"):P==="plan"?li("Plan siswa",T.sPlan):li("Jumlah siswa",T.siswa);
- const kipl=cmp()?`<li><b>${rp(T.actual)}</b> (${fp(T.achv)})</li><li>Mandiri — plan ${rp(T.mPlan)} · actual ${rp(T.mAct)} · <b>${fp(pc(T.mAct,T.mPlan))}</b></li><li>Mandatory — plan ${rp(T.dPlan)} · actual ${rp(T.dAct)} · <b>${fp(pc(T.dAct,T.dPlan))}</b></li>`
-  :P==="plan"?`<li><b>${rp(T.plan)}</b></li><li>Mandiri — plan ${rp(T.mPlan)}</li><li>Mandatory — plan ${rp(T.dPlan)}</li>`:`<li><b>${rp(T.actual)}</b></li><li>Mandiri — actual ${rp(T.mAct)}</li><li>Mandatory — actual ${rp(T.dAct)}</li>`;
- return`<div class="stitle"><b>SUMMARY</b><span>${P==="both"?"ACHIEVEMENT":P==="plan"?"PLAN":"ACTUAL"} ${S.year} · s.d. ${MONTHS[S.month-1]}</span></div>
- <div class="slide"><div class="cols">
-  <div class="card"><div class="ph">Kesiswaan</div>${kes}</div>
-  <div class="card"><div class="ph">Akademik</div><h4>Reguler (Batch 38 &amp; 39)</h4><ul>${sis}${showA()?li("Lokasi OJT",T.ojt+" site"):""}</ul>
-   <h4>Program CSR</h4>${P==="plan"?onlyA:`<ul>${li("Jumlah program",T.csrP)}${li("Jumlah sekolah / PT",T.csrS)}${li("Jumlah peserta",nf(T.csrQ))}</ul>`}</div>
-  <div class="card"><div class="ph">KIPL</div><h4>${P==="both"?"Achievement":P==="plan"?"Plan":"Actual"} as of ${MONTHS[S.month-1]}</h4><ul>${kipl}</ul>
-   ${showA()?`<h4>New Project / New Customer (Big 5)</h4><ul>${li("Total",T.cust)}</ul>`:""}<h4>Optimalisasi Fasus NT UTS</h4><ul>${showA()?li("Fasus terpakai",T.fU):""}${showP()?li("Fasus direncanakan",T.fP):""}</ul></div>
- </div></div>
- <div class="card" style="margin-top:10px"><div class="hd">Daftar Laporan Aset</div>${P==="plan"?onlyA:`<div class="desc">${T.bad} aset berstatus Rusak dari ${T.assets} aset yang dilaporkan. Rincian per LP tersedia di detail Learning Point.</div><div style="margin-top:8px"><button class="bt" onclick="switchView('asset')">Buka Daftar Aset per LP</button></div>`}</div>
- <div class="noprint" style="margin-top:10px"><button class="bt" onclick="window.print()">🖨 Cetak / Simpan PDF</button></div>`;
+ const ms=lpList().map(l=>metrics(l)),T=agg(ms),P=S.pa,nrep=ms.filter(x=>x.rep).length,pl=P==="plan";
+ const hs=[[pl?rp(T.plan):rp(T.actual),cmp()?"Income · "+fp(T.achv):"Income "+PA_LABEL[P]],[pl?nf(T.sPlan):nf(T.siswa),cmp()?"Siswa dari "+nf(T.sPlan):"Siswa"],[pl?"—":nf(T.mcu),pl?"MCU":"Lolos MCU dari "+nf(T.sel)],[pl?"—":nf(T.cust),"Customer / project baru"]];
+ return`<div class="hero"><div><small>${P==="both"?"ACHIEVEMENT":P==="plan"?"PLAN":"ACTUAL"} ${S.year}</small><h2>Ringkasan Konsolidasi</h2><p>s.d. ${MONTHS[S.month-1]} ${S.year} · ${nrep} dari ${ms.length} Learning Point melapor</p></div><div class="hero-s">${hs.map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div></div>
+ <div class="pillars">${pillarsHTML(ms,T)}</div>
+ <div class="card astn"><div class="ab ${T.bad?"bad":"ok"}">${P==="plan"?"—":T.bad}</div><div style="flex:1"><div class="hd" style="margin:0 0 4px">Daftar Laporan Aset</div>${P==="plan"?onlyA:`<div class="desc">${T.bad} aset berstatus Rusak dari ${T.assets} aset yang dilaporkan. Rincian per LP tersedia di detail Learning Point.</div>`}</div>${P==="plan"?"":`<button class="bt noprint" onclick="switchView('asset')">Buka Daftar Aset per LP</button>`}</div>
+ <div class="noprint" style="margin-top:14px"><button class="bt w" onclick="window.print()">🖨 Cetak / Simpan PDF</button></div>`;
 }
 function viewInput(){
  if(!isAdmin())return`<div class="card"><div class="hd">Akses ditolak</div><div class="desc">Hanya HO (Admin) yang dapat mengubah data.</div></div>`;
