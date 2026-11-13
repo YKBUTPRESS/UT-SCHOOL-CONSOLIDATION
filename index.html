@@ -650,6 +650,28 @@ svg.lc{display:block;overflow:visible}
 .ast-miss .tags button{background:#fff;border:0;box-shadow:0 0 0 1px var(--line);border-radius:999px;padding:5px 13px}
 .ast-miss .tags button:hover{box-shadow:0 0 0 1.5px var(--ink);background:#fff}
 @media(max-width:900px){.ast-sum{grid-template-columns:1fr 1fr}.ast-box.ringb{grid-column:1/-1}}
+
+/* ================= REDESIGN v7 · aksen warna terkendali ================= */
+.late{display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;background:#fdf0cf;color:#7a5600;font-size:12px;font-weight:700}
+/* kartu pilar: garis warna di atas + label berwarna */
+.pillars>*:nth-child(1){--pc:#f5a800}.pillars>*:nth-child(2){--pc:#3f6fb5}.pillars>*:nth-child(3){--pc:#2f8f5b}
+.pillars>.card{box-shadow:inset 0 5px 0 var(--pc),var(--sh);padding-top:26px}
+.pillars>*:nth-child(1) .ph,.pillars>*:nth-child(2) .ph,.pillars>*:nth-child(3) .ph{background:var(--pc);background:color-mix(in srgb,var(--pc) 17%,#fff);color:var(--ink);color:color-mix(in srgb,var(--pc) 58%,#10151a)}
+/* ubin: tint tipis sesuai kategori */
+.st{background:var(--soft);background:color-mix(in srgb,var(--c) 9%,#fff);border:1px solid #e9edf1;border:1px solid color-mix(in srgb,var(--c) 20%,#fff)}
+.st b{color:var(--ink);color:color-mix(in srgb,var(--c) 64%,#10151a)}
+/* corong: warna merek amber */
+.fnl.k0{background:#fbd774;color:var(--ink)}.fnl.k1{background:#f5b93a;color:var(--ink)}.fnl.k2{background:#e39a12;color:#fff}.fnl.k3{background:#b87400;color:#fff}
+.bn{background:#e6eefb;color:#2c4f86}
+/* ringkasan: garis warna di tiap angka utama */
+.hero-s div{position:relative;overflow:hidden}
+.hero-s div::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--hc,#f5a800)}
+.hero-s div:nth-child(1){--hc:#f5a800}.hero-s div:nth-child(2){--hc:#5b8fd9}.hero-s div:nth-child(3){--hc:#3fb07a}.hero-s div:nth-child(4){--hc:#9b86e0}
+/* dashboard: KPI kedua & ketiga */
+.kpi:nth-child(2){box-shadow:inset 0 5px 0 #3f6fb5,var(--sh)}
+.kpi:nth-child(3){box-shadow:inset 0 5px 0 #2f8f5b,var(--sh)}
+.ast-col:nth-child(3n+1){box-shadow:inset 0 5px 0 #f5a800}.ast-col:nth-child(3n+2){box-shadow:inset 0 5px 0 #3f6fb5}.ast-col:nth-child(3n+3){box-shadow:inset 0 5px 0 #2f8f5b}
+.ast-col{padding-top:14px}
 </style>
 </head>
 <body>
@@ -1056,7 +1078,7 @@ function toggleFullScreen(){const el=document.documentElement;if(!document.fulls
 /* ============ RENDER ============ */
 function renderFilters(){
  $("fL").innerHTML=`<label>Tahun:</label><select class="fs" style="min-width:90px" onchange="switchYear(+this.value)">${yearList().map(y=>`<option value="${y}" ${S.year===y?"selected":""}>${y}</option>`).join("")}</select>
- <label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${S.year}${i+1>dueNow()?" · belum jatuh tempo":""}</option>`).join("")}</select>
+ <label>Periode s.d.:</label><select class="fs" onchange="S.month=+this.value;S.monthTouched=true;renderAll()">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${S.month===i+1?"selected":""}>${MONTHS[i]} ${S.year}${i+1>dueNow()?" · belum jatuh tempo":""}</option>`).join("")}</select>${S.month>dueNow()?'<span class="late">Belum jatuh tempo · data = laporan terakhir yang masuk</span>':""}
  <label>Wilayah:</label><select class="fs" onchange="S.region=this.value;renderAll()"><option value="all">-- Semua Wilayah --</option>${REGIONS.map(r=>`<option ${S.region===r?"selected":""}>${esc(r)}</option>`).join("")}</select>
  <label>Koordinator:</label><select class="fs" style="min-width:110px" onchange="S.coord=this.value;renderAll()"><option value="all">Semua</option>${["Medan","Surabaya","Makassar"].map(c=>`<option value="${c}" ${S.coord===c?"selected":""}>${c}</option>`).join("")}<option value="direct" ${S.coord==="direct"?"selected":""}>Langsung HO</option></select>
  <label>Batch:</label><select class="fs" style="min-width:110px" onchange="S.batch=this.value;renderAll()"><option value="all">Semua Batch</option>${batchList().map(b=>`<option value="${esc(b)}" ${S.batch===b?"selected":""}>${esc(b)}</option>`).join("")}</select>
@@ -1138,7 +1160,8 @@ function renderRank(ms){
 }
 function renderTrend(lps){
  const labels=[],plan=[],act=[];
- for(let m=1;m<=S.month;m++){labels.push(MON[m-1]);const ms=lps.map(l=>metrics(l,m)).filter(x=>x.rep);plan.push(sum(ms,x=>x.plan));act.push(sum(ms,x=>x.actual))}
+ const lastM=Math.max(0,...lps.map(l=>(latest(l.id,12)||{}).month||0));
+ for(let m=1;m<=S.month;m++){labels.push(MON[m-1]);if(m>lastM){plan.push(0);act.push(0);continue}const ms=lps.map(l=>metrics(l,m)).filter(x=>x.rep);plan.push(sum(ms,x=>x.plan));act.push(sum(ms,x=>x.actual))}
  const series=[];if(showP())series.push({name:"Plan (YTD)",color:"#9aa1a9",vals:plan,dash:1,w:2.5});if(showA())series.push({name:"Actual (YTD)",color:"#111",vals:act});
  $("trendNote").textContent=(cmp()?"Plan vs actual":PA_LABEL[S.pa])+" · Mandiri + Mandatory";
  $("trend").innerHTML=lineChart(labels,series);
@@ -1346,7 +1369,7 @@ function openLP(id){
  if(!r)body='<div class="empty">Belum ada laporan yang masuk untuk learning point ini.</div>';
  else{
   const k=r.kipl,kb=r.kesiswaan,bs=kb.bintalsik,ser=[];
-  const vals=f=>Array.from({length:S.month},(_,i)=>{const x=latest(id,i+1);return x?f(x):0});
+  const lm=(latest(id,12)||{}).month||0,vals=f=>Array.from({length:S.month},(_,i)=>{const x=latest(id,i+1);return x&&i+1<=lm?f(x):0});
   if(showP())ser.push({name:"Plan (YTD)",color:"#9aa1a9",dash:1,w:2.5,vals:vals(x=>x.kipl.mandiri.plan+x.kipl.mandatory.plan)});
   if(showA())ser.push({name:"Actual (YTD)",color:"#111",vals:vals(x=>x.kipl.mandiri.actual+x.kipl.mandatory.actual)});
   const tr=lineChart(MON.slice(0,S.month),ser);
